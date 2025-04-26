@@ -2,6 +2,8 @@
 <html lang="ar" dir="rtl">
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Language" content="ar">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المركز السوري للتنمية المستدامة - التمكين المجتمعي</title>
@@ -65,13 +67,14 @@
             background-color: var(--light-color);
             color: var(--dark-color);
             line-height: 2;
-        }
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial', sans-serif;
+            }
 
         .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
+            width: calc(100% - 60px); /* 30px من كل جانب */
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0;
         }
 
         /* شريط التنقل - معدل */
@@ -87,9 +90,10 @@
 
         .header .container {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px; /* زيادة المسافة بين العناصر */
+    padding: 0 20px; /* إضافة حشو داخلي */
             /* إضافة فراغ بين العناصر */
         }
 
@@ -100,23 +104,33 @@
         }
 
         .logo img {
-            height: 50px;
+            height: 70px;
             width: auto;
         }
 
         .org-name {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            white-space: nowrap;
-        }
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+        .org-name-line1 {
+    font-size: 1.5rem;
+    white-space: nowrap;
+}
 
+.org-name-line2 {
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    white-space: nowrap;
+}
         .nav-list {
             display: flex;
             list-style: none;
             margin: 0;
             padding: 0;
-            gap: 10px;
+            gap: 20px;
             /* فراغ متساوي بين عناصر القائمة */
 
         }
@@ -151,6 +165,7 @@
             color: var(--white) !important;
             padding: 8px 15px;
             border-radius: 4px;
+            margin-right: 60px; /* إبعاده عن العناصر الأخرى */
         }
 
         .login-btn a:hover {
@@ -199,7 +214,68 @@
         .dropdown:hover .dropdown-content {
             display: block;
         }
+        /* أنماط محول اللغة المعدلة */
+.language-switcher {
+    position: relative;
+    margin-right: 0;
+    display: inline-flex; /* بدلاً من flex لعدم التأثير على العناصر الأخرى */
+    align-items: center;
+}
 
+.language-btn {
+    background: none;
+    border: none;
+    color: var(--dark-color);
+    cursor: pointer;
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: var(--transition);
+    text-decoration: none;
+    font-size: inherit;
+}
+
+.language-btn:hover {
+    color: var(--primary-color);
+    background-color: rgba(46, 134, 171, 0.1);
+}
+
+.language-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--white);
+    min-width: 150px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    z-index: 100;
+    list-style: none;
+    padding: 10px 0;
+    margin-top: 5px; /* هامش بسيط */
+}
+
+.language-switcher:hover .language-menu {
+    display: block;
+}
+
+.language-menu li a {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--dark-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.language-menu li a:hover {
+    background-color: rgba(46, 134, 171, 0.1);
+    color: var(--primary-color);
+}
         /* تلوين كلمة شركاؤنا */
         /* المحتوى الرئيسي */
         main {
@@ -861,14 +937,18 @@
         <div class="container">
             <div class="logo-container">
                 <div class="logo">
-                    <img src="\logo.png" alt="شعار المركز السوري للتنمية المستدامة">
+                    <img src="\logo.png" alt="شعار المركز">
                 </div>
-                <div class="org-name">المركز السوري للتنمية المستدامة والتمكين المجتمعي</div>
+                <div class="org-name">
+                    <span class="org-name-line1">المركز السوري للتنمية المستدامة</span>
+                    <span class="org-name-line2">والتمكين المجتمعي</span>
+                </div>
             </div>
+            <div class="buttons-container">
             <nav class="nav">
                 <ul class="nav-list">
-                    <li><a href="#home">الرئيسية</a></li>
-                    <li><a href="#about">النشاطات والفعاليات </a></li>
+                    <li><a href="#home">الخدمات</a></li>
+                    <li><a href="{{ route('events') }}">النشاطات والفعاليات </a></li>
                     <li><a href="contact.html">اتصل بنا</a></li>
                     <li class="dropdown">
                         <a href="javascript:void(0)" class="dropbtn">أخرى <i class="fas fa-chevron-down"></i></a>
@@ -877,43 +957,64 @@
                             <a href="#target">الفئة المستهدفة</a>
                             <a href="#services">مجالاتنا</a>
                             <a href="#team">فريقنا</a>
-                            <a href="#partners" style="color: #000; font-weight: bold;">شركاؤنا</a>
+                            <a href="#partners">شركاؤنا</a>
                         </div>
+                    </li>
+                    <li class="language-switcher">
+                        <button class="language-btn">
+                            <i class="fas fa-globe"></i>
+                            <span class="current-lang">العربية</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <ul class="language-menu">
+                            <li><a href="#" data-lang="ar"><i class="fas fa-language"></i> العربية</a></li>
+                            <li><a href="#" data-lang="en"><i class="fas fa-language"></i> English</a></li>
+                        </ul>
                     </li>
                     <li class="login-btn"><a href="/login">تسجيل الدخول</a></li>
                 </ul>
             </nav>
         </div>
+        </div>
     </header>
 
     <!-- القسم الرئيسي -->
     <main>
-        <!-- قسم من نحن -->
-        <!-- قسم من نحن -->
-        <section id="about" class="section about-section">
-            <div class="container">
-                <h2 class="section-title">من نحن</h2>
-                <div class="about-container">
-                    <div class="about-image">
-                        <div class="about-image-card">
-                            <img src="/image1.jpg" alt="صورة تمثل أعمال المركز السوري للتنمية المستدامة">
-                        </div>
+       <!-- قسم من نحن -->
+       <section id="about" class="section about-section">
+        <div class="container">
+            <h2 class="section-title">من نحن</h2>
+            <div class="about-container">
+                <div class="about-image">
+                    <div class="about-image-card">
+                        <img src="/image1.jpg" alt="صورة تمثل أعمال المركز السوري للتنمية المستدامة">
                     </div>
-                    <div class="about-content">
-                        <p>المركز السوري للتنمية المستدامة هو منظمة غير حكومية تهدف إلى تعزيز التمكين المجتمعي والتنمية
-                            المستدامة في سوريا من خلال برامج ومبادرات متنوعة.</p>
-                        <p>نعمل على بناء قدرات الأفراد والمجتمعات المحلية لتحقيق التنمية الشاملة والمستدامة التي تلبي
-                            احتياجات الحاضر دون المساس بقدرة الأجيال القادمة على تلبية احتياجاتها.</p>
-
-                        <!-- زر قراءة المزيد المضاف -->
-                        <div class="read-more-btn-container">
-                            <a href="#" class="read-more-btn">قراءة المزيد</a>
-                        </div>
+                </div>
+                <div class="about-content">
+                    @php
+                        // استخراج المحتوى العربي فقط (يمكن تعديل النمط حسب احتياجاتك)
+                        $arabicContent = preg_replace('/[^\p{Arabic}\s]/u', '', $aboutUs->content);
+                        
+                        // تقسيم النص إلى كلمات
+                        $words = preg_split('/\s+/', $arabicContent);
+                        
+                        // أخذ أول 40 كلمة
+                        $shortContent = implode(' ', array_slice($words, 0, 40));
+                        
+                        // إضافة نقاط (...) إذا كان النص الأصلي أطول
+                        if (count($words) > 40) {
+                            $shortContent .= '...';
+                        }
+                    @endphp
+                    <p>{{ $shortContent }}</p>
+                    <!-- زر قراءة المزيد -->
+                    <div class="read-more-btn-container">
+                        <a href="{{ route('about-us') }}" class="read-more-btn">قراءة المزيد</a>
                     </div>
                 </div>
             </div>
-        </section>
-
+        </div>
+    </section>
         <!-- قسم الرسالة والرؤية -->
         <section id="mission" class="section mission-section">
             <div class="container">
@@ -923,14 +1024,14 @@
                         <div class="icon-wrapper">
                             <i class="far fa-lightbulb"></i>
                         </div>
-                        <p>تقديم الحلول المبتكرة والشركات الفعالة لتحسن سبل العيش وتعزيز الاستقرار الاجتماعي</p>
+                        <p>{{ $message->content ?? 'المحتوى غير متوفر حالياً' }}</p>
                     </div>
                     <div class="vision">
                         <h3 style="color: #000;">رؤيتنا</h3>
                         <div class="icon-wrapper">
                             <i class="fas fa-crosshairs"></i>
                         </div>
-                        <p>دعم التنمية المستدامة وتمكين الأفراد والمجتمعات نحو مستقبل أفضل </p>
+                        <p>{{ $vision->content ?? 'المحتوى غير متوفر حالياً' }}</p>
                     </div>
                 </div>
             </div>
@@ -944,11 +1045,7 @@
                     <i class="fas fa-users" style="color: #000;"></i>
                 </div>
                 <div class="target-content">
-                    <p>قادة المجتمع السوري والمواطنون </p>
-                    <p>منظمات المجتمع المدني </p>
-                    <p>المنظمات الدولية والجهات المانحة </p>
-                    <p>الطلاب والباحثون والشباب</p>
-                    <p>وسائل الإعلام</p>
+                    <p>{{ $targetgroup->content ?? 'المحتوى غير متوفر حالياً' }}</p>
                 </div>
             </div>
         </section>
@@ -1054,7 +1151,8 @@
                 <div class="footer-links">
                     <h4>روابط سريعة</h4>
                     <ul>
-                        <li><a href="#home">الرئيسية</a></li>
+                        <li><a href="#home">النشاطات والفعاليات</a></li>
+                        <li><a href="#home">الخدمات</a></li>
                         <li><a href="#about">من نحن</a></li>
                         <li><a href="#services">مجالاتنا</a></li>
                         <li><a href="#team">فريقنا</a></li>

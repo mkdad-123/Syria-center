@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\CustomUser\AuhtController;
 use App\Http\Controllers\CustomUser\ResetPasswordController;
+use App\Http\Controllers\ShowController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('/');
+Route::get('/', [ShowController::class , 'showHomePage'])->name('home');
+Route::get('/home/about-us', [ShowController::class , 'showAbout_usPage'])->name('about-us');
+Route::get('/home/events', [ShowController::class , 'showEventsPage'])->name('events');
+
+
+
 
 Route::get('/login', [AuhtController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuhtController::class, 'login'])->name('login.submit');
@@ -37,3 +41,5 @@ Route::post('/register', [AuhtController::class, 'register'])->name('register.su
         }
         return view('customauth.reset');
     })->name('password.reset');
+
+

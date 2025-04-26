@@ -17,5 +17,8 @@ class Event extends Model
         'is_published',
         'cover_image'
     ];
-
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+    ];
 }
