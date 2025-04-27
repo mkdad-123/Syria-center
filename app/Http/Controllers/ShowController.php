@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\Event;
+use App\Models\Section;
+use App\Models\Service;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 
@@ -14,42 +17,17 @@ class ShowController extends Controller
         // جلب المحتوى حيث section = 'about-us'
         $aboutUs = Setting::where('section', 'about-us')->first();
 
-        if (!$aboutUs) {
-            return response()->json([
-                'message' => 'Content not found',
-                'data' => null
-            ], 404);
-        }
 
         // جلب المحتوى حيث section = 'vision'
         $vision = Setting::where('section', 'vision')->first();
 
-        if (!$vision) {
-            return response()->json([
-                'message' => 'Content not found',
-                'data' => null
-            ], 404);
-        }
 
         // جلب المحتوى حيث section = 'message'
         $message = Setting::where('section', 'message')->first();
 
-        if (!$message) {
-            return response()->json([
-                'message' => 'Content not found',
-                'data' => null
-            ], 404);
-        }
 
         // جلب المحتوى حيث section = 'targetgroup'
         $targetgroup = Setting::where('section', 'target group')->first();
-
-        if (!$targetgroup) {
-            return response()->json([
-                'message' => 'Content not found',
-                'data' => null
-            ], 404);
-        }
 
         return view('welcome', compact('aboutUs', 'targetgroup', 'message', 'vision'));
     }
@@ -67,10 +45,40 @@ class ShowController extends Controller
         return view('about-us', compact('aboutUs'));
     }
 
-    public function showEventsPage(){
+    public function showEventsPage()
+    {
         $events = Event::where('is_published', '1')
-        ->orderByDesc('id')
-        ->get();  
-        return view('events' , compact('events'));
+            ->orderByDesc('id')
+            ->get();
+        return view('events', compact('events'));
+    }
+
+    public function showSectionsPage()
+    {
+        $sections = Section::with('services')->get();
+
+        return view('sections', compact('sections'));
+    }
+
+
+    public function showServicesPage($id)
+    {
+        $services = Service::where('section_id', $id)->get();
+
+        return view('services', compact('services'));
+    }
+
+    public function showServicesDetailesPage($id)
+    {
+        $service = Service::with('articles')->findOrFail($id);
+
+        return view('servicesdetailes', compact('service'));
+    }
+
+    public function showArticlePage($id)
+    {
+        $article = Article::where('id' , $id )->get();
+
+        return view('article', compact('article'));
     }
 }

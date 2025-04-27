@@ -947,7 +947,7 @@
             <div class="buttons-container">
             <nav class="nav">
                 <ul class="nav-list">
-                    <li><a href="#home">الخدمات</a></li>
+                    <li><a href="{{ route('sections') }}">الخدمات</a></li>
                     <li><a href="{{ route('events') }}">النشاطات والفعاليات </a></li>
                     <li><a href="contact.html">اتصل بنا</a></li>
                     <li class="dropdown">
@@ -980,8 +980,8 @@
 
     <!-- القسم الرئيسي -->
     <main>
-       <!-- قسم من نحن -->
-       <section id="about" class="section about-section">
+        <!-- قسم من نحن -->
+        <section id="about" class="section about-section">
         <div class="container">
             <h2 class="section-title">من نحن</h2>
             <div class="about-container">
@@ -992,21 +992,27 @@
                 </div>
                 <div class="about-content">
                     @php
+                    // التحقق مما إذا كان $aboutUs موجودًا وغير فارغ
+                    if (!empty($aboutUs)) {
                         // استخراج المحتوى العربي فقط (يمكن تعديل النمط حسب احتياجاتك)
                         $arabicContent = preg_replace('/[^\p{Arabic}\s]/u', '', $aboutUs->content);
-                        
+                
                         // تقسيم النص إلى كلمات
                         $words = preg_split('/\s+/', $arabicContent);
-                        
+                
                         // أخذ أول 40 كلمة
                         $shortContent = implode(' ', array_slice($words, 0, 40));
-                        
+                
                         // إضافة نقاط (...) إذا كان النص الأصلي أطول
                         if (count($words) > 40) {
                             $shortContent .= '...';
                         }
-                    @endphp
-                    <p>{{ $shortContent }}</p>
+                    } else {
+                        // القيمة الافتراضية إذا كان $aboutUs فارغًا
+                        $shortContent = "المركز السوري للتنمية المستدامة والتمكين المجتمعي هو منظمة غير حكومية تهدف إلى دعم التنمية المستدامة في سوريا من خلال برامج ومشاريع تنموية...";
+                    }
+                @endphp
+                <p>{{ $shortContent }}</p>
                     <!-- زر قراءة المزيد -->
                     <div class="read-more-btn-container">
                         <a href="{{ route('about-us') }}" class="read-more-btn">قراءة المزيد</a>

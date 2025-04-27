@@ -19,7 +19,7 @@ class Service extends Model
         return $this->belongsTo(Section::class);
     }
 
-    public function article(): HasMany
+    public function articles(): HasMany
     {
         return $this->hasMany(Article::class);
     }

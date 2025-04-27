@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [ShowController::class , 'showHomePage'])->name('home');
 Route::get('/home/about-us', [ShowController::class , 'showAbout_usPage'])->name('about-us');
 Route::get('/home/events', [ShowController::class , 'showEventsPage'])->name('events');
+Route::get('/home/sections', [ShowController::class , 'showSectionsPage'])->name('sections');
+Route::get('/home/sections/{section?}/services', [ShowController::class , 'showServicesPage'])->name('services');
+Route::get('/home/sections/services/{service?}/detailes',[ShowController::class , 'showServicesDetailesPage'])->name('details');
+Route::get('/home/sections/services/detailes/{article?}/content',[ShowController::class , 'showArticlePage'])->name('article');
+
 
 
 
