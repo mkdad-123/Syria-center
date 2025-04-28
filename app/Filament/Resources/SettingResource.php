@@ -79,11 +79,6 @@ class SettingResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->contentGrid([
-                'md' => 2,
-                'lg' => 3,
-                'xl' => 4,
-            ])
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
                     ->label('image')
