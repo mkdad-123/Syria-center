@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class ArticleResource extends Resource
 {
@@ -32,19 +33,15 @@ class ArticleResource extends Resource
                     ->required()
                     ->maxLength(255),
 
-                Forms\Components\RichEditor::make('content')
-                    ->label('content')
+                TinyEditor::make('content')
+                    ->minHeight(300)
+                    ->fileAttachmentsDisk('public')
+                    ->fileAttachmentsVisibility('public')
+                    ->fileAttachmentsDirectory('articles')
+                    ->hint('Upload images and use them easily')
                     ->required()
-                    ->columnSpanFull()
-                    ->toolbarButtons([
-                        'bold',
-                        'bulletList',
-                        'italic',
-                        'link',
-                        'orderedList',
-                        'redo',
-                        'undo',
-                    ]),
+                    ->columnSpanFull(),
+
             ]);
     }
 
