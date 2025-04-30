@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Section extends Model
 {
+    public $translatable = ['name','description'];
+
     protected $fillable = ['name', 'image', 'description'];
     
     public function services(): HasMany

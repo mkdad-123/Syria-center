@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
+    public $translatable = ['description' , 'title' ,'type' , 'location' ,'max_participants'];
+
     protected $fillable = [
         'title',
         'description',

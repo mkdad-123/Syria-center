@@ -17,8 +17,11 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 class ResetPasswordController extends Controller
 {
+    protected $guard = 'custom'; // تحديد الـ guard المخصص
+
     public function sendResetCode(Request $request)
     {
+        
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:customusers',
         ]);

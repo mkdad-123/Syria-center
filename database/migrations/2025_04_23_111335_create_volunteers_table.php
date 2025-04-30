@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             // basic info
-            $table->string('name');
+            $table->json('name');
             $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->string('national_id')->nullable(); // for Identity verification
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
 
             //  skills and profession
-            $table->string('profession')->nullable();
+            $table->json('profession')->nullable();
             $table->json('skills')->nullable(); // list of skills
 
             // availability and commitment
@@ -33,9 +33,9 @@ return new class extends Migration
 
             //  files and management
             $table->string('profile_photo')->nullable();
-            $table->string('CV')->nullable();
-            $table->text('notes')->nullable();
-            $table->softDeletes();
+            $table->json('CV')->nullable();
+            $table->json('notes')->nullable();
+            $table->softDeletes()->nullable();
 
             $table->timestamps();
         });

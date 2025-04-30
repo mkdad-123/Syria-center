@@ -3,31 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Translatable\HasTranslations;
 
-class Volunteer extends Model
+class Partner extends Model
 {
+    use HasApiTokens , Notifiable;
     use HasTranslations;
 
-    public $translatable = ['name','gender','profession','skills','CV','notes'];
+    protected $table = 'partners';
+    public $translatable = ['name','description'];
 
-    protected $fillable = [
-        'name',
-        'email',
-        'phone',
-        'national_id',
-        'birth_date',
-        'gender',
-        'profession',
-        'skills',
-        'availability',
-        'join_date',
-        'is_active',
-        'profile_photo',
-        'CV',
-        'notes'
-    ];
-
+    protected $fillable = ['name', 'image', 'description'];
     public function getTranslatedContent($locale, $default = null)
     {
         try {

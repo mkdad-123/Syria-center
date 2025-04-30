@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Redirect;
 
 class AuhtController extends Controller
 {
+    protected $guard = 'custom'; // تحديد الـ guard المخصص
+
     public function showRegistrationForm()
     {
         return view('customauth.register');
@@ -38,6 +40,7 @@ class AuhtController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        Auth::guard($this->guard)->login($user);
 
         return redirect('/')->with('success', 'تم التسجيل بنجاح!');
     }
@@ -60,7 +63,7 @@ class AuhtController extends Controller
     $remember = $request->filled('remember');
 
     // استخدام Guard المخصص للـ customusers
-    if (Auth::guard('custom')->attempt($credentials, $remember)) {
+    if (Auth::guard($this->guard)->attempt($credentials, $remember)) {
         $request->session()->regenerate();
 
         return redirect()->intended('/');
@@ -73,10 +76,9 @@ class AuhtController extends Controller
 }
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard($this->guard)->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect('/');
     }
 }

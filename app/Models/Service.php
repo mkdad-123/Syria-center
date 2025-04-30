@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Service extends Model
 {
+    public $translatable = ['description','name'];
+
     protected $fillable = [
         'name' ,
         'description' ,
