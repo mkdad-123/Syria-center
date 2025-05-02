@@ -3,7 +3,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SectionResource\Pages;
 use App\Filament\Resources\SectionResource\RelationManagers;
-use Filament\Forms\Components\Section;
+use App\Models\Section;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,7 +23,7 @@ class SectionResource extends Resource
     {
         return $form
             ->schema([
-                Section::make()
+                Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->label('name')
@@ -87,7 +87,7 @@ class SectionResource extends Resource
     public static function getRelations(): array
     {
         return [
-//            RelationManagers\ServicesRelationManager::class,
+            RelationManagers\ServicesRelationManager::class,
         ];
     }
 

@@ -22,5 +22,7 @@ class Volunteer extends Model
         'CV',
         'notes'
     ];
-
+    protected $casts = [
+        'skills' => 'array',
+    ];
 }
