@@ -64,6 +64,15 @@ class SettingResource extends Resource
 
                     Forms\Components\RichEditor::make('content')
                         ->label('content')
+                        ->toolbarButtons([
+                            'bold',
+                            'bulletList',
+                            'italic',
+                            'link',
+                            'orderedList',
+                            'redo',
+                            'undo',
+                        ])
                         ->columnSpanFull(),
 
                     Forms\Components\KeyValue::make('extra')
