@@ -36,27 +36,28 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users', // للـ users الافتراضي
-        ],
-        'custom' => [ // Guard مخصص لـ CustomUser
-            'driver' => 'session',
-            'provider' => 'customusers',
-        ],
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
     ],
 
-    'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class, // الجدول الافتراضي
-        ],
-        'customusers' => [ // Provider لـ CustomUser
-            'driver' => 'eloquent',
-            'model' => App\Models\CustomUser::class,
-        ],
+    'custom' => [ // اسم الـ guard المخصص
+        'driver' => 'session',
+        'provider' => 'custom_users', // سيتم تعريفه لاحقاً
+    ],
+],
+
+'providers' => [
+    'users' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\User::class,
     ],
 
+    'custom_users' => [ // مقدم الخدمة المخصص
+        'driver' => 'eloquent',
+        'model' => App\Models\CustomUser::class, // نموذج المستخدم المخصص
+    ],
+],
     /*
     |--------------------------------------------------------------------------
     | Resetting Passwords

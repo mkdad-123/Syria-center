@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->enum('section', ['about-us', 'vision', 'message' , 'target group'])->nullable();
-            $table->string('title')->nullable();
-            $table->text('content')->nullable();
+            $table->enum('section', ['about-us', 'vision', 'message' , 'target group','social_media','contact_info'])->nullable();
+            $table->json('title')->nullable();
+            $table->json('content')->nullable();
             $table->string('image')->nullable();
             $table->json('extra')->nullable();
             $table->timestamps();

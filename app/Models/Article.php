@@ -9,6 +9,7 @@ class Article extends Model
 {
     protected $table = 'articles';
     protected $fillable = ['content' , 'service_id' , 'title'];
+    public $translatable = ['content' , 'title'];
 
     public function service(): BelongsTo
     {

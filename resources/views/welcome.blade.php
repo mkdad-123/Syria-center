@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{{ $locale }}" dir="{{ $locale == 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="Content-Language" content="ar">
+    <meta http-equiv="Content-Language" content="{{ $locale }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المركز السوري للتنمية المستدامة - التمكين المجتمعي</title>
+    <title>{{ __('main.site_name') }} - {{ __('main.site_subname') }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* أنماط عامة */
@@ -67,14 +67,15 @@
             background-color: var(--light-color);
             color: var(--dark-color);
             line-height: 2;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial', sans-serif;
-            }
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial', sans-serif;
+        }
 
         .container {
-            width: calc(100% - 60px); /* 30px من كل جانب */
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0;
+            width: calc(100% - 60px);
+            /* 30px من كل جانب */
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0;
         }
 
         /* شريط التنقل - معدل */
@@ -90,10 +91,12 @@
 
         .header .container {
             display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 40px; /* زيادة المسافة بين العناصر */
-    padding: 0 20px; /* إضافة حشو داخلي */
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            /* زيادة المسافة بين العناصر */
+            padding: 0 20px;
+            /* إضافة حشو داخلي */
             /* إضافة فراغ بين العناصر */
         }
 
@@ -109,22 +112,24 @@
         }
 
         .org-name {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.2;
-    color: var(--primary-color);
-    font-weight: bold;
-}
-        .org-name-line1 {
-    font-size: 1.5rem;
-    white-space: nowrap;
-}
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
 
-.org-name-line2 {
-    font-size: 1.1rem;
-    color: var(--secondary-color);
-    white-space: nowrap;
-}
+        .org-name-line1 {
+            font-size: 1.5rem;
+            white-space: nowrap;
+        }
+
+        .org-name-line2 {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            white-space: nowrap;
+        }
+
         .nav-list {
             display: flex;
             list-style: none;
@@ -165,7 +170,8 @@
             color: var(--white) !important;
             padding: 8px 15px;
             border-radius: 4px;
-            margin-right: 60px; /* إبعاده عن العناصر الأخرى */
+            margin-right: 60px;
+            /* إبعاده عن العناصر الأخرى */
         }
 
         .login-btn a:hover {
@@ -214,36 +220,38 @@
         .dropdown:hover .dropdown-content {
             display: block;
         }
+
         /* أنماط محول اللغة المعدلة */
-.language-switcher {
-    position: relative;
-    margin-right: 0;
-    display: inline-flex; /* بدلاً من flex لعدم التأثير على العناصر الأخرى */
-    align-items: center;
-}
+        .language-switcher {
+            position: relative;
+            margin-right: 0;
+            display: inline-flex;
+            /* بدلاً من flex لعدم التأثير على العناصر الأخرى */
+            align-items: center;
+        }
 
-.language-btn {
-    background: none;
-    border: none;
-    color: var(--dark-color);
-    cursor: pointer;
-    padding: 8px 15px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 500;
-    border-radius: 4px;
-    transition: var(--transition);
-    text-decoration: none;
-    font-size: inherit;
-}
+        .language-btn {
+            background: none;
+            border: none;
+            color: var(--dark-color);
+            cursor: pointer;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            border-radius: 4px;
+            transition: var(--transition);
+            text-decoration: none;
+            font-size: inherit;
+        }
 
-.language-btn:hover {
-    color: var(--primary-color);
-    background-color: rgba(46, 134, 171, 0.1);
-}
+        .language-btn:hover {
+            color: var(--primary-color);
+            background-color: rgba(46, 134, 171, 0.1);
+        }
 
-.language-menu {
+        .language-menu {
     display: none;
     position: absolute;
     top: 100%;
@@ -252,30 +260,32 @@
     min-width: 150px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
-    z-index: 100;
+    z-index: 1000; /* تأكد من أن القائمة فوق كل العناصر */
     list-style: none;
     padding: 10px 0;
-    margin-top: 5px; /* هامش بسيط */
+    margin-top: 5px;
 }
 
-.language-switcher:hover .language-menu {
+.language-switcher:hover .language-menu,
+.language-menu:hover {
     display: block;
 }
 
-.language-menu li a {
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--dark-color);
-    text-decoration: none;
-    transition: var(--transition);
-}
+        .language-menu li a {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
 
-.language-menu li a:hover {
-    background-color: rgba(46, 134, 171, 0.1);
-    color: var(--primary-color);
-}
+        .language-menu li a:hover {
+            background-color: rgba(46, 134, 171, 0.1);
+            color: var(--primary-color);
+        }
+
         /* تلوين كلمة شركاؤنا */
         /* المحتوى الرئيسي */
         main {
@@ -896,6 +906,14 @@
                 flex-direction: column;
             }
 
+            .user-welcome {
+                display: flex;
+                align-items: center;
+                padding: 0 15px;
+                color: var(--primary-color);
+                font-weight: 500;
+            }
+
             .team-carousel,
             .partners-carousel {
                 height: 350px;
@@ -937,412 +955,506 @@
         <div class="container">
             <div class="logo-container">
                 <div class="logo">
-                    <img src="\logo.png" alt="شعار المركز">
+                    <img src="\logo.png" alt="{{ __('main.site_name') }}">
                 </div>
                 <div class="org-name">
-                    <span class="org-name-line1">المركز السوري للتنمية المستدامة</span>
-                    <span class="org-name-line2">والتمكين المجتمعي</span>
+                    <span class="org-name-line1">{{ __('main.site_name') }}</span>
+                    <span class="org-name-line2">{{ __('main.site_subname') }}</span>
                 </div>
             </div>
             <div class="buttons-container">
-            <nav class="nav">
-                <ul class="nav-list">
-                    <li><a href="{{ route('sections') }}">الخدمات</a></li>
-                    <li><a href="{{ route('events') }}">النشاطات والفعاليات </a></li>
-                    <li><a href="contact.html">اتصل بنا</a></li>
-                    <li class="dropdown">
-                        <a href="javascript:void(0)" class="dropbtn">أخرى <i class="fas fa-chevron-down"></i></a>
-                        <div class="dropdown-content">
-                            <a href="#mission">الرؤية والرسالة</a>
-                            <a href="#target">الفئة المستهدفة</a>
-                            <a href="#services">مجالاتنا</a>
-                            <a href="#team">فريقنا</a>
-                            <a href="#partners">شركاؤنا</a>
-                        </div>
-                    </li>
-                    <li class="language-switcher">
-                        <button class="language-btn">
-                            <i class="fas fa-globe"></i>
-                            <span class="current-lang">العربية</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <ul class="language-menu">
-                            <li><a href="#" data-lang="ar"><i class="fas fa-language"></i> العربية</a></li>
-                            <li><a href="#" data-lang="en"><i class="fas fa-language"></i> English</a></li>
-                        </ul>
-                    </li>
-                    <li class="login-btn"><a href="/login">تسجيل الدخول</a></li>
-                </ul>
-            </nav>
-        </div>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
+                        <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
+                        <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
+                        <li class="dropdown">
+                            <a href="javascript:void(0)" class="dropbtn">{{ __('main.menu.sections') }} <i class="fas fa-chevron-down"></i></a>
+                            <div class="dropdown-content">
+                                <a href="#mission">{{ __('main.menu.about') }}</a>
+                                <a href="#target">{{ __('main.menu.target') }}</a>
+                                <a href="#services">{{ __('main.menu.services') }}</a>
+                                <a href="#team">{{ __('main.menu.team') }}</a>
+                                <a href="#partners">{{ __('main.menu.partners') }}</a>
+                            </div>
+                        </li>
+                        <li class="language-switcher">
+                            <button class="language-btn">
+                                <i class="fas fa-globe"></i>
+                                <span class="current-lang">{{ $locale == 'ar' ? 'العربية' : 'English' }}</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <ul class="language-menu">
+                                <li><a href="#" data-lang="ar"><i class="fas fa-language"></i> العربية</a></li>
+                                <li><a href="#" data-lang="en"><i class="fas fa-language"></i> English</a></li>
+                            </ul>
+                        </li>
+                        @if(Auth::guard('custom')->check())
+                        <li class="login-btn">
+                            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                {{ __('main.buttons.logout') }}
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </li>
+                        @else
+                        <li class="login-btn"><a href="{{ route('login') }}">{{ __('main.buttons.login') }}</a></li>
+                        @endif
+                    </ul>
+                </nav>
+            </div>
         </div>
     </header>
 
     <!-- القسم الرئيسي -->
     <main>
-        <!-- قسم من نحن -->
+        <!-- About Us Section - Fixed -->
         <section id="about" class="section about-section">
-        <div class="container">
-            <h2 class="section-title">من نحن</h2>
-            <div class="about-container">
-                <div class="about-image">
-                    <div class="about-image-card">
-                        <img src="/image1.jpg" alt="صورة تمثل أعمال المركز السوري للتنمية المستدامة">
+            <div class="container">
+                <h2 class="section-title">{{ __('main.titles.about') }}</h2>
+                <div class="about-container">
+                    <!-- الصورة الجديدة -->
+                    <div class="about-image">
+                        <div class="about-image-card">
+                            <img src="\image1.jpg" alt="{{ __('main.titles.about') }}">
+                        </div>
                     </div>
-                </div>
                 <div class="about-content">
                     @php
-                    // التحقق مما إذا كان $aboutUs موجودًا وغير فارغ
-                    if (!empty($aboutUs)) {
-                        // استخراج المحتوى العربي فقط (يمكن تعديل النمط حسب احتياجاتك)
-                        $arabicContent = preg_replace('/[^\p{Arabic}\s]/u', '', $aboutUs->content);
-                
-                        // تقسيم النص إلى كلمات
-                        $words = preg_split('/\s+/', $arabicContent);
-                
-                        // أخذ أول 40 كلمة
+                        $aboutContent = '';
+                        if (is_string($aboutUs)) {
+                            $aboutContent = $aboutUs;
+                        } elseif ($aboutUs instanceof \App\Models\Setting) {
+                            $aboutContent = $aboutUs->getTranslation('content', $locale, false) ?? __('No content available');
+                        } else {
+                            $aboutContent = __('No content available');
+                        }
+                        
+                        $words = preg_split('/\s+/', $aboutContent);
                         $shortContent = implode(' ', array_slice($words, 0, 40));
-                
-                        // إضافة نقاط (...) إذا كان النص الأصلي أطول
                         if (count($words) > 40) {
                             $shortContent .= '...';
                         }
-                    } else {
-                        // القيمة الافتراضية إذا كان $aboutUs فارغًا
-                        $shortContent = "المركز السوري للتنمية المستدامة والتمكين المجتمعي هو منظمة غير حكومية تهدف إلى دعم التنمية المستدامة في سوريا من خلال برامج ومشاريع تنموية...";
-                    }
-                @endphp
-                <p>{{ $shortContent }}</p>
-                    <!-- زر قراءة المزيد -->
+                    @endphp
+                    <p>{{ $shortContent }}</p>
                     <div class="read-more-btn-container">
-                        <a href="{{ route('about-us') }}" class="read-more-btn">قراءة المزيد</a>
+                        <a href="{{ route('about-us') }}" class="read-more-btn">{{ __('main.buttons.read_more') }}</a>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-        <!-- قسم الرسالة والرؤية -->
+        </section>
+
+        <!-- Mission & Vision Section - Fixed -->
         <section id="mission" class="section mission-section">
             <div class="container">
                 <div class="mission-vision">
                     <div class="mission">
-                        <h3 style="color: #000;">رسالتنا</h3>
+                        <h3 style="color: #000;">{{ __('main.titles.mission') }}</h3>
                         <div class="icon-wrapper">
                             <i class="far fa-lightbulb"></i>
                         </div>
-                        <p>{{ $message->content ?? 'المحتوى غير متوفر حالياً' }}</p>
+                        @php
+                            $missionContent = '';
+                            if (is_string($message)) {
+                                $missionContent = $message;
+                            } elseif ($message instanceof \App\Models\Setting) {
+                                $missionContent = $message->getTranslation('content', $locale, false) ?? __('No content available');
+                            } else {
+                                $missionContent = __('No content available');
+                            }
+                        @endphp
+                        <p>{{ $missionContent }}</p>
                     </div>
                     <div class="vision">
-                        <h3 style="color: #000;">رؤيتنا</h3>
+                        <h3 style="color: #000;">{{ __('main.titles.vision') }}</h3>
                         <div class="icon-wrapper">
                             <i class="fas fa-crosshairs"></i>
                         </div>
-                        <p>{{ $vision->content ?? 'المحتوى غير متوفر حالياً' }}</p>
+                        @php
+                            $visionContent = '';
+                            if (is_string($vision)) {
+                                $visionContent = $vision;
+                            } elseif ($vision instanceof \App\Models\Setting) {
+                                $visionContent = $vision->getTranslation('content', $locale, false) ?? __('No content available');
+                            } else {
+                                $visionContent = __('No content available');
+                            }
+                        @endphp
+                        <p>{{ $visionContent }}</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- قسم الفئة المستهدفة -->
+        <!-- Target Group Section - Fixed -->
         <section id="target" class="section target-section">
             <div class="container">
-                <h2 class="section-title">الفئة المستهدفة</h2>
+                <h2 class="section-title">{{ __('main.titles.target') }}</h2>
                 <div class="target-icon">
                     <i class="fas fa-users" style="color: #000;"></i>
                 </div>
                 <div class="target-content">
-                    <p>{{ $targetgroup->content ?? 'المحتوى غير متوفر حالياً' }}</p>
+                    @php
+                        $targetContent = '';
+                        if (is_string($targetgroup)) {
+                            $targetContent = $targetgroup;
+                        } elseif ($targetgroup instanceof \App\Models\Setting) {
+                            $targetContent = $targetgroup->getTranslation('content', $locale, false) ?? __('No content available');
+                        } else {
+                            $targetContent = __('No content available');
+                        }
+                    @endphp
+                    <p>{{ $targetContent }}</p>
                 </div>
             </div>
         </section>
-
-        <!-- قسم ما نقدمه -->
-        <section id="services" class="section services-section">
-            <div class="container">
-                <h2 class="section-title"> مجالاتنا </h2>
-                <div class="services-grid">
-                    <div class="service-card">
-                        <i class="fas fa-graduation-cap"></i>
-                        <h3>التعليم والتمكين </h3>
-                        <p>تمكين الأفراد والمجتمعات من تعزيز قدراتهم على الصمود والمساهمة في بناء المستقبل </p>
-                    </div>
-                    <div class="service-card">
-                        <i class="fas fa-chart-line"></i>
-                        <h3>التنمية والإسكان </h3>
-                        <p>تحسين سبل العيش وتعزيز الاستقرار المجتمعي من خلال دعم الفرص المدرة للدخل </p>
-                    </div>
-                    <div class="service-card">
-                        <i class="fas fa-seedling"></i>
-                        <h3> البيئة </h3>
-                        <p> تعزيز التنمية الزراعية والحفاظ على الموارد الطبيعية </p>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <a href="services.html" class="btn">اكتشف المزيد من خدماتنا</a>
-                </div>
+<!-- قسم ما نقدمه -->
+<section id="services" class="section services-section">
+    <div class="container">
+        <h2 class="section-title">{{ __('main.titles.services') }}</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fas fa-graduation-cap"></i>
+                <h3>{{ __('main.services.education') }}</h3>
+                <p>{{ $locale == 'ar' ? 'تمكين الأفراد والمجتمعات من تعزيز قدراتهم' : 'Empowering individuals and communities to enhance their capabilities' }}</p>
             </div>
-        </section>
+            <div class="service-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>{{ __('main.services.development') }}</h3>
+                <p>{{ $locale == 'ar' ? 'تحسين سبل العيش وتعزيز الاستقرار المجتمعي' : 'Improving livelihoods and enhancing community stability' }}</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-seedling"></i>
+                <h3>{{ __('main.services.environment') }}</h3>
+                <p>{{ $locale == 'ar' ? 'تعزيز التنمية الزراعية والحفاظ على الموارد' : 'Promoting agricultural development and preserving resources' }}</p>
+            </div>
+        </div>
+        <div class="text-center">
+            <a href="{{ route('sections') }}" class="btn">{{ __('main.buttons.discover') }}</a>
+        </div>
+    </div>
+</section>
 
-        <!-- قسم فريقنا المحسن -->
+        <!-- Team Section - Improved -->
         <section id="team" class="section team-section">
             <div class="container">
-                <h2 class="section-title">فريقنا</h2>
-                <div class="team-carousel">
-                    <button class="carousel-btn" id="prevBtn"><i class="fas fa-chevron-right"></i></button>
-                    <button class="carousel-btn" id="nextBtn"><i class="fas fa-chevron-left"></i></button>
-                    <div class="team-slide" id="teamCarousel">
-                        <div class="team-member">
-                            <img src="/team1.jpg" alt="عضو الفريق">
-                            <h3>محمد أحمد</h3>
-                            <p>مدير المركز</p>
-                            <p>خبرة أكثر من 15 سنة في مجال التنمية المستدامة</p>
+                <h2 class="section-title">{{ __('main.titles.team') }}</h2>
+                <div class="team-carousel" id="teamCarousel">
+                    <div class="team-slide">
+                        @foreach($team as $member)
+                        <div class="team-member {{ $loop->first ? 'active' : '' }}">
+                            <img src="{{ asset($member->image) }}" alt="{{ $member->name }}">
+                            <h3>{{ $member->name }}</h3>
+                            <p>{{ $member->getTranslation('position', $locale) }}</p>
+                            <p>{{ $member->getTranslation('bio', $locale) }}</p>
                         </div>
-                        <div class="team-member">
-                            <img src="/team2.jpg" alt="عضو الفريق">
-                            <h3>سارة محمد</h3>
-                            <p>منسقة المشاريع</p>
-                            <p>متخصصة في التمكين المجتمعي وتنمية المرأة</p>
-                        </div>
-                        <div class="team-member">
-                            <img src="/team3.jpg" alt="عضو الفريق">
-                            <h3>علي حسن</h3>
-                            <p>خبير بيئي</p>
-                            <p>متخصص في الحفاظ على الموارد الطبيعية</p>
-                        </div>
+                        @endforeach
                     </div>
+                    <button class="carousel-btn" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="carousel-btn" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+                    <div class="carousel-indicators"></div>
                 </div>
             </div>
         </section>
 
-        <!-- قسم الشركاء الجديد -->
+        <!-- Partners Section - Improved -->
         <section id="partners" class="section partners-section">
             <div class="container">
-                <h2 class="section-title">شركاؤنا</h2>
-                <div class="partners-carousel">
-                    <button class="carousel-btn" id="partnersPrevBtn"><i class="fas fa-chevron-right"></i></button>
-                    <button class="carousel-btn" id="partnersNextBtn"><i class="fas fa-chevron-left"></i></button>
-                    <div class="partners-slide" id="partnersCarousel">
-                        <div class="partner">
-                            <img src="/partner1.jpg" alt="شريك 1">
-                            <h3>منظمة الأمم المتحدة</h3>
-                            <p>شريك استراتيجي في برامج التنمية المستدامة</p>
-                            <p>نعمل معاً منذ 2015 على تنفيذ مشاريع التنمية المجتمعية</p>
+                <h2 class="section-title">{{ __('main.titles.partners') }}</h2>
+                <div class="partners-carousel" id="partnersCarousel">
+                    <div class="partners-slide">
+                        @foreach($partners as $partner)
+                        <div class="partner {{ $loop->first ? 'active' : '' }}">
+                            <img src="{{ asset($partner->logo) }}" alt="{{ $partner->name }}">
+                            <h3>{{ $partner->name }}</h3>
+                            <p>{{ $partner->getTranslation('description', $locale) }}</p>
                         </div>
-                        <div class="partner">
-                            <img src="/partner2.jpg" alt="شريك 2">
-                            <h3>الصندوق الدولي للتنمية</h3>
-                            <p>داعم رئيسي لبرامج التمكين الاقتصادي</p>
-                            <p>ساهموا في تمويل 10 مشاريع لتحسين سبل العيش</p>
-                        </div>
-                        <div class="partner">
-                            <img src="/partner3.jpg" alt="شريك 3">
-                            <h3>جمعية الهلال الأحمر</h3>
-                            <p>شريك في البرامج الإنسانية والتنموية</p>
-                            <p>تعاون مشترك في تقديم المساعدات الإنسانية</p>
-                        </div>
+                        @endforeach
                     </div>
+                    <button class="carousel-btn" id="partnersPrevBtn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="carousel-btn" id="partnersNextBtn"><i class="fas fa-chevron-right"></i></button>
+                    <div class="carousel-indicators"></div>
                 </div>
             </div>
         </section>
     </main>
 
     <!-- تذييل الصفحة -->
-    <footer class="footer">
+    < <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <img src="\logo.png" alt="شعار المركز السوري للتنمية المستدامة">
-                    <p>المركز السوري للتنمية المستدامة و التمكين المجتمعي</p>
+                    <img src="\logo.png" alt="{{ __('main.site_name') }}">
+                    <p>{{ __('main.site_name') }} - {{ __('main.site_subname') }}</p>
                 </div>
                 <div class="footer-links">
-                    <h4>روابط سريعة</h4>
+                    <h4>{{ __('main.footer.quick_links') }}</h4>
                     <ul>
-                        <li><a href="#home">النشاطات والفعاليات</a></li>
-                        <li><a href="#home">الخدمات</a></li>
-                        <li><a href="#about">من نحن</a></li>
-                        <li><a href="#services">مجالاتنا</a></li>
-                        <li><a href="#team">فريقنا</a></li>
-                        <li><a href="#partners">شركاؤنا</a></li>
-                        <li><a href="contact.html">اتصل بنا</a></li>
+                        <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
+                        <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
+                        <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
+                        <li><a href="#about">{{ __('main.menu.about') }}</a></li>
+                        <li><a href="#services">{{ __('main.menu.services') }}</a></li>
+                        <li><a href="#team">{{ __('main.menu.team') }}</a></li>
+                        <li><a href="#partners">{{ __('main.menu.partners') }}</a></li>
                     </ul>
                 </div>
-                <div class="footer-contact">
-                    <h4>تواصل معنا</h4>
-                    <p><i class="fas fa-map-marker-alt"></i> سوريا , دمشق , ميدان_بناء جريدة تشرين</p>
-                    <p><i class="fas fa-phone"></i> +963 123 456 789</p>
-                    <p><i class="fas fa-envelope"></i> info@scsd.org</p>
+                </div>
+                <div class="contact-info-container">
+                    <h2 class="contact-info-title" style="color: #FF6B00;">{{ __('main.footer.contact_us') }}</h2>
+                        <!-- قسم الهواتف -->
+                        @if(isset($contactInfo['phones']) && count($contactInfo['phones']) > 0)
+                            <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-phone contact-icon" style="color: #FF6B00;"></i>
+                                <span>{{ $contactInfo['phones'][0] }}</span>
+                            </div>
+                        @else
+                            <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-phone contact-icon" style="color: #FF6B00;"></i>
+                                <span>+963 11 123 4567</span>
+                            </div>
+                        @endif
+                
+                        <!-- قسم البريد الإلكتروني -->
+                        @if(isset($contactInfo['emails']) && count($contactInfo['emails']) > 0)
+                            <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-envelope contact-icon" style="color: #FF6B00;"></i>
+                                <span>{{ $contactInfo['emails'][0] }}</span>
+                            </div>
+                        @else
+                            <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-envelope contact-icon" style="color: #FF6B00;"></i>
+                                <span>info@example.com</span>
+                            </div>
+                        @endif
+                
+                        <!-- قسم العنوان -->
+                        @if(isset($contactInfo['address']))
+                            <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-map-marker-alt contact-icon" style="color: #FF6B00;"></i>
+                                <span>{{ $contactInfo['address'] }}</span>
+                            </div>
+                        @else
+                            <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-map-marker-alt contact-icon" style="color: #FF6B00;"></i>
+                                <span>دمشق، سوريا - ميدان بناء جريدة تشرين</span>
+                            </div>
+                        @endif
+                    </div>
+                
+                    <!-- قسم ساعات العمل (اختياري) -->
+                    @if(isset($contactInfo['working_hours']))
+                        <div class="working-hours" style="display: flex; align-items: center; gap: 10px; margin-top: 20px;">
+                            <i class="fas fa-clock contact-icon" style="color: #FF6B00;"></i>
+                            <span>ساعات العمل: {{ $contactInfo['working_hours'] }}</span>
+                        </div>
+                    @endif
+                </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
+                <p>{{ __('main.footer.copyright') }}</p>
+                    <div class="social-icons">
+                    <a href="{{ $socialMedia['facebook'] ?? '#' }}"><i class="fab fa-facebook-f"></i></a>
+                    <a href="{{ $socialMedia['twitter'] ?? '#' }}"><i class="fab fa-twitter"></i></a>
+                    <a href="{{ $socialMedia['linkedin'] ?? '#' }}"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="{{ $socialMedia['instagram'] ?? '#' }}"><i class="fab fa-instagram"></i></a>
+                    @if (isset($socialMedia['youtube']))
+                        <a href="{{ $socialMedia['youtube'] }}"><i class="fab fa-youtube"></i></a>
+                    @endif
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // تغيير خلفية الصفحة تلقائياً
-        document.addEventListener('DOMContentLoaded', function() {
-            const backgroundImages = document.querySelectorAll('.background-slideshow img');
-            let currentImage = 0;
+document.addEventListener('DOMContentLoaded', function() {
+    // Background slideshow functionality
+    const backgroundImages = document.querySelectorAll('.background-slideshow img');
+    let currentImage = 0;
 
-            function changeBackground() {
-                backgroundImages[currentImage].classList.remove('active');
-                currentImage = (currentImage + 1) % backgroundImages.length;
-                backgroundImages[currentImage].classList.add('active');
-            }
+    function changeBackground() {
+        backgroundImages[currentImage].classList.remove('active');
+        currentImage = (currentImage + 1) % backgroundImages.length;
+        backgroundImages[currentImage].classList.add('active');
+    }
 
-            setInterval(changeBackground, 5000);
+    // Start background slideshow
+    setInterval(changeBackground, 5000);
 
-            // تهيئة كاروسيل فريق العمل
-            initCarousel('teamCarousel', 'prevBtn', 'nextBtn');
+    // Initialize carousels
+    initCarousel('teamCarousel', 'prevBtn', 'nextBtn');
+    initCarousel('partnersCarousel', 'partnersPrevBtn', 'partnersNextBtn');
 
-            // تهيئة كاروسيل الشركاء
-            initCarousel('partnersCarousel', 'partnersPrevBtn', 'partnersNextBtn');
+    // Enhanced language switcher
+    const languageSwitcher = document.querySelector('.language-switcher');
+    if (languageSwitcher) {
+        const languageBtn = languageSwitcher.querySelector('.language-btn');
+        const languageMenu = languageSwitcher.querySelector('.language-menu');
 
-            // لجعل القائمة المنسدلة تعمل على الأجهزة المحمولة
-            const dropdowns = document.querySelectorAll('.dropdown');
+        // Toggle language menu on button click
+        languageBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const isOpen = languageMenu.style.display === 'block';
+            languageMenu.style.display = isOpen ? 'none' : 'block';
+        });
 
-            dropdowns.forEach(dropdown => {
-                if (window.innerWidth <= 768) {
-                    const dropbtn = dropdown.querySelector('.dropbtn');
-                    dropbtn.addEventListener('click', function() {
-                        dropdown.classList.toggle('active');
-                    });
-                }
-            });
-
-            // إغلاق القوائم المنسدلة عند النقر خارجها
-            document.addEventListener('click', function(event) {
-                if (!event.target.matches('.dropbtn') && !event.target.matches('.dropbtn *')) {
-                    dropdowns.forEach(dropdown => {
-                        dropdown.classList.remove('active');
-                    });
-                }
-            });
-
-            // دالة عامة لتهيئة الكاروسيل
-            function initCarousel(carouselId, prevBtnId, nextBtnId) {
-                const carousel = document.getElementById(carouselId);
-                const members = carousel.querySelectorAll('.team-member, .partner');
-                const prevBtn = document.getElementById(prevBtnId);
-                const nextBtn = document.getElementById(nextBtnId);
-                let currentIndex = 0;
-                let slideInterval;
-                const slideDuration = 5000; // 5 ثواني
-
-                // إنشاء مؤشرات الشرائح
-                const indicatorsContainer = document.createElement('div');
-                indicatorsContainer.className = 'carousel-indicators';
-                carousel.appendChild(indicatorsContainer);
-
-                members.forEach((_, index) => {
-                    const indicator = document.createElement('div');
-                    indicator.className = 'carousel-indicator';
-                    if (index === 0) indicator.classList.add('active');
-                    indicator.addEventListener('click', () => goToSlide(index));
-                    indicatorsContainer.appendChild(indicator);
-                });
-
-                const indicators = carousel.querySelectorAll('.carousel-indicator');
-
-                // تهيئة العرض
-                function init() {
-                    members.forEach((member, index) => {
-                        if (index === 0) {
-                            member.classList.add('active');
-                        } else {
-                            member.style.display = 'none';
-                        }
-                    });
-
-                    startSlideShow();
-                }
-
-                // الانتقال إلى شريحة محددة
-                function goToSlide(index) {
-                    if (index === currentIndex) return;
-
-                    clearInterval(slideInterval);
-
-                    const prevIndex = currentIndex;
-                    currentIndex = index;
-
-                    updateCarousel(prevIndex, currentIndex);
-                    startSlideShow();
-                }
-
-                // تحريك العرض
-                function moveSlide(direction) {
-                    clearInterval(slideInterval);
-
-                    const prevIndex = currentIndex;
-                    currentIndex = (currentIndex + direction + members.length) % members.length;
-
-                    updateCarousel(prevIndex, currentIndex);
-                    startSlideShow();
-                }
-
-                // تحديث حالة العرض
-                function updateCarousel(prevIndex, newIndex) {
-                    // تحديث المؤشرات
-                    indicators.forEach((indicator, idx) => {
-                        if (idx === newIndex) {
-                            indicator.classList.add('active');
-                        } else {
-                            indicator.classList.remove('active');
-                        }
-                    });
-
-                    // إخفاء العضو السابق
-                    const outgoingMember = members[prevIndex];
-                    outgoingMember.classList.remove('active');
-                    outgoingMember.style.opacity = '0';
-                    outgoingMember.style.transform = 'scale(0.8)';
-
-                    // إظهار العضو الجديد
-                    const incomingMember = members[newIndex];
-                    incomingMember.style.display = 'block';
-
-                    // تأخير بسيط لضمان التفعيل الصحيح للانتقال
-                    setTimeout(() => {
-                        incomingMember.classList.add('active');
-                        incomingMember.style.opacity = '1';
-                        incomingMember.style.transform = 'scale(1)';
-
-                        // إخفاء العضو السابق بعد انتهاء الانتقال
-                        setTimeout(() => {
-                            outgoingMember.style.display = 'none';
-                        }, 800);
-                    }, 10);
-                }
-
-                // بدء العرض التلقائي
-                function startSlideShow() {
-                    clearInterval(slideInterval);
-                    slideInterval = setInterval(() => {
-                        moveSlide(1);
-                    }, slideDuration);
-                }
-
-                // أحداث الأزرار
-                prevBtn.addEventListener('click', () => moveSlide(-1));
-                nextBtn.addEventListener('click', () => moveSlide(1));
-
-                // بدء التشغيل
-                init();
-
-                // إيقاف العرض التلقائي عند تحويم الماوس
-                carousel.addEventListener('mouseenter', () => clearInterval(slideInterval));
-                carousel.addEventListener('mouseleave', startSlideShow);
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!languageSwitcher.contains(e.target)) {
+                languageMenu.style.display = 'none';
             }
         });
+
+        // Prevent menu from closing when clicking inside it
+        languageMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // Handle language selection
+        document.querySelectorAll('.language-menu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const lang = this.getAttribute('data-lang');
+                
+                // Show loading indicator
+                const currentLangText = languageBtn.querySelector('.current-lang').textContent;
+                languageBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${currentLangText}`;
+                
+                // Change language after a small delay
+                setTimeout(() => {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('lang', lang);
+                    window.location.href = url.toString();
+                }, 300);
+            });
+        });
+    }
+
+    // Mobile dropdown handling
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+        if (window.innerWidth <= 768) {
+            const dropbtn = dropdown.querySelector('.dropbtn');
+            dropbtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdown.classList.toggle('active');
+            });
+        }
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!event.target.matches('.dropbtn') && !event.target.matches('.dropbtn *')) {
+            dropdowns.forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+        }
+    });
+
+    // Carousel initialization function
+    function initCarousel(carouselId, prevBtnId, nextBtnId) {
+        const carousel = document.getElementById(carouselId);
+        if (!carousel) return;
+
+        const slides = carousel.querySelectorAll('.team-member, .partner');
+        const prevBtn = document.getElementById(prevBtnId);
+        const nextBtn = document.getElementById(nextBtnId);
+        let currentIndex = 0;
+        let slideInterval;
+        const slideDuration = 5000;
+
+        // Create indicators
+        const indicatorsContainer = carousel.querySelector('.carousel-indicators');
+        if (indicatorsContainer) {
+            slides.forEach((_, index) => {
+                const indicator = document.createElement('div');
+                indicator.className = 'carousel-indicator';
+                if (index === 0) indicator.classList.add('active');
+                indicator.addEventListener('click', () => goToSlide(index));
+                indicatorsContainer.appendChild(indicator);
+            });
+        }
+
+        const indicators = carousel.querySelectorAll('.carousel-indicator');
+
+        function init() {
+            slides.forEach((slide, index) => {
+                if (index === 0) {
+                    slide.classList.add('active');
+                } else {
+                    slide.style.display = 'none';
+                }
+            });
+            startSlideShow();
+        }
+
+        function goToSlide(index) {
+            if (index === currentIndex) return;
+            clearInterval(slideInterval);
+
+            const prevIndex = currentIndex;
+            currentIndex = index;
+
+            updateCarousel(prevIndex, currentIndex);
+            startSlideShow();
+        }
+
+        function moveSlide(direction) {
+            clearInterval(slideInterval);
+            const prevIndex = currentIndex;
+            currentIndex = (currentIndex + direction + slides.length) % slides.length;
+            updateCarousel(prevIndex, currentIndex);
+            startSlideShow();
+        }
+
+        function updateCarousel(prevIndex, newIndex) {
+            indicators.forEach((indicator, idx) => {
+                if (idx === newIndex) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+
+            const outgoingSlide = slides[prevIndex];
+            outgoingSlide.classList.remove('active');
+            outgoingSlide.style.opacity = '0';
+            outgoingSlide.style.transform = 'scale(0.8)';
+
+            const incomingSlide = slides[newIndex];
+            incomingSlide.style.display = 'block';
+
+            setTimeout(() => {
+                incomingSlide.classList.add('active');
+                incomingSlide.style.opacity = '1';
+                incomingSlide.style.transform = 'scale(1)';
+
+                setTimeout(() => {
+                    outgoingSlide.style.display = 'none';
+                }, 800);
+            }, 10);
+        }
+
+        function startSlideShow() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(() => {
+                moveSlide(1);
+            }, slideDuration);
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', () => moveSlide(-1));
+        if (nextBtn) nextBtn.addEventListener('click', () => moveSlide(1));
+
+        init();
+        carousel.addEventListener('mouseenter', () => clearInterval(slideInterval));
+        carousel.addEventListener('mouseleave', startSlideShow);
+    }
+});
     </script>
+    
 </body>
 
 </html>

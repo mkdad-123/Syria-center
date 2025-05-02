@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
+            $table->json('title');
+            $table->json('description');
             $table->enum('type', ['festival', 'volunteering', 'workshop']);
             $table->dateTime('start_date');
             $table->dateTime('end_date');
-            $table->string('location');
+            $table->json('location');
             $table->integer('max_participants')->nullable();
             $table->boolean('is_published')->default(false);
             $table->string('cover_image')->nullable();
