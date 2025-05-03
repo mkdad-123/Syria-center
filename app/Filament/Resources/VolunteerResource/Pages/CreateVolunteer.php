@@ -8,5 +8,14 @@ use Filament\Resources\Pages\CreateRecord;
 
 class CreateVolunteer extends CreateRecord
 {
+    use CreateRecord\Concerns\Translatable;
+
     protected static string $resource = VolunteerResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Actions\LocaleSwitcher::make(),
+        ];
+    }
 }

@@ -16,12 +16,13 @@ class Partner extends Model
     public $translatable = ['name','description'];
 
     protected $fillable = ['name', 'image', 'description'];
+
     public function getTranslatedContent($locale, $default = null)
     {
         try {
-            return $this->getTranslation('content', $locale, false) 
-                   ?? $this->content 
-                   ?? $default 
+            return $this->getTranslation('content', $locale, false)
+                   ?? $this->content
+                   ?? $default
                    ?? __('No content available');
         } catch (\Exception $e) {
             return $this->content ?? $default ?? __('No content available');

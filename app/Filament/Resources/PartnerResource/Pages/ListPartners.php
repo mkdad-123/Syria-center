@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Filament\Resources\EventResource\Pages;
+namespace App\Filament\Resources\PartnerResource\Pages;
 
-use App\Filament\Resources\EventResource;
+use App\Filament\Resources\PartnerResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-class ListEvents extends ListRecords
+class ListPartners extends ListRecords
 {
     use ListRecords\Concerns\Translatable;
 
-    protected static string $resource = EventResource::class;
+    protected static string $resource = PartnerResource::class;
 
     protected function getHeaderActions(): array
     {

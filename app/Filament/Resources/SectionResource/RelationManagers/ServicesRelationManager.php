@@ -4,6 +4,7 @@ namespace App\Filament\Resources\SectionResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Resources\RelationManagers\Concerns\Translatable;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -12,6 +13,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ServicesRelationManager extends RelationManager
 {
+    use Translatable;
+
     protected static string $relationship = 'services';
 
     public function form(Form $form): Form

@@ -6,6 +6,7 @@ use App\Filament\Resources\CompliantResource\Pages;
 use App\Models\Compliants;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -13,6 +14,8 @@ use Illuminate\Support\Str;
 
 class CompliantResource extends Resource
 {
+    use Translatable;
+
     protected static ?string $model = Compliants::class;
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-ellipsis';
     protected static ?string $modelLabel = 'شكوى/مقترح';
@@ -140,6 +143,6 @@ class CompliantResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return Compliants::count();
+        return Compliants::query()->where('created_at', today())->count();
     }
 }

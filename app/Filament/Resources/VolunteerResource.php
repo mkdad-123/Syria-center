@@ -3,15 +3,20 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\VolunteerResource\Pages;
+use App\GenderEnum;
 use App\Models\Volunteer;
+use App\VolunteerAvailabilityEnum;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
 class VolunteerResource extends Resource
 {
+    use Translatable;
+
     protected static ?string $model = Volunteer::class;
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $modelLabel = 'volunteer';
@@ -62,9 +67,9 @@ class VolunteerResource extends Resource
                         Forms\Components\Select::make('gender')
                             ->label('الجنس')
                             ->options([
-                                'male' => 'ذكر',
-                                'female' => 'أنثى',
-                                'other' => 'أخرى',
+                                GenderEnum::Male->value => 'ذكر',
+                                GenderEnum::Female->value => 'أنثى',
+                                GenderEnum::Other->value => 'أخرى',
                             ])
                             ->native(false),
                     ])->columns(2),
@@ -102,9 +107,9 @@ class VolunteerResource extends Resource
                         Forms\Components\Select::make('availability')
                             ->label('التوفر')
                             ->options([
-                                'full_time' => 'دوام كامل',
-                                'part_time' => 'دوام جزئي',
-                                'weekends' => 'عطلات نهاية الأسبوع',
+                                VolunteerAvailabilityEnum::Full_Time->value => 'دوام كامل',
+                                VolunteerAvailabilityEnum::Part_time->value => 'دوام جزئي',
+                                VolunteerAvailabilityEnum::Weekends->value => 'عطلات نهاية الأسبوع',
                             ])
                             ->native(false),
 

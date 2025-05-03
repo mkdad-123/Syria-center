@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Translatable\HasTranslations;
 
 class Compliants extends Model
 {
-    use HasApiTokens , Notifiable;
+    use HasApiTokens , Notifiable , HasTranslations;
 
     protected $table = 'compliants';
     protected $fillable = ['content', 'email', 'date'];

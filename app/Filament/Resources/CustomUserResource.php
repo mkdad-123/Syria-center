@@ -3,16 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CustomUserResource\Pages;
-use App\Filament\Resources\CustomUserResource\RelationManagers;
 use App\Models\CustomUser;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\DB;
+
 
 class CustomUserResource extends Resource
 {
@@ -26,11 +23,7 @@ class CustomUserResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-
-            ]);
-
+        return $form->schema([]);
     }
 
     public static function table(Table $table): Table
@@ -38,13 +31,6 @@ class CustomUserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\Layout\Panel::make([
-                    Tables\Columns\ImageColumn::make('avatar')
-                        ->label('')
-                        //->getStateUsing(fn () => 'https://ui-avatars.com/api/?name=' . urlencode($record->name))
-                        ->width(80)
-                        ->height(80)
-                        ->circular(),
-
                     Tables\Columns\TextColumn::make('name')
                         ->label('الاسم')
                         ->searchable()
@@ -56,19 +42,6 @@ class CustomUserResource extends Resource
                         ->searchable()
                         ->icon('heroicon-o-envelope')
                         ->iconPosition('after'),
-
-                    Tables\Columns\TextColumn::make('session_status')
-                        ->label('حالة الجلسة')
-                        ->badge()
-                        ->color(fn ($state) => $state ? 'success' : 'danger')
-                        ->formatStateUsing(fn ($state) => $state ? 'نشطة الآن' : 'غير نشطة')
-                        ->icon(fn ($state) => $state ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle'),
-
-                    Tables\Columns\TextColumn::make('last_activity')
-                        ->label('آخر نشاط')
-                        ->dateTime('d/m/Y H:i')
-                        ->sortable()
-                        ->description(fn ($record) => $record->last_activity ? now()->parse($record->last_activity)->diffForHumans() : ''),
 
                     Tables\Columns\TextColumn::make('created_at')
                         ->label('تاريخ التسجيل')
@@ -82,9 +55,6 @@ class CustomUserResource extends Resource
                 'xl' => 3,
             ])
             ->filters([
-                Tables\Filters\Filter::make('active_sessions')
-                    ->label('جلسات نشطة')
-                    ->query(fn ($query) => $query->whereHas('sessions', fn ($q) => $q->where('last_activity', '>', now()->subMinutes(15)))),
 
                 Tables\Filters\Filter::make('registered_this_month')
                     ->label('مسجلون هذا الشهر')
@@ -93,10 +63,6 @@ class CustomUserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make()
-                        ->icon('heroicon-o-eye')
-                        ->color('primary'),
-
                     Tables\Actions\DeleteAction::make()
                         ->icon('heroicon-o-trash')
                         ->requiresConfirmation()
@@ -105,11 +71,6 @@ class CustomUserResource extends Resource
                         ->modalSubmitActionLabel('نعم، احذف')
                         ->modalCancelActionLabel('إلغاء'),
 
-                    Tables\Actions\Action::make('sessions')
-                        ->label('عرض الجلسات')
-                        ->icon('heroicon-o-computer-desktop')
-                        ->color('warning')
-                        //->url(fn ($record) => SessionResource::getUrl('index', ['user_id' => $record->id])),
                 ])
                     ->dropdown(false)
                     ->icon('heroicon-s-cog-6-tooth')
@@ -120,18 +81,7 @@ class CustomUserResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
-                    Tables\Actions\BulkAction::make('clear_sessions')
-                        ->label('مسح الجلسات')
-                        ->icon('heroicon-o-arrow-path')
-                        ->color('danger')
-                        ->action(function ($records) {
-                            $records->each(function ($user) {
-                                DB::table('sessions')
-                                    ->where('user_id', $user->id)
-                                    ->delete();
-                            });
-                        })
-                        ->requiresConfirmation(),
+
                 ]),
             ])
             ->defaultSort('created_at', 'desc')
@@ -141,9 +91,6 @@ class CustomUserResource extends Resource
                     ->date()
                     ->collapsible(),
 
-                Tables\Grouping\Group::make('session_status')
-                    ->label('حالة الجلسة')
-                    ->collapsible(),
             ]);
     }
 
@@ -158,23 +105,11 @@ class CustomUserResource extends Resource
     {
         return [
             'index' => Pages\ListCustomUsers::route('/'),
-            'create' => Pages\CreateCustomUser::route('/create'),
-            'edit' => Pages\EditCustomUser::route('/{record}/edit'),
         ];
     }
 
-    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    public static function getNavigationBadge(): ?string
     {
-        return parent::getEloquentQuery()
-            ->with(['sessions' => function ($query) {
-                $query->orderBy('last_activity', 'desc')->limit(1);
-            }])
-            ->addSelect([
-                'last_activity' => DB::table('sessions')
-                    ->select('last_activity')
-                    ->whereColumn('user_id', 'users.id')
-                    ->orderByDesc('last_activity')
-                    ->limit(1)
-            ]);
+        return CustomUser::count();
     }
 }
