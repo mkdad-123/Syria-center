@@ -42,5 +42,7 @@ class Volunteer extends Model
 
     protected $casts = [
         'skills' => 'array',
+        'gender' => 'json',
+
     ];
 }

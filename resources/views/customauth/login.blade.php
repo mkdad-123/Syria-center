@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>تسجيل الدخول - المركز السوري للتنمية المستدامة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -104,7 +103,6 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
-
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
@@ -132,7 +130,7 @@
 
         .header .container {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
         }
 
@@ -152,6 +150,33 @@
             font-weight: bold;
             color: var(--primary-color);
             white-space: nowrap;
+        }
+
+        /* زر الترجمة */
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--dark-color);
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .language-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .language-btn.active {
+            color: var(--primary-color);
+            font-weight: bold;
         }
 
         /* تصميم نموذج تسجيل الدخول */
@@ -210,15 +235,6 @@
             position: relative;
         }
 
-        .input-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #100f0f;
-            z-index: 2;
-        }
-
         .form-control {
             width: 100%;
             padding: 12px 15px 12px 40px;
@@ -234,6 +250,15 @@
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(46, 134, 171, 0.2);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+            z-index: 2;
         }
 
         .btn {
@@ -334,9 +359,23 @@
         /* رسائل الخطأ */
         .error-message {
             color: #dc3545;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-top: 5px;
             text-align: right;
+        }
+
+        .has-error .form-control {
+            border-color: #dc3545;
+        }
+
+        /* رسائل النجاح */
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
         }
 
         /* التجاوب مع الشاشات الصغيرة */
@@ -374,8 +413,17 @@
             }
 
             .input-icon {
-                right: 10px;
+                left: 10px;
                 font-size: 0.9rem;
+            }
+
+            .header .container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .language-switcher {
+                margin-top: 10px;
             }
         }
     </style>
@@ -395,9 +443,15 @@
         <div class="container">
             <div class="logo-container">
                 <div class="logo">
-                    <img src="{{ asset('logo.png') }}" alt="شعار المركز السوري للتنمية المستدامة">
+                    <img src="logo.png" alt="شعار المركز السوري للتنمية المستدامة">
                 </div>
-                <div class="org-name">المركز السوري للتنمية المستدامة والتمكين المجتمعي</div>
+                <div class="org-name" data-translate="org_name">المركز السوري للتنمية المستدامة والتمكين المجتمعي</div>
+            </div>
+
+            <!-- زر الترجمة -->
+            <div class="language-switcher">
+                <button class="language-btn active" data-lang="ar">العربية</button>
+                <button class="language-btn" data-lang="en">English</button>
             </div>
         </div>
     </header>
@@ -405,8 +459,9 @@
     <!-- قسم تسجيل الدخول -->
     <div class="login-page">
         <div class="login-container">
-            <h2 class="login-title">تسجيل الدخول</h2>
-            
+            <h2 class="login-title" data-translate="login_title">تسجيل الدخول</h2>
+
+            <!-- عرض رسائل الخطأ -->
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -416,49 +471,60 @@
                     </ul>
                 </div>
             @endif
-            
+
+            <!-- عرض رسالة النجاح -->
+            @if (session('success'))
+                <div class="alert-success" data-translate="success_message">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <form id="loginForm" method="POST" action="{{ route('login.submit') }}">
                 @csrf
-                <div class="form-group">
-                    <label for="name">اسم المستخدم</label>
+
+                <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+                    <label for="name" data-translate="username_label">اسم المستخدم</label>
                     <div class="input-container">
                         <i class="fas fa-user input-icon"></i>
-                        <input type="text" id="name" name="name" class="form-control" required autofocus>
+                        <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" required autofocus>
                     </div>
-                    @error('name')
-                        <span class="error-message">{{ $message }}</span>
-                    @enderror
+                    @if ($errors->has('name'))
+                        <span class="error-message">{{ $errors->first('name') }}</span>
+                    @endif
                 </div>
-                <div class="form-group">
-                    <label for="password">كلمة المرور</label>
+
+                <div class="form-group {{ $errors->has('password') ? 'has-error' : '' }}">
+                    <label for="password" data-translate="password_label">كلمة المرور</label>
                     <div class="input-container">
                         <i class="fas fa-lock input-icon"></i>
                         <input type="password" id="password" name="password" class="form-control" required>
                     </div>
-                    @error('password')
-                        <span class="error-message">{{ $message }}</span>
-                    @enderror
+                    @if ($errors->has('password'))
+                        <span class="error-message">{{ $errors->first('password') }}</span>
+                    @endif
                 </div>
+
                 <div class="form-group">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                        <label class="form-check-label" for="remember">
+                        <label class="form-check-label" for="remember" data-translate="remember_me">
                             تذكرني
                         </label>
                     </div>
                 </div>
+
                 <div class="form-group">
-                    <button type="submit" class="btn btn-block">تسجيل الدخول</button>
+                    <button type="submit" class="btn btn-block" data-translate="login_button">تسجيل الدخول</button>
                 </div>
             </form>
 
             <div class="divider">
-                <span class="divider-text">أو</span>
+                <span class="divider-text" data-translate="or_text">أو</span>
             </div>
 
             <div class="login-footer">
-                <a href="{{ route('register') }}">إنشاء حساب جديد</a>
-                <a href="{{ route('password.request') }}">نسيت كلمة المرور؟</a>
+                <a href="{{ route('register') }}" data-translate="register_link">ليس لديك حساب؟ إنشاء حساب جديد</a>
+                <a href="{{ route('password.request') }}" data-translate="forgot_password_link">نسيت كلمة المرور؟</a>
             </div>
         </div>
     </div>
@@ -466,7 +532,7 @@
     <!-- تذييل الصفحة -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; {{ date('Y') }} المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.</p>
+            <p data-translate="copyright_text">&copy; 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.</p>
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -476,15 +542,89 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-    
-document.getElementById('loginForm').addEventListener('submit', function() {
-    const btn = this.querySelector('button[type="submit"]');
-    btn.disabled = true;
-    btn.innerHTML = 'جاري تسجيل الدخول...';
-});
+        // ترجمة النصوص
+        const translations = {
+            ar: {
+                org_name: "المركز السوري للتنمية المستدامة والتمكين المجتمعي",
+                login_title: "تسجيل الدخول",
+                username_label: "اسم المستخدم",
+                password_label: "كلمة المرور",
+                remember_me: "تذكرني",
+                login_button: "تسجيل الدخول",
+                or_text: "أو",
+                register_link: "ليس لديك حساب؟ إنشاء حساب جديد",
+                forgot_password_link: "نسيت كلمة المرور؟",
+                copyright_text: "© 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.",
+                success_message: "تم تسجيل الدخول بنجاح!"
+            },
+            en: {
+                org_name: "Syrian Center for Sustainable Development and Community Empowerment ",
+                login_title: "Login",
+                username_label: "Username",
+                password_label: "Password",
+                remember_me: "Remember Me",
+                login_button: "Login",
+                or_text: "OR",
+                register_link: "Don't have an account? Register",
+                forgot_password_link: "Forgot Password?",
+                copyright_text: "© 2023 Syrian Center for Sustainable Development. All rights reserved.",
+                success_message: "Logged in successfully!"
+            }
+        };
+
+        // تغيير اللغة
+        document.querySelectorAll('.language-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+
+                // تحديث حالة الأزرار
+                document.querySelectorAll('.language-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                this.classList.add('active');
+
+                // تغيير اتجاه الصفحة
+                document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+                document.documentElement.lang = lang;
+
+                // تطبيق الترجمة
+                document.querySelectorAll('[data-translate]').forEach(element => {
+                    const key = element.getAttribute('data-translate');
+                    if (translations[lang][key]) {
+                        element.textContent = translations[lang][key];
+                    }
+                });
+
+                // تغيير مكان الأيقونات في حقول الإدخال
+                if (lang === 'en') {
+                    document.querySelectorAll('.input-icon').forEach(icon => {
+                        icon.style.left = 'auto';
+                        icon.style.right = '15px';
+                    });
+                    document.querySelectorAll('.form-control').forEach(input => {
+                        input.style.textAlign = 'left';
+                        input.style.padding = '12px 40px 12px 15px';
+                    });
+                } else {
+                    document.querySelectorAll('.input-icon').forEach(icon => {
+                        icon.style.left = '15px';
+                        icon.style.right = 'auto';
+                    });
+                    document.querySelectorAll('.form-control').forEach(input => {
+                        input.style.textAlign = 'right';
+                        input.style.padding = '12px 15px 12px 40px';
+                    });
+                }
+            });
+        });
+
+        // تغيير حالة زر تسجيل الدخول أثناء الإرسال
+        document.getElementById('loginForm').addEventListener('submit', function() {
+            const btn = this.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.innerHTML = this.lang === 'ar' ? 'جاري تسجيل الدخول...' : 'Logging in...';
+        });
     </script>
 </body>
-
 </html>

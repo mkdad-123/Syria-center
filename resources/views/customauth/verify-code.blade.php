@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>تحقق من رمز إعادة التعيين - المركز السوري للتنمية المستدامة</title>
+    <title data-translate="verify_title">تحقق من رمز إعادة التعيين - المركز السوري للتنمية المستدامة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* أنماط عامة */
@@ -131,7 +132,7 @@
 
         .header .container {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
         }
 
@@ -151,6 +152,33 @@
             font-weight: bold;
             color: var(--primary-color);
             white-space: nowrap;
+        }
+
+        /* زر الترجمة */
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--dark-color);
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .language-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .language-btn.active {
+            color: var(--primary-color);
+            font-weight: bold;
         }
 
         /* تصميم نموذج التحقق من الرمز */
@@ -362,6 +390,15 @@
             .org-name {
                 font-size: 1rem;
             }
+
+            .header .container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .language-switcher {
+                margin-top: 10px;
+            }
         }
     </style>
 </head>
@@ -382,7 +419,13 @@
                 <div class="logo">
                     <img src="{{ asset('logo.png') }}" alt="شعار المركز السوري للتنمية المستدامة">
                 </div>
-                <div class="org-name">المركز السوري للتنمية المستدامة والتمكين المجتمعي</div>
+                <div class="org-name" data-translate="org_name">المركز السوري للتنمية المستدامة والتمكين المجتمعي</div>
+            </div>
+
+            <!-- زر الترجمة -->
+            <div class="language-switcher">
+                <button class="language-btn active" data-lang="ar">العربية</button>
+                <button class="language-btn" data-lang="en">English</button>
             </div>
         </div>
     </header>
@@ -390,8 +433,10 @@
     <!-- قسم التحقق من الرمز -->
     <div class="verify-page">
         <div class="verify-container">
-            <h2 class="verify-title">تحقق من رمز إعادة التعيين</h2>
-            <p class="verify-message">تم إرسال رمز مكون من 6 أرقام إلى <strong>{{ request()->query('email') }}</strong></p>
+            <h2 class="verify-title" data-translate="verify_title">تحقق من رمز إعادة التعيين</h2>
+            <p class="verify-message" data-translate="verify_message" data-email="{{ request()->query('email') }}">
+                تم إرسال رمز مكون من 6 أرقام إلى <strong>{{ request()->query('email') }}</strong>
+            </p>
 
             <form id="verifyCodeForm">
                 @csrf
@@ -407,11 +452,11 @@
                     <input type="text" maxlength="1" class="code-input" name="code1" required inputmode="numeric" pattern="[0-9]*">
                 </div>
 
-                <button type="submit" class="btn">تحقق من الرمز</button>
+                <button type="submit" class="btn" data-translate="verify_btn">تحقق من الرمز</button>
 
                 <div class="resend-container">
-                    <a href="#" id="resendCode" class="resend-link">إعادة إرسال الرمز</a>
-                    <div id="countdown" class="countdown d-none">يمكنك إعادة الإرسال بعد <span id="timer">60</span> ثانية</div>
+                    <a href="#" id="resendCode" class="resend-link" data-translate="resend_link">إعادة إرسال الرمز</a>
+                    <div id="countdown" class="countdown d-none" data-translate="countdown_text">يمكنك إعادة الإرسال بعد <span id="timer">60</span> ثانية</div>
                 </div>
             </form>
 
@@ -423,7 +468,7 @@
     <!-- تذييل الصفحة -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; {{ date('Y') }} المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.</p>
+            <p data-translate="copyright_text">&copy; {{ date('Y') }} المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.</p>
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -434,6 +479,73 @@
     </footer>
 
     <script>
+        // ترجمة النصوص
+        const translations = {
+            ar: {
+                org_name: "المركز السوري للتنمية المستدامة والتمكين المجتمعي",
+                verify_title: "تحقق من رمز إعادة التعيين",
+                verify_message: "تم إرسال رمز مكون من 6 أرقام إلى",
+                verify_btn: "تحقق من الرمز",
+                resend_link: "إعادة إرسال الرمز",
+                countdown_text: "يمكنك إعادة الإرسال بعد",
+                copyright_text: "© {{ date('Y') }} المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.",
+                success_message: "تم التحقق بنجاح، جاري التوجيه...",
+                error_message: "رمز التحقق غير صحيح",
+                resend_success: "تم إعادة إرسال رمز التحقق إلى بريدك الإلكتروني",
+                resend_error: "حدث خطأ أثناء إعادة إرسال الرمز",
+                verifying: "جاري التحقق...",
+                seconds: "ثانية"
+            },
+            en: {
+                org_name: "Syrian Center for Sustainable Development and Community Empowerment",
+                verify_title: "Verify Reset Code",
+                verify_message: "A 6-digit code has been sent to",
+                verify_btn: "Verify Code",
+                resend_link: "Resend Code",
+                countdown_text: "You can resend after",
+                copyright_text: "© {{ date('Y') }} Syrian Center for Sustainable Development. All rights reserved.",
+                success_message: "Verification successful, redirecting...",
+                error_message: "Verification code is incorrect",
+                resend_success: "Verification code has been resent to your email",
+                resend_error: "An error occurred while resending the code",
+                verifying: "Verifying...",
+                seconds: "seconds"
+            }
+        };
+
+        // تغيير اللغة
+        document.querySelectorAll('.language-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+
+                // تحديث حالة الأزرار
+                document.querySelectorAll('.language-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                this.classList.add('active');
+
+                // تغيير اتجاه الصفحة
+                document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+                document.documentElement.lang = lang;
+
+                // تطبيق الترجمة
+                document.querySelectorAll('[data-translate]').forEach(element => {
+                    const key = element.getAttribute('data-translate');
+                    if (translations[lang][key]) {
+                        if (key === 'verify_message') {
+                            const email = element.getAttribute('data-email');
+                            element.innerHTML = `${translations[lang][key]} <strong>${email}</strong>`;
+                        } else if (key === 'countdown_text') {
+                            const timer = document.getElementById('timer');
+                            element.innerHTML = `${translations[lang][key]} <span id="timer">${timer.textContent}</span> ${translations[lang]['seconds']}`;
+                        } else {
+                            element.textContent = translations[lang][key];
+                        }
+                    }
+                });
+            });
+        });
+
         // Auto focus and move between inputs (معدل للعمل من اليمين لليسار)
         const codeInputs = document.querySelectorAll('.code-input');
         codeInputs.forEach((input, index) => {
@@ -478,6 +590,7 @@
 
             const successMessage = document.getElementById('successMessage');
             const errorMessage = document.getElementById('errorMessage');
+            const currentLang = document.documentElement.lang || 'ar';
 
             // Reset messages
             successMessage.classList.add('d-none');
@@ -487,7 +600,7 @@
             const submitBtn = e.target.querySelector('button[type="submit"]');
             const originalBtnText = submitBtn.innerHTML;
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق...';
+            submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${translations[currentLang]['verifying']}`;
 
             fetch('/verify-code', {
                 method: 'POST',
@@ -504,19 +617,19 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    successMessage.textContent = data.message;
+                    successMessage.textContent = translations[currentLang]['success_message'];
                     successMessage.classList.remove('d-none');
                     // Redirect to reset page with token
                     setTimeout(() => {
                         window.location.href = `/reset?email=${encodeURIComponent(email)}&token=${encodeURIComponent(data.token)}`;
                     }, 2000);
                 } else {
-                    errorMessage.textContent = data.message || 'رمز التحقق غير صحيح';
+                    errorMessage.textContent = data.message || translations[currentLang]['error_message'];
                     errorMessage.classList.remove('d-none');
                 }
             })
             .catch(error => {
-                errorMessage.textContent = 'حدث خطأ في الاتصال بالخادم';
+                errorMessage.textContent = translations[currentLang]['error_message'];
                 errorMessage.classList.remove('d-none');
             })
             .finally(() => {
@@ -532,6 +645,9 @@
             const resendLink = document.getElementById('resendCode');
             const countdown = document.getElementById('countdown');
             const timer = document.getElementById('timer');
+            const currentLang = document.documentElement.lang || 'ar';
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
 
             // Disable resend link and show countdown
             resendLink.classList.add('disabled');
@@ -563,19 +679,32 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    const successMessage = document.getElementById('successMessage');
-                    successMessage.textContent = 'تم إعادة إرسال رمز التحقق إلى بريدك الإلكتروني';
+                    successMessage.textContent = translations[currentLang]['resend_success'];
                     successMessage.classList.remove('d-none');
                 } else {
-                    const errorMessage = document.getElementById('errorMessage');
-                    errorMessage.textContent = data.message || 'حدث خطأ أثناء إعادة إرسال الرمز';
+                    errorMessage.textContent = data.message || translations[currentLang]['resend_error'];
                     errorMessage.classList.remove('d-none');
                 }
             })
             .catch(error => {
-                const errorMessage = document.getElementById('errorMessage');
-                errorMessage.textContent = 'حدث خطأ في الاتصال بالخادم';
+                errorMessage.textContent = translations[currentLang]['resend_error'];
                 errorMessage.classList.remove('d-none');
+            });
+        });
+
+        // Initialize translations on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentLang = document.documentElement.lang || 'ar';
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[currentLang][key]) {
+                    if (key === 'verify_message') {
+                        const email = element.getAttribute('data-email');
+                        element.innerHTML = `${translations[currentLang][key]} <strong>${email}</strong>`;
+                    } else {
+                        element.textContent = translations[currentLang][key];
+                    }
+                }
             });
         });
     </script>

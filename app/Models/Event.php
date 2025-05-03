@@ -23,4 +23,17 @@ class Event extends Model
         'start_date' => 'datetime',
         'end_date' => 'datetime',
     ];
+
+public function getTranslatedContent($locale, $default = null)
+{
+    try {
+        return $this->getTranslation('content', $locale, false)
+               ?? $this->content
+               ?? $default
+               ?? __('No content available');
+    } catch (\Exception $e) {
+        return $this->content ?? $default ?? __('No content available');
+    }
+}
+
 }
