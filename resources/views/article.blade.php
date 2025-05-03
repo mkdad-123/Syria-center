@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{{ $locale }}" dir="{{ $locale == 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المركز السوري للتنمية المستدامة - {{ $article->title }}</title>
+    <title>{{ __('main.site_name') }} - {{ $article['title'] }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* أنماط عامة */
@@ -223,7 +223,6 @@
             transition: all 0.3s ease;
         }
 
-        /* إذا كنت تريد خلفية شبه شفافة */
         .article-content-container.translucent {
             background-color: rgba(255, 255, 255, 0.9);
         }
@@ -243,7 +242,6 @@
             font-size: 2rem;
         }
 
-        /* إذا كنت تريد إضافة حدود */
         .article-content-container.bordered {
             border: 1px solid #e0e0e0;
         }
@@ -433,33 +431,33 @@
 <body>
     <!-- خلفية متغيرة للصفحة -->
     <div class="background-slideshow">
-        <img src="/ima1.jpg" class="active" alt="خلفية 1">
-        <img src="/ima2.jpg" alt="خلفية 2">
-        <img src="/ima3.jpg" alt="خلفية 3">
+        <img src="{{ asset('/ima1.jpg') }}" class="active" alt="{{ __('main.alt.background1') }}">
+        <img src="{{ asset('/ima2.jpg') }}" alt="{{ __('main.alt.background2') }}">
+        <img src="{{ asset('/ima3.jpg') }}" alt="{{ __('main.alt.background3') }}">
     </div>
 
     <header class="header">
         <div class="container">
             <div class="logo-container">
                 <div class="logo">
-                    <img src="/logo.png" alt="شعار المركز">
+                    <img src="{{ asset('/logo.png') }}" alt="{{ __('main.site_name') }}">
                 </div>
                 <div class="org-name">
-                    <span class="org-name-line1">المركز السوري للتنمية المستدامة</span>
-                    <span class="org-name-line2">والتمكين المجتمعي</span>
+                    <span class="org-name-line1">{{ __('main.site_name') }}</span>
+                    <span class="org-name-line2">{{ __('main.site_subname') }}</span>
                 </div>
             </div>
             <div class="buttons-container">
                 <nav class="nav">
                     <ul class="nav-list">
-                        <li><a href="{{ route('home') }}">الرئيسية</a></li>
-                        <li><a href="{{ route('sections') }}">الخدمات</a></li>
-                        <li><a href="{{ route('events') }}">النشاطات والفعاليات</a></li>
-                        <li><a href="contact.html">اتصل بنا</a></li>
+                        <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
+                        <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
+                        <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
+                        <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
                         <li class="language-switcher" style="list-style: none;">
                             <button class="language-btn">
                                 <i class="fas fa-globe"></i>
-                                <span class="current-lang">العربية</span>
+                                <span class="current-lang">{{ $locale == 'ar' ? 'العربية' : 'English' }}</span>
                                 <i class="fas fa-chevron-down"></i>
                             </button>
                             <ul class="language-menu">
@@ -467,7 +465,7 @@
                                 <li><a href="#" data-lang="en"><i class="fas fa-language"></i> English</a></li>
                             </ul>
                         </li>
-                        <li class="login-btn"><a href="/login">تسجيل الدخول</a></li>
+                        <li class="login-btn"><a href="/logout">{{ __('main.buttons.logout') }}</a></li>
                     </ul>
                 </nav>
             </div>
@@ -479,58 +477,103 @@
         <section class="section">
             <div class="container">
                 <div class="article-content-container">
-                    @if($article->image)
-                        <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}" class="article-image-main">
-                    @else
-                        <img src="/default-article.jpg" alt="صورة افتراضية" class="article-image-main">
-                    @endif
                     
-                    <h1 class="article-title">{{ $article->title }}</h1>
+                    <h1 class="article-title">{{ $article['title'] }}</h1>
                     
                     <div class="article-body">
-                        {!! nl2br(e($article->content)) !!}
+                        {!! $article['content'] !!}
                     </div>
                     
                     <div class="article-meta">
-                        <span>تاريخ النشر: {{ $article->created_at->format('Y-m-d') }}</span>
-                        <span>كاتب المقال: {{ $article->author ?? 'إدارة المركز' }}</span>
+                        <span>{{ __('main.titles.published_date') }}: {{ \Carbon\Carbon::parse($article['created_at'])->format('Y-m-d') }}</span>
+                        @if(isset($article['service']))
+                            <span>{{ __('main.titles.service') }}: 
+                                <a href="{{ route('services', $article['service']['id']) }}?lang={{ $locale }}">
+                                    {{ $article['service']['name'] }}
+                                </a>
+                            </span>
+                        @endif
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
+
     <!-- تذييل الصفحة -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <img src="/logo.png" alt="شعار المركز السوري للتنمية المستدامة">
-                    <p>المركز السوري للتنمية المستدامة و التمكين المجتمعي</p>
+                    <img src="{{ asset('/logo.png') }}" alt="{{ __('main.site_name') }}">
+                    <p>{{ __('main.site_name') }} - {{ __('main.site_subname') }}</p>
                 </div>
                 <div class="footer-links">
-                    <h4>روابط سريعة</h4>
+                    <h4>{{ __('main.footer.quick_links') }}</h4>
                     <ul>
-                        <li><a href="{{ route('home') }}">الرئيسية</a></li>
-                        <li><a href="{{ route('sections') }}">الأقسام والخدمات</a></li>
-                        <li><a href="{{ route('events') }}">الفعاليات</a></li>
-                        <li><a href="contact.html">اتصل بنا</a></li>
+                        <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
+                        <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
+                        <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
+                        <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
                     </ul>
                 </div>
-                <div class="footer-contact">
-                    <h4>تواصل معنا</h4>
-                    <p><i class="fas fa-map-marker-alt"></i> سوريا , دمشق , ميدان_بناء جريدة تشرين</p>
-                    <p><i class="fas fa-phone"></i> +963 123 456 789</p>
-                    <p><i class="fas fa-envelope"></i> info@scsd.org</p>
+                <div class="contact-info-container">
+                    <h2 class="contact-info-title" style="color: #FF6B00;">{{ __('main.footer.contact_us') }}</h2>
+                    <!-- قسم الهواتف -->
+                    @if (isset($contactInfo['phones']) && count($contactInfo['phones']) > 0)
+                        <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-phone contact-icon" style="color: #FF6B00;"></i>
+                            <span>{{ $contactInfo['phones'][0] }}</span>
+                        </div>
+                    @else
+                        <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-phone contact-icon" style="color: #FF6B00;"></i>
+                            <span>+963 11 123 4567</span>
+                        </div>
+                    @endif
+
+                    <!-- قسم البريد الإلكتروني -->
+                    @if (isset($contactInfo['emails']) && count($contactInfo['emails']) > 0)
+                        <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-envelope contact-icon" style="color: #FF6B00;"></i>
+                            <span>{{ $contactInfo['emails'][0] }}</span>
+                        </div>
+                    @else
+                        <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-envelope contact-icon" style="color: #FF6B00;"></i>
+                            <span>info@example.com</span>
+                        </div>
+                    @endif
+
+                    <!-- قسم العنوان -->
+                    @if (isset($contactInfo['address']))
+                        <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-map-marker-alt contact-icon" style="color: #FF6B00;"></i>
+                            <span>{{ $contactInfo['address'] }}</span>
+                        </div>
+                    @else
+                        <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-map-marker-alt contact-icon" style="color: #FF6B00;"></i>
+                            <span>دمشق، سوريا - ميدان بناء جريدة تشرين</span>
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.</p>
+                <p>&copy; {{ date('Y') }} {{ __('main.site_name') }}. {{ __('main.footer.copyright') }}</p>
                 <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    @if(isset($socialMedia['facebook']))
+                        <a href="{{ $socialMedia['facebook'] }}"><i class="fab fa-facebook-f"></i></a>
+                    @endif
+                    @if(isset($socialMedia['twitter']))
+                        <a href="{{ $socialMedia['twitter'] }}"><i class="fab fa-twitter"></i></a>
+                    @endif
+                    @if(isset($socialMedia['linkedin']))
+                        <a href="{{ $socialMedia['linkedin'] }}"><i class="fab fa-linkedin-in"></i></a>
+                    @endif
+                    @if(isset($socialMedia['instagram']))
+                        <a href="{{ $socialMedia['instagram'] }}"><i class="fab fa-instagram"></i></a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -550,6 +593,17 @@
 
             // بدء التغيير التلقائي
             setInterval(changeBackground, 5000);
+
+            // تبديل اللغة
+            document.querySelectorAll('.language-menu a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const lang = this.getAttribute('data-lang');
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('lang', lang);
+                    window.location.href = url.toString();
+                });
+            });
         });
     </script>
 </body>

@@ -130,7 +130,7 @@
 
         .header .container {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
         }
 
@@ -150,6 +150,33 @@
             font-weight: bold;
             color: var(--primary-color);
             white-space: nowrap;
+        }
+
+        /* زر الترجمة */
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--dark-color);
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .language-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .language-btn.active {
+            color: var(--primary-color);
+            font-weight: bold;
         }
 
         /* تصميم نموذج إنشاء الحساب */
@@ -357,37 +384,46 @@
                 padding: 30px 20px;
                 margin: 20px 10px;
             }
-            
+
             .register-title {
                 font-size: 1.5rem;
             }
-            
+
             .register-footer {
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
             }
-            
+
             .register-footer a {
                 margin: 5px 0;
             }
-            
+
             .logo-container {
                 flex-direction: column;
                 gap: 5px;
             }
-            
+
             .org-name {
                 font-size: 1rem;
             }
-            
+
             .form-control {
                 padding: 12px 15px 12px 35px;
             }
-            
+
             .input-icon {
                 left: 10px;
                 font-size: 0.9rem;
+            }
+
+            .header .container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .language-switcher {
+                margin-top: 10px;
             }
         }
     </style>
@@ -409,7 +445,13 @@
                 <div class="logo">
                     <img src="logo.png" alt="شعار المركز السوري للتنمية المستدامة">
                 </div>
-                <div class="org-name">المركز السوري للتنمية المستدامة</div>
+                <div class="org-name" data-translate="org_name">المركز السوري للتنمية المستدامة والتمكين المجتمعي</div>
+            </div>
+
+            <!-- زر الترجمة -->
+            <div class="language-switcher">
+                <button class="language-btn active" data-lang="ar">العربية</button>
+                <button class="language-btn" data-lang="en">English</button>
             </div>
         </div>
     </header>
@@ -417,8 +459,8 @@
     <!-- قسم إنشاء الحساب -->
     <div class="register-page">
         <div class="register-container">
-            <h2 class="register-title">إنشاء حساب جديد</h2>
-            
+            <h2 class="register-title" data-translate="register_title">إنشاء حساب جديد</h2>
+
             <!-- عرض رسائل الخطأ -->
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -429,19 +471,19 @@
                     </ul>
                 </div>
             @endif
-            
+
             <!-- عرض رسالة النجاح -->
             @if (session('success'))
-                <div class="alert-success">
+                <div class="alert-success" data-translate="success_message">
                     {{ session('success') }}
                 </div>
             @endif
-            
+
             <form action="{{ route('register.submit') }}" method="POST">
                 @csrf
-                
+
                 <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                    <label for="name">اسم المستخدم</label>
+                    <label for="name" data-translate="username_label">اسم المستخدم</label>
                     <div class="input-container">
                         <i class="fas fa-user-tag input-icon"></i>
                         <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" required>
@@ -450,9 +492,9 @@
                         <span class="error-message">{{ $errors->first('name') }}</span>
                     @endif
                 </div>
-                
+
                 <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-                    <label for="email">البريد الإلكتروني</label>
+                    <label for="email" data-translate="email_label">البريد الإلكتروني</label>
                     <div class="input-container">
                         <i class="fas fa-envelope input-icon"></i>
                         <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}" required>
@@ -461,9 +503,9 @@
                         <span class="error-message">{{ $errors->first('email') }}</span>
                     @endif
                 </div>
-                
+
                 <div class="form-group {{ $errors->has('password') ? 'has-error' : '' }}">
-                    <label for="password">كلمة المرور</label>
+                    <label for="password" data-translate="password_label">كلمة المرور</label>
                     <div class="input-container">
                         <i class="fas fa-lock input-icon"></i>
                         <input type="password" id="password" name="password" class="form-control" required>
@@ -472,26 +514,26 @@
                         <span class="error-message">{{ $errors->first('password') }}</span>
                     @endif
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="password_confirmation">تأكيد كلمة المرور</label>
+                    <label for="password_confirmation" data-translate="confirm_password_label">تأكيد كلمة المرور</label>
                     <div class="input-container">
                         <i class="fas fa-lock input-icon"></i>
                         <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" required>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
-                    <button type="submit" class="btn btn-block">إنشاء حساب</button>
+                    <button type="submit" class="btn btn-block" data-translate="register_button">إنشاء حساب</button>
                 </div>
             </form>
 
             <div class="divider">
-                <span class="divider-text">أو</span>
+                <span class="divider-text" data-translate="or_text">أو</span>
             </div>
 
             <div class="register-footer">
-                <a href="{{ route('login') }}">لديك حساب بالفعل؟ تسجيل الدخول</a>
+                <a href="{{ route('login') }}" data-translate="login_link">لديك حساب بالفعل؟ تسجيل الدخول</a>
             </div>
         </div>
     </div>
@@ -499,7 +541,7 @@
     <!-- تذييل الصفحة -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.</p>
+            <p data-translate="copyright_text">&copy; 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.</p>
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -510,19 +552,100 @@
     </footer>
 
     <script>
+        // ترجمة النصوص
+        const translations = {
+            ar: {
+                org_name: "المركز السوري للتنمية المستدامة والتمكين المجتمعي",
+
+                register_title: "إنشاء حساب جديد",
+                username_label: "اسم المستخدم",
+                email_label: "البريد الإلكتروني",
+                password_label: "كلمة المرور",
+                confirm_password_label: "تأكيد كلمة المرور",
+                register_button: "إنشاء حساب",
+                or_text: "أو",
+                login_link: "لديك حساب بالفعل؟ تسجيل الدخول",
+                copyright_text: "© 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.",
+                success_message: "تم إنشاء الحساب بنجاح!"
+            },
+            en: {
+                org_name: "Syrian Center for Sustainable Development and Community Empowerment ",
+                register_title: "Create New Account",
+                username_label: "Username",
+                email_label: "Email Address",
+                password_label: "Password",
+                confirm_password_label: "Confirm Password",
+                register_button: "Create Account",
+                or_text: "OR",
+                login_link: "Already have an account? Login",
+                copyright_text: "© 2023 Syrian Center for Sustainable Development. All rights reserved.",
+                success_message: "Account created successfully!"
+            }
+        };
+
+        // تغيير اللغة
+        document.querySelectorAll('.language-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+
+                // تحديث حالة الأزرار
+                document.querySelectorAll('.language-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                this.classList.add('active');
+
+                // تغيير اتجاه الصفحة
+                document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+                document.documentElement.lang = lang;
+
+                // تطبيق الترجمة
+                document.querySelectorAll('[data-translate]').forEach(element => {
+                    const key = element.getAttribute('data-translate');
+                    if (translations[lang][key]) {
+                        element.textContent = translations[lang][key];
+                    }
+                });
+
+                // تغيير مكان الأيقونات في حقول الإدخال
+                if (lang === 'en') {
+                    document.querySelectorAll('.input-icon').forEach(icon => {
+                        icon.style.left = 'auto';
+                        icon.style.right = '15px';
+                    });
+                    document.querySelectorAll('.form-control').forEach(input => {
+                        input.style.textAlign = 'left';
+                        input.style.padding = '12px 40px 12px 15px';
+                    });
+                } else {
+                    document.querySelectorAll('.input-icon').forEach(icon => {
+                        icon.style.left = '15px';
+                        icon.style.right = 'auto';
+                    });
+                    document.querySelectorAll('.form-control').forEach(input => {
+                        input.style.textAlign = 'right';
+                        input.style.padding = '12px 15px 12px 40px';
+                    });
+                }
+            });
+        });
+
+        // التحقق من تطابق كلمة المرور
         document.querySelector('form').addEventListener('submit', function(e) {
             const password = document.getElementById('password').value.trim();
             const confirmPassword = document.getElementById('password_confirmation').value.trim();
-            
+
             if (password !== confirmPassword) {
                 e.preventDefault();
-                alert('كلمة المرور وتأكيدها غير متطابقين');
+                const currentLang = document.documentElement.lang || 'ar';
+                const errorMsg = currentLang === 'ar' ?
+                    'كلمة المرور وتأكيدها غير متطابقين' :
+                    'Password and confirmation do not match';
+                alert(errorMsg);
                 return false;
             }
-            
+
             return true;
         });
     </script>
 </body>
-
 </html>

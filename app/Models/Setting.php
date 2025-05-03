@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-
 use App\SectionEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
@@ -33,51 +32,56 @@ class Setting extends Model
         'section' => SectionEnum::class,
     ];
 
-
     /**
-
-     * الحصول على روابط السوشيال ميديا
+     * الحصول على روابط السوشيال ميديا مع قيم افتراضية آمنة
      */
     public static function getSocialMediaLinks()
     {
         $setting = self::where('section', 'social_media')->first();
-        return $setting ? $setting->extra : [
-            'facebook' => null,
-            'instagram' => null,
-            'twitter' => null,
-            'youtube' => null,
-            'linkedin' => null
+        
+        $defaults = [
+            'facebook' => '#',
+            'instagram' => '#',
+            'twitter' => '#',
+            'youtube' => '#',
+            'linkedin' => '#'
         ];
+
+        if (!$setting || !is_array($setting->extra)) {
+            return $defaults;
+        }
+
+        return array_merge($defaults, $setting->extra);
     }
 
     /**
-     * الحصول على معلومات التواصل
+     * الحصول على معلومات التواصل مع قيم افتراضية آمنة
      */
     public static function getContactInfo()
     {
         $setting = self::where('section', 'contact_info')->first();
-        return $setting ? $setting->extra : [
-            'emails' => [],
-            'phones' => [],
+        
+        $defaults = [
+            'emails' => ['info@example.com'],
+            'phones' => ['123-456-789'],
             'mobile_numbers' => [],
-            'address' => null,
-            'working_hours' => null
+            'address' => __('Damascus, Syria'),
+            'working_hours' => __('9:00 AM - 5:00 PM')
         ];
-    }
 
-    /**
-     * الحصول على المحتوى المترجم
-     */
-    public function getTranslatedContent($locale, $default = null)
-    {
-        try {
-            return $this->getTranslation('content', $locale, false)
-                   ?? $this->content
-                   ?? $default
-                   ?? __('No content available');
-        } catch (\Exception $e) {
-            return $this->content ?? $default ?? __('No content available');
+        if (!$setting || !is_array($setting->extra)) {
+            return $defaults;
         }
+
+        // تأكد من أن القيم الأساسية هي مصفوفات
+        $extra = $setting->extra;
+        foreach (['emails', 'phones', 'mobile_numbers'] as $arrayField) {
+            if (isset($extra[$arrayField]) && !is_array($extra[$arrayField])) {
+                $extra[$arrayField] = (array)$extra[$arrayField];
+            }
+        }
+
+        return array_merge($defaults, $extra);
     }
     /**
      * الحصول على قيمة من الحقل extra

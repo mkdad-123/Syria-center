@@ -10,7 +10,13 @@ return [
         'about' => 'About Us',
         'target' => 'Target Group',
         'team' => 'Our Team',
-        'partners' => 'Partners'
+        'partners' => 'Partners',
+        'home'=>'Home Page',
+        'read_more' => 'read more',
+        'end_date' => 'end date',
+        'start_date' => ' start date',
+
+
     ],
     'titles' => [
         'about' => 'About Us',
@@ -19,13 +25,23 @@ return [
         'target' => 'Target Group',
         'services' => 'Our Services',
         'team' => 'Our Team',
-        'partners' => 'Our Partners'
+        'partners' => 'Our Partners',
+        'sections'=> 'sections',
+        'services_count' => 'services count' ,
+        'services' => 'services',
+        'related_articles' => 'related articles',
+        'published_date' => 'published date',
+        'service' => 'Service',
+
+
     ],
     'buttons' => [
         'read_more' => 'Read More',
         'discover' => 'Discover More',
         'login' => 'Login',
-        'logout' => 'Logout'
+        'logout' => 'Logout',
+        'explore' => 'explore',
+        'view_details' => 'view details'
     ],
     'services' => [
         'education' => 'Education & Empowerment',
@@ -36,5 +52,15 @@ return [
         'quick_links' => 'Quick Links',
         'contact_us' => 'Contact Us',
         'copyright' => 'Copyright © 2023 Syrian Center for Sustainable Development. All rights reserved.'
+    ],
+    'events' => [
+        'festival' => 'fastival',
+        'volunteering' => 'volunteering',
+        'workshop' => 'workshop',
+        'location' => 'location',
+        'max_participants' => ' max participants ',
+        'description' => 'description'
+
+
     ]
 ];

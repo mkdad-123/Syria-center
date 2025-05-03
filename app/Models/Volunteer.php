@@ -51,7 +51,10 @@ class Volunteer extends Model
 
     protected $casts = [
         'skills' => 'array',
+
         'gender' =>  GenderEnum::class,
-        'availability' => VolunteerAvailabilityEnum::class
+        'availability' => VolunteerAvailabilityEnum::class,
+        'gender' => 'json',
+
     ];
 }

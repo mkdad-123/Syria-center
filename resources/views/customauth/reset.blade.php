@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>تعيين كلمة مرور جديدة - المركز السوري للتنمية المستدامة</title>
+    <title data-translate="page_title">تعيين كلمة مرور جديدة - المركز السوري للتنمية المستدامة</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -119,12 +119,11 @@
             top: 0;
             z-index: 1000;
             padding: 10px 0;
-            text-align: center;
         }
 
         .header .container {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
         }
 
@@ -144,6 +143,33 @@
             font-weight: bold;
             color: var(--primary-color);
             white-space: nowrap;
+        }
+
+        /* زر الترجمة */
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--dark-color);
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .language-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .language-btn.active {
+            color: var(--primary-color);
+            font-weight: bold;
         }
 
         /* تصميم الصفحة الرئيسية */
@@ -341,6 +367,15 @@
                 right: 10px;
                 font-size: 0.9rem;
             }
+
+            .header .container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .language-switcher {
+                margin-top: 10px;
+            }
         }
     </style>
 </head>
@@ -361,7 +396,13 @@
                 <div class="logo">
                     <img src="{{ asset('logo.png') }}" alt="شعار المركز السوري للتنمية المستدامة">
                 </div>
-                <div class="org-name">المركز السوري للتنمية المستدامة والتمكين المجتمعي</div>
+                <div class="org-name" data-translate="org_name">المركز السوري للتنمية المستدامة والتمكين المجتمعي</div>
+            </div>
+
+            <!-- زر الترجمة -->
+            <div class="language-switcher">
+                <button class="language-btn active" data-lang="ar">العربية</button>
+                <button class="language-btn" data-lang="en">English</button>
             </div>
         </div>
     </header>
@@ -369,7 +410,7 @@
     <!-- قسم تعيين كلمة المرور الجديدة -->
     <div class="reset-page">
         <div class="reset-container">
-            <h2 class="form-title">تعيين كلمة مرور جديدة</h2>
+            <h2 class="form-title" data-translate="reset_title">تعيين كلمة مرور جديدة</h2>
 
             <form id="resetPasswordForm">
                 @csrf
@@ -377,7 +418,7 @@
                 <input type="hidden" name="token" value="{{ request()->query('token') }}">
 
                 <div class="form-group">
-                    <label for="password">كلمة المرور الجديدة</label>
+                    <label for="password" data-translate="new_password_label">كلمة المرور الجديدة</label>
                     <div class="input-container">
                         <i class="fas fa-lock input-icon"></i>
                         <input type="password" class="form-control" id="password" name="password" required>
@@ -386,7 +427,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="password_confirmation">تأكيد كلمة المرور</label>
+                    <label for="password_confirmation" data-translate="confirm_password_label">تأكيد كلمة المرور</label>
                     <div class="input-container">
                         <i class="fas fa-lock input-icon"></i>
                         <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
@@ -395,9 +436,9 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block">
-                    <span id="submitText">تعيين كلمة المرور</span>
+                    <span id="submitText" data-translate="reset_button">تعيين كلمة المرور</span>
                     <span id="submitSpinner" class="d-none">
-                        <i class="fas fa-spinner fa-spin"></i> جاري المعالجة...
+                        <i class="fas fa-spinner fa-spin"></i> <span data-translate="processing_text">جاري المعالجة...</span>
                     </span>
                 </button>
             </form>
@@ -410,7 +451,7 @@
     <!-- تذييل الصفحة -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; {{ date('Y') }} المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.</p>
+            <p data-translate="copyright_text">&copy; {{ date('Y') }} المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.</p>
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -421,6 +462,82 @@
     </footer>
 
     <script>
+        // ترجمة النصوص
+        const translations = {
+            ar: {
+                page_title: "تعيين كلمة مرور جديدة - المركز السوري للتنمية المستدامة",
+                org_name: "المركز السوري للتنمية المستدامة والتمكين المجتمعي",
+                reset_title: "تعيين كلمة مرور جديدة",
+                new_password_label: "كلمة المرور الجديدة",
+                confirm_password_label: "تأكيد كلمة المرور",
+                reset_button: "تعيين كلمة المرور",
+                processing_text: "جاري المعالجة...",
+                copyright_text: `© ${new Date().getFullYear()} المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.`,
+                success_message: "تم تعيين كلمة المرور بنجاح!",
+                error_message: "حدث خطأ أثناء تعيين كلمة المرور"
+            },
+            en: {
+                org_name: "Syrian Center for Sustainable Development and Community Empowerment ",
+                reset_title: "Reset Password",
+                new_password_label: "New Password",
+                confirm_password_label: "Confirm Password",
+                reset_button: "Reset Password",
+                processing_text: "Processing...",
+                copyright_text: `© ${new Date().getFullYear()} Syrian Center for Sustainable Development. All rights reserved.`,
+                success_message: "Password has been reset successfully!",
+                error_message: "An error occurred while resetting password"
+            }
+        };
+
+        // تغيير اللغة
+        document.querySelectorAll('.language-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+
+                // تحديث حالة الأزرار
+                document.querySelectorAll('.language-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                this.classList.add('active');
+
+                // تغيير اتجاه الصفحة
+                document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+                document.documentElement.lang = lang;
+
+                // تطبيق الترجمة
+                document.querySelectorAll('[data-translate]').forEach(element => {
+                    const key = element.getAttribute('data-translate');
+                    if (translations[lang][key]) {
+                        element.textContent = translations[lang][key];
+                    }
+                });
+
+                // تحديث عنوان الصفحة
+                document.title = translations[lang]['page_title'];
+
+                // تغيير مكان الأيقونات في حقول الإدخال
+                if (lang === 'en') {
+                    document.querySelectorAll('.input-icon').forEach(icon => {
+                        icon.style.left = 'auto';
+                        icon.style.right = '15px';
+                    });
+                    document.querySelectorAll('.form-control').forEach(input => {
+                        input.style.textAlign = 'left';
+                        input.style.padding = '12px 40px 12px 15px';
+                    });
+                } else {
+                    document.querySelectorAll('.input-icon').forEach(icon => {
+                        icon.style.left = '15px';
+                        icon.style.right = 'auto';
+                    });
+                    document.querySelectorAll('.form-control').forEach(input => {
+                        input.style.textAlign = 'right';
+                        input.style.padding = '12px 15px 12px 40px';
+                    });
+                }
+            });
+        });
+
         document.getElementById('resetPasswordForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -468,7 +585,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    successMessage.textContent = data.message;
+                    successMessage.textContent = translations[document.documentElement.lang]['success_message'];
                     successMessage.classList.remove('d-none');
 
                     // Redirect to login after 3 seconds
@@ -488,12 +605,12 @@
                         });
                     }
 
-                    errorMessage.textContent = data.message || 'حدث خطأ أثناء تعيين كلمة المرور';
+                    errorMessage.textContent = data.message || translations[document.documentElement.lang]['error_message'];
                     errorMessage.classList.remove('d-none');
                 }
             })
             .catch(error => {
-                errorMessage.textContent = 'حدث خطأ في الاتصال بالخادم';
+                errorMessage.textContent = translations[document.documentElement.lang]['error_message'];
                 errorMessage.classList.remove('d-none');
                 console.error('Error:', error);
             })

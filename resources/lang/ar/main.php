@@ -10,7 +10,12 @@ return [
         'about' => 'من نحن',
         'target' => 'الفئة المستهدفة',
         'team' => 'فريقنا',
-        'partners' => 'شركاؤنا'
+        'partners' => 'شركاؤنا',
+        'home'=>'الرئيسية',
+        'read_more' => 'قراءة المزيد ',
+        'end_date' => 'موعد الانتهاء',
+        'start_date' => 'موعد البدء',
+
     ],
     'titles' => [
         'about' => 'من نحن',
@@ -19,13 +24,27 @@ return [
         'target' => 'الفئة المستهدفة',
         'services' => 'مجالاتنا',
         'team' => 'فريقنا',
-        'partners' => 'شركاؤنا'
+        'partners' => 'شركاؤنا',
+        'sections'=> 'الأقسام',
+        'services_count' => 'عدد الخدمات' ,
+        'services' => 'الخدمات',
+        'related_articles' => 'مقالات ذات صلة ',
+        'published_date' => 'تاريخ النشر ',
+        'service' => 'الخدمة',
+
+
+
     ],
     'buttons' => [
+        '',
         'read_more' => 'قراءة المزيد',
         'discover' => 'اكتشف المزيد',
         'login' => 'تسجيل الدخول',
-        'logout' => 'تسجيل الخروج'
+        'logout' => 'تسجيل الخروج',
+        'explore' => 'استكشاف',
+    'view_details' => 'عرض التفاصيل '
+
+
     ],
     'services' => [
         'education' => 'التعليم والتمكين',
@@ -36,5 +55,16 @@ return [
         'quick_links' => 'روابط سريعة',
         'contact_us' => 'تواصل معنا',
         'copyright' => 'حقوق النشر © 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.'
+    ],
+
+    'events' => [
+        'festival' => 'مهرجان',
+        'volunteering' => 'تطوعي',
+        'workshop' => 'متجر عمل',
+        'location' => 'الموقع',
+        'max_participants' => 'العددالأقصى للمنضمين ',
+        'description' => 'الوصف'
+
+
     ]
 ];
