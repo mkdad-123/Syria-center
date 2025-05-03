@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->enum('section', ['about-us', 'vision', 'message' , 'target group','social_media','contact_info'])->nullable();
+            $table->string('section')->nullable();
             $table->json('title')->nullable();
             $table->json('content')->nullable();
             $table->string('image')->nullable();

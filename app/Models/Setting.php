@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\SectionEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Translatable\HasTranslations;
@@ -10,9 +11,28 @@ class Setting extends Model
 {
     use HasTranslations;
 
-    public $translatable = ['title', 'content', 'extra'];
-    protected $fillable = ['key', 'title', 'content', 'image', 'extra', 'section'];
-    protected $casts = ['extra' => 'array', 'title' => 'array', 'content' => 'array'];
+    public $translatable = [
+        'title',
+        'content',
+        'extra'
+    ];
+
+    protected $fillable = [
+        'key',
+        'title',
+        'content',
+        'image',
+        'extra',
+        'section'
+    ];
+
+    protected $casts = [
+        'extra' => 'array',
+        'title' => 'array',
+        'content' => 'array',
+        'section' => SectionEnum::class,
+    ];
+
 
     /**
 
@@ -51,9 +71,9 @@ class Setting extends Model
     public function getTranslatedContent($locale, $default = null)
     {
         try {
-            return $this->getTranslation('content', $locale, false) 
-                   ?? $this->content 
-                   ?? $default 
+            return $this->getTranslation('content', $locale, false)
+                   ?? $this->content
+                   ?? $default
                    ?? __('No content available');
         } catch (\Exception $e) {
             return $this->content ?? $default ?? __('No content available');

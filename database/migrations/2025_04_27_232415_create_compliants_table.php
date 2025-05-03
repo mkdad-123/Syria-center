@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('compliants', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('custom_user_id')->constrained('customusers')->cascadeOnDelete()->cascadeOnUpdate();
             $table->longText('content');
             $table->string('email');
             $table->date('date');

@@ -11,6 +11,5 @@ class Compliants extends Model
     use HasApiTokens , Notifiable;
 
     protected $table = 'compliants';
-
     protected $fillable = ['content', 'email', 'date'];
 }

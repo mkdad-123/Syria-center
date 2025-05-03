@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SettingResource\Pages;
 use App\Models\Setting;
+use App\SectionEnum;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -32,7 +33,6 @@ class SettingResource extends Resource
     {
         return $form
             ->schema([
-
                Section::make()
                 ->schema([
                     Select::make('section')
@@ -40,11 +40,13 @@ class SettingResource extends Resource
                         ->required()
                         ->unique()
                         ->options([
-                            'about_us' => 'نبذة عنا',
-                            'vision' => 'الرؤية',
-                            'mission' => 'المهمة',
-                            'contact_us' => 'اتصل بنا',
-                            'privacy_policy' => 'سياسة الخصوصية',
+                            SectionEnum::AboutUs->value => 'About Us',
+                            SectionEnum::Vision->value => 'Vision',
+                            SectionEnum::Message->value => 'Message',
+                            SectionEnum::TargetGroup->value => 'Target Group',
+                            SectionEnum::SocialMedia->value => 'Social Media',
+                            SectionEnum::ContactInfo->value => 'Contact Info',
+                            SectionEnum::Partners->value => 'Partners',
                         ])
                         ->live()
                         ->afterStateUpdated(function ($state , Forms\Set $set){
