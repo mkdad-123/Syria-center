@@ -8,7 +8,7 @@ use Spatie\Translatable\HasTranslations;
 class Event extends Model
 {
     use HasTranslations;
-    public $translatable = ['description' , 'title' ,'type' , 'location' ,'max_participants'];
+    public $translatable = ['title', 'description', 'type', 'location'];
 
     protected $fillable = [
         'title',
@@ -24,8 +24,11 @@ class Event extends Model
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
+        'title' => 'array',
+        'description' => 'array',
+        'location' => 'array',
+        'type' => 'array'
     ];
-
 public function getTranslatedContent($locale, $default = null)
 {
     try {

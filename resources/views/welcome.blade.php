@@ -1027,27 +1027,41 @@
                     </div>
                     <div class="about-content">
                         @php
-                            $aboutContent = '';
-                            if (is_string($aboutUs)) {
-                                $aboutContent = $aboutUs;
-                            } elseif ($aboutUs instanceof \App\Models\Setting) {
-                                $aboutContent =
-                                    $aboutUs->getTranslation('content', $locale, false) ?? __('No content available');
-                            } else {
-                                $aboutContent = __('No content available');
-                            }
-
-                            $words = preg_split('/\s+/', $aboutContent);
-                            $shortContent = implode(' ', array_slice($words, 0, 40));
-                            if (count($words) > 40) {
-                                $shortContent .= '...';
-                            }
-                        @endphp
-                        <p>{{ $shortContent }}</p>
-                        <div class="read-more-btn-container">
-                            <a href="{{ route('about-us') }}"
-                                class="read-more-btn">{{ __('main.buttons.read_more') }}</a>
+                        $aboutContent = '';
+                        if (is_string($aboutUs)) {
+                            $aboutContent = $aboutUs;
+                        } elseif ($aboutUs instanceof \App\Models\Setting) {
+                            $aboutContent = $aboutUs->getTranslation('content', $locale, false) ?? __('No content available');
+                        } else {
+                            $aboutContent = __('No content available');
+                        }
+                    
+                        // عرض المحتوى الكامل كـ HTML
+                        $fullContent = $aboutContent;
+                        
+                        // إنشاء نسخة مختصرة للنص (بدون علامات HTML)
+                        $textOnly = strip_tags($aboutContent);
+                        $words = preg_split('/\s+/', $textOnly);
+                        $shortContent = implode(' ', array_slice($words, 0, 40));
+                        if (count($words) > 40) {
+                            $shortContent .= '...';
+                        }
+                    @endphp
+                    
+                    <div class="about-content">
+                        <div class="short-content">
+                            <p>{!! nl2br(e($shortContent)) !!}</p>
+                                <div class="read-more-btn-container">
+                                    <a href="{{ route('about-us') }}" class="read-more-btn">{{ __('main.buttons.read_more') }}</a>
+                                </div>
                         </div>
+                        
+                        <!-- في صفحة about-us يمكنك استخدام: -->
+                        @if(request()->routeIs('about-us'))
+                            <div class="full-content">
+                                {!! $fullContent !!}
+                            </div>
+                        @endif
                     </div>
                 </div>
         </section>
@@ -1072,8 +1086,8 @@
                                 $missionContent = __('No content available');
                             }
                         @endphp
-                        <p>{{ $missionContent }}</p>
-                    </div>
+                    {!! $missionContent !!}
+                </div>
                     <div class="vision">
                         <h3 style="color: #000;">{{ __('main.titles.vision') }}</h3>
                         <div class="icon-wrapper">
@@ -1090,8 +1104,8 @@
                                 $visionContent = __('No content available');
                             }
                         @endphp
-                        <p>{{ $visionContent }}</p>
-                    </div>
+                    {!! $visionContent !!}
+                </div>
                 </div>
             </div>
         </section>
@@ -1115,7 +1129,7 @@
                             $targetContent = __('No content available');
                         }
                     @endphp
-                    <p>{{ $targetContent }}</p>
+                    {!!$targetContent !!}
                 </div>
             </div>
         </section>
@@ -1157,8 +1171,9 @@
                     <div class="team-slide">
                         @foreach ($team as $member)
                             <div class="team-member {{ $loop->first ? 'active' : '' }}">
-                                <img src="{{ asset($member['image']) }}" alt="{{ $member['name'] }}">
-                                <h3>{{ $member['name'] }}</h3>
+                                <a href="{{ route('volunteers', ['vol' => $member['id'] ?? null]) }}">
+                                    <img src="{{ asset('storage/' . $member['image']) }}" alt="{{ $member['name'] }}" style="cursor: pointer;">
+                                </a>                                <h3>{{ $member['name'] }}</h3>
                                 <p>{{ $member['profession'] }}</p>
                                 <p>{{ $member['bio'] }}</p>
                             </div>
@@ -1178,12 +1193,21 @@
                 <div class="partners-carousel" id="partnersCarousel">
                     <div class="partners-slide">
                         @foreach ($partners as $partner)
-                            <div class="partner {{ $loop->first ? 'active' : '' }}">
-                                <img src="{{ asset($partner->logo) }}" alt="{{ $partner->name }}">
-                                <h3>{{ $partner->name }}</h3>
-                                <p>{{ $partner->getTranslation('description', $locale) }}</p>
-                            </div>
-                        @endforeach
+                        {{-- Debug output --}}
+                        <div class="partner {{ $loop->first ? 'active' : '' }}">
+                            <img src="{{ asset('storage/' . $partner['image']) }}" alt="{{ $partner['name'] }}">
+                            <p>
+                            {!! $partner['name'] !!}
+                            </p>
+                            <p>
+                                @if(is_array($partner['description']))
+                                    {!! $partner['description'][$locale] ?? $partner['description']['en'] ?? '' !!}
+                                @else
+                                    {!! $partner['description'] !!}
+                                @endif
+                            </p>                       </div>
+                    @endforeach
+                        
                     </div>
                     <button class="carousel-btn" id="partnersPrevBtn"><i class="fas fa-chevron-left"></i></button>
                     <button class="carousel-btn" id="partnersNextBtn"><i class="fas fa-chevron-right"></i></button>

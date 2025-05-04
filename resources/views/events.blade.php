@@ -651,20 +651,21 @@
                     <div class="event-card">
                         <div class="event-image-container">
                             @if($event['cover_image'])
-                                <img src="{{ asset($event['cover_image']) }}" alt="{{ $event['title'] }}" class="event-image">
+                                <img src="{{ asset('storage/' . $event['cover_image']) }}" alt="{{ $event['title'] }}" class="event-image">
                             @else
                                 <img src="{{ asset('default-event.jpg') }}" alt="{{ __('events.default_image_alt') }}" class="event-image">
                             @endif
+                           
                         </div>
                         <div class="event-content">
-                            <span class="event-type {{ $event['type'] }}">
-                                @if($event['type'] == 'festival') {{ __('events.types.festival') }}
-                                @elseif($event['type'] == 'volunteering') {{ __('events.types.volunteering') }}
-                                @elseif($event['type'] == 'workshop') {{ __('events.types.workshop') }}
+                            <span class="event-type {{ $event['type'] }}" style="margin-bottom: 15px; display: inline-block;">
+                                @if($event['type'] == 'festival') {{ __('main.events.festival') }}
+                                @elseif($event['type'] == 'volunteering') {{ __('main.events.volunteering') }}
+                                @elseif($event['type'] == 'workshop') {{ __('main.events.workshop') }}
                                 @endif
                             </span>
 
-                            <h3 class="event-title">{{ $event['title'] }}</h3>
+                            <h3 class="event-title">{{ $event['title'] ?? 'No title available' }}</h3>
 
                             <div class="event-meta">
                                 <div class="event-meta-item">
@@ -683,8 +684,9 @@
                                 </div>
                             </div>
 
-                            <p class="event-description">{{ Str::limit($event['description'], 100) }}</p>
-
+                            <p class="event-description">
+                                {!! Str::limit(strip_tags($event['description'], 100)) !!}
+                            </p>
                             <button class="read-more-btn" onclick="openEventModal({{ $event['id'] }})">{{ __('main.menu.read_more') }}</button>
                         </div>
                     </div>
@@ -748,8 +750,9 @@
             @if($event['description'])
             <div class="modal-description">
                 <h3>{{ __('main.events.description') }}:</h3>
-                <p>{!! nl2br(e($event['description'])) !!}</p>
-            </div>
+                <p class="event-description">
+                    {!! Str::limit(strip_tags($event['description'], 100)) !!}
+                </p>            </div>
             @endif
         </div>
     </div>
@@ -768,7 +771,7 @@
                     <ul>
                         <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
                         <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
-                        <li><a href="{{ route('events') }}">{{ __('main.menu.events') }}</a></li>
+                        <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
                         <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
                     </ul>
                 </div>

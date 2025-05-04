@@ -12,5 +12,4 @@ class Compliants extends Model
     use HasApiTokens , Notifiable , HasTranslations;
 
     protected $table = 'compliants';
-    protected $fillable = ['content', 'email', 'date'];
-}
+    protected $fillable = ['custom_user_id', 'content', 'email', 'date'];}

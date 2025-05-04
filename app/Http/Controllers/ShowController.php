@@ -24,7 +24,7 @@ class ShowController extends Controller
         $aboutUs = Setting::where('section', 'about-us')->first();
         $vision = Setting::where('section', 'vision')->first();
         $message = Setting::where('section', 'message')->first();
-        $targetgroup = Setting::where('section', 'target group')->first();
+        $targetgroup = Setting::where('section', 'target-group')->first();
 
         // فريق العمل مع ترجمة آمنة
         $team = Volunteer::all()->map(function ($member) use ($locale) {
@@ -94,7 +94,7 @@ class ShowController extends Controller
         } catch (\Exception $e) {
             return $model->content ?? __('No content available');
         }
-    }
+     }
 
     public function showAbout_usPage(Request $request)
     {
@@ -115,63 +115,61 @@ class ShowController extends Controller
         // معلومات التواصل ووسائل التواصل الاجتماعي
         $socialMedia = Setting::getSocialMediaLinks();
         $contactInfo = Setting::getContactInfo();
-
+        $image = $aboutUs->image ;
         return view('about-us', [
             'locale' => $locale,
             'aboutUs' => $this->getSafeContent($aboutUs, $locale),
             'socialMedia' => $socialMedia,
-            'contactInfo' => $contactInfo
+            'contactInfo' => $contactInfo,
+            'image' => $image ,
         ]);
     }
 
     public function showEventsPage(Request $request)
     {
-        // تحديد اللغة
         $locale = $request->has('lang') ? $request->lang : 'ar';
         app()->setLocale($locale);
-
-        // جلب الأحداث المنشورة مع ترتيب تنازلي
+    
         $events = Event::where('is_published', '1')
             ->orderByDesc('id')
             ->get()
-            ->map(function ($event) use ($locale) {
+            ->map(function ($event) {
                 return [
                     'id' => $event->id,
-                    'title' => $this->getTranslatedValue($event->title, $locale),
-                    'description' => $this->getTranslatedValue($event->description, $locale),
-                    'type' => $this->getTranslatedValue($event->type, $locale),
+                    'title' => $event->title,
+                    'description' => $event->description,
+                    'type' => $event->type,
                     'start_date' => $event->start_date,
                     'end_date' => $event->end_date,
-                    'location' => $this->getTranslatedValue($event->location, $locale),
+                    'location' => $event->location,
                     'max_participants' => $event->max_participants,
                     'cover_image' => $event->cover_image,
                     'created_at' => $event->created_at,
                     'updated_at' => $event->updated_at
                 ];
             });
-
+    
         return view('events', [
             'events' => $events,
             'locale' => $locale
         ]);
     }
 
-    private function getTranslatedValue($jsonData, $locale, $default = null)
-{
-    // إذا كانت البيانات بالفعل مصفوفة، لا نحتاج لتحويلها
-    if (is_array($jsonData)) {
-        return $jsonData[$locale] ?? $jsonData['ar'] ?? $default ?? __('No content available');
+    protected function getTranslatedValue($value, $locale)
+    {
+        // If the value is a JSON string containing translations
+        if (is_string($value) && $decoded = json_decode($value, true)) {
+            return $decoded[$locale] ?? 'No content available';
+        }
+        
+        // If it's already an array (if using casts)
+        if (is_array($value)) {
+            return $value[$locale] ?? 'No content available';
+        }
+        
+        // If no translation exists, return the raw value
+        return $value ?? 'No content available';
     }
-    
-    // إذا كانت نصًا، نحاول تحويلها من JSON
-    try {
-        $data = json_decode($jsonData, true);
-        return $data[$locale] ?? $data['ar'] ?? $default ?? __('No content available');
-    } catch (\Exception $e) {
-        return $default ?? __('No content available');
-    }
-}
-
     public function showSectionsPage(Request $request)
     {
         // تحديد اللغة
@@ -326,11 +324,37 @@ public function showContactInfoPage()
     ]);
 }
 
-    public  function showVolunteerPage($id)
-    {
+    public function showVolunteerPage(Request $request, $id)
+{
+    // Set the locale with fallback to 'ar'
+    $locale = $request->get('lang', 'ar');
+    app()->setLocale($locale);
 
-        $volunteer = Volunteer::findOrFail($id); // Get single volunteer
+    // Get the volunteer with translations
+    $volunteer = Volunteer::findOrFail($id);
 
-        return view('volunteer', compact('volunteer'));
-    }
+    // Prepare translated volunteer data
+    $translatedVolunteer = [
+        'id' => $volunteer->id,
+        'name' => $volunteer->getTranslation('name', $locale) ?? $volunteer->name,
+        'email' => $volunteer->email,
+        'phone' => $volunteer->phone,
+        'national_id' => $volunteer->national_id,
+        'birth_date' => $volunteer->birth_date,
+        'gender' => $volunteer->getTranslation('gender', $locale) ?? $volunteer->gender,
+        'profession' => $volunteer->getTranslation('profession', $locale) ?? $volunteer->profession,
+        'skills' => $volunteer->getTranslation('skills', $locale) ?? $volunteer->skills,
+        'availability' => $volunteer->getTranslation('availability', $locale) ?? $volunteer->availability,
+        'join_date' => $volunteer->join_date,
+        'is_active' => $volunteer->is_active,
+        'profile_photo' => $volunteer->profile_photo,
+        'CV' => $volunteer->CV,
+        'notes' => $volunteer->getTranslation('notes', $locale) ?? $volunteer->notes,
+    ];
+
+    return view('volunteer', [
+        'volunteer' => $translatedVolunteer,
+        'locale' => $locale
+    ]);
+}
 }

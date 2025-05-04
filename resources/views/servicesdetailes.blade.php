@@ -576,7 +576,7 @@
                         <h1 class="service-title">{{ $service['name'] }}</h1>
                         
                         <div class="service-description">
-                            {!! nl2br(e($service['description'])) !!}
+                            {!! $service['description'] !!}
                         </div>
                     </div>
 
@@ -589,7 +589,7 @@
                                    
                                         <div class="article-content">
                                             <h3 class="article-title">{{ $article['title'] }}</h3>
-                                            <p class="article-excerpt">{{ Str::limit($article['content'], 150) }}</p>
+                                            <p class="article-excerpt">{!!Str::limit($article['content'], 150) !!}</p>
                                             <a href="{{ route('article.show', $article['id']) }}" class="read-more">{{ __('main.buttons.read_more') }}</a>
                                         </div>
                                     </div>

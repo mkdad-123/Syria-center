@@ -527,7 +527,7 @@
                         <div class="service-card">
                             <div class="service-content">
                                 <h3 class="service-title">{{ $service['name'] }}</h3>
-                                <p class="service-description">{{ Str::limit($service['description'], 200) }}</p>
+                                <p class="service-description">{!!Str::limit($service['description'], 200) !!}</p>
                                 <a href="{{ route('details', $service['id']) }}" class="details-btn">{{ __('main.buttons.view_details') }}</a>
                             </div>
                         </div>

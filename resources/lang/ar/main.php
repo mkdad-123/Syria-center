@@ -32,7 +32,20 @@ return [
         'published_date' => 'تاريخ النشر ',
         'service' => 'الخدمة',
 
+        'volunteer' => [
+            'male' => 'ذكر',
+            'female' => 'أنثى',
+            'join_date' => 'تاريخ الانضمام',
+            'personal_info' => 'معلومات شخصية ',
+            'availability' => 'التواجد ' ,
+            'national_id' => 'المعرف الوطني ' ,
+            'skills' => 'المهارات ' ,
 
+
+
+
+
+        ],
 
     ],
     'buttons' => [
