@@ -13,6 +13,7 @@
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.1",
         "laravel/tinker": "^2.10.1",
+        "mews/purifier": "^3.4",
         "mohamedsabil83/filament-forms-tinyeditor": "^2.4",
         "spatie/laravel-translatable": "^6.11",
         "symfony/mailer": "^7.2"

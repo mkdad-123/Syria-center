@@ -471,72 +471,111 @@
             width: 100%;
         }
 
-        /* تذييل الصفحة */
-        .footer {
-            background-color: var(--dark-color_1);
-            color: var(--white);
-            padding: 60px 0 0;
-        }
+           /* أنماط الفوتر المعدلة */
+    .footer {
+        background-color: var(--dark-color_1);
+        color: var(--white);
+        padding: 50px 0 0;
+        font-size: 1.05rem; /* زيادة حجم الخط العام */
+    }
 
-        .footer-content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 40px;
-            margin-bottom: 40px;
-        }
+    .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* زيادة العرض الأدنى للعناصر */
+        gap: 40px;
+        margin-bottom: 40px;
+    }
 
-        .footer-logo img {
-            height: 60px;
-            width: auto;
-            margin-bottom: 20px;
-        }
+    .footer-logo {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
-        .footer-links h4,
-        .footer-contact h4 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            color: var(--secondary-color);
-        }
+    .footer-logo img {
+        height: 80px; /* زيادة حجم الشعار */
+        width: auto;
+        margin-bottom: 20px;
+    }
 
-        .footer-links ul {
-            list-style: none;
-        }
+    .footer-logo p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
 
-        .footer-links li {
-            margin-bottom: 10px;
-        }
+    .footer-links h4,
+    .footer-contact h4 {
+        font-size: 1.3rem; /* زيادة حجم العناوين */
+        margin-bottom: 25px;
+        color: var(--secondary-color);
+        position: relative;
+        padding-bottom: 10px;
+    }
 
-        .footer-links a {
-            color: var(--white);
-            text-decoration: none;
-            transition: var(--transition);
-        }
+    .footer-links h4::after,
+    .footer-contact h4::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background-color: var(--secondary-color);
+    }
 
-        .footer-links a:hover {
-            color: var(--secondary-color);
-            padding-right: 5px;
-        }
+    .footer-links ul {
+        list-style: none;
+        padding: 0;
+    }
 
-        .footer-contact p {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
+    .footer-links li {
+        margin-bottom: 12px; /* زيادة المسافة بين العناصر */
+    }
 
-        .footer-contact i {
-            margin-left: 10px;
-            color: var(--secondary-color);
-        }
+    .footer-links a {
+        color: var(--white);
+        text-decoration: none;
+        transition: var(--transition);
+        font-size: 1.05rem;
+        display: inline-block;
+        padding: 5px 0;
+    }
 
-        .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 20px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+    .footer-links a:hover {
+        color: var(--secondary-color);
+        transform: translateX(5px);
+    }
+
+    .footer-contact p {
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        font-size: 1.05rem;
+    }
+
+    .footer-contact i {
+        margin-left: 12px;
+        font-size: 1.2rem;
+        color: var(--secondary-color);
+        min-width: 25px;
+        text-align: center;
+    }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 25px 0;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .footer-bottom p {
+        margin: 0;
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
 
         .social-icons a {
             display: inline-block;
@@ -658,12 +697,12 @@
                            
                         </div>
                         <div class="event-content">
-                            <span class="event-type {{ $event['type'] }}" style="margin-bottom: 15px; display: inline-block;">
-                                @if($event['type'] == 'festival') {{ __('main.events.festival') }}
-                                @elseif($event['type'] == 'volunteering') {{ __('main.events.volunteering') }}
-                                @elseif($event['type'] == 'workshop') {{ __('main.events.workshop') }}
-                                @endif
-                            </span>
+                         <span class="event-type {{ $event['type'] }}" style="margin-bottom: 15px; display: inline-block;">
+                @if($event['type'] == 'festival') {{ __('main.events.festival') }}
+                @elseif($event['type'] == 'volunteering') {{ __('main.events.volunteering') }}
+                @elseif($event['type'] == 'workshop') {{ __('main.events.workshop') }}
+                @endif
+            </span>
 
                             <h3 class="event-title">{{ $event['title'] ?? 'No title available' }}</h3>
 
@@ -762,51 +801,54 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
+                <!-- قسم الشعار والمعلومات -->
                 <div class="footer-logo">
-                    <img src="{{ asset('logo.png') }}" alt="{{ __('main.site_name') }}">
-                    <p>{{ __('main.site_name') }} - {{ __('main.site_subname') }}</p>
+                    <img src="\logo.png" alt="{{ __('main.site_name') }}">
+                    <p>{{ __('main.site_name') }}<br>
+                    <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span></p>
                 </div>
+    
+                <!-- قسم الروابط السريعة -->
                 <div class="footer-links">
                     <h4>{{ __('main.footer.quick_links') }}</h4>
                     <ul>
-                        <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
-                        <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
                         <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
+                        <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
                         <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
+                        <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
                     </ul>
                 </div>
-                <div class="footer-contact">
-                    <h4>{{ __('main.footer.contact_us') }}</h4>
-                    @if(isset($contactInfo['address']))
-                        <p><i class="fas fa-map-marker-alt"></i> {{ $contactInfo['address'] }}</p>
-                    @endif
-                    @if(isset($contactInfo['phones']) && count($contactInfo['phones']) > 0)
-                        <p><i class="fas fa-phone"></i> {{ $contactInfo['phones'][0] }}</p>
-                    @endif
-                    @if(isset($contactInfo['emails']) && count($contactInfo['emails']) > 0)
-                        <p><i class="fas fa-envelope"></i> {{ $contactInfo['emails'][0] }}</p>
-                    @endif
-                </div>
+    
+                <!-- قسم معلومات الاتصال -->
+               
             </div>
+    
+            
+    
+            <!-- حقوق النشر ووسائل التواصل الاجتماعي -->
             <div class="footer-bottom">
-                <p>&copy; {{ date('Y') }} {{ __('main.site_name') }}. {{ __('main.footer.all_rights') }}</p>
+                <p>{{ __('main.footer.copyright') }} &copy; {{ date('Y') }}</p>
                 <div class="social-icons">
-                    @if(isset($socialMedia['facebook']))
-                        <a href="{{ $socialMedia['facebook'] }}"><i class="fab fa-facebook-f"></i></a>
+                    @if (isset($socialMedia['facebook']))
+                        <a href="{{ $socialMedia['facebook'] }}" target="_blank"><i class="fab fa-facebook-f"></i></a>
                     @endif
-                    @if(isset($socialMedia['twitter']))
-                        <a href="{{ $socialMedia['twitter'] }}"><i class="fab fa-twitter"></i></a>
+                    @if (isset($socialMedia['twitter']))
+                        <a href="{{ $socialMedia['twitter'] }}" target="_blank"><i class="fab fa-twitter"></i></a>
                     @endif
-                    @if(isset($socialMedia['linkedin']))
-                        <a href="{{ $socialMedia['linkedin'] }}"><i class="fab fa-linkedin-in"></i></a>
+                    @if (isset($socialMedia['linkedin']))
+                        <a href="{{ $socialMedia['linkedin'] }}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                     @endif
-                    @if(isset($socialMedia['instagram']))
-                        <a href="{{ $socialMedia['instagram'] }}"><i class="fab fa-instagram"></i></a>
+                    @if (isset($socialMedia['instagram']))
+                        <a href="{{ $socialMedia['instagram'] }}" target="_blank"><i class="fab fa-instagram"></i></a>
+                    @endif
+                    @if (isset($socialMedia['youtube']))
+                        <a href="{{ $socialMedia['youtube'] }}" target="_blank"><i class="fab fa-youtube"></i></a>
                     @endif
                 </div>
             </div>
         </div>
     </footer>
+
 
     <script>
         // تغيير خلفية الصفحة تلقائياً
