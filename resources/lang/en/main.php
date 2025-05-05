@@ -15,9 +15,18 @@ return [
         'read_more' => 'read more',
         'end_date' => 'end date',
         'start_date' => ' start date',
-
-
     ],
+        'volunteer' => [
+            'male' => 'Male',
+            'female' => 'Female',
+            'join_date' => 'join date',
+            'personal_info' => 'personal information ',
+            'availability' => 'availability' ,
+            'national_id' => 'national Id' ,
+            'skills' => 'skills ' ,
+
+        ],
+   
     'titles' => [
         'about' => 'About Us',
         'mission' => 'Our Mission',

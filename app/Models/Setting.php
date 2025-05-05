@@ -13,7 +13,8 @@ class Setting extends Model
     public $translatable = [
         'title',
         'content',
-        'extra'
+        'extra',
+        'address', 'working_hours'
     ];
 
     protected $fillable = [
@@ -22,7 +23,8 @@ class Setting extends Model
         'content',
         'image',
         'extra',
-        'section'
+        'section',
+        'address', 'working_hours'
     ];
 
     protected $casts = [

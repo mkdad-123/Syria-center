@@ -13,7 +13,7 @@ class Compliants extends Model
 
     protected $table = 'compliants';
 
-    protected $fillable = ['content', 'email', 'date'];
+    protected $fillable = ['custom_user_id','content', 'email', 'date'];
 
     public function customUser()
     {

@@ -420,73 +420,171 @@
             text-align: center;
         }
 
-        /* تذييل الصفحة */
         .footer {
-            background-color: var(--dark-color_1);
-            color: var(--white);
-            padding: 20px 0 0;
-            height: 80px;
-        }
+        background-color: var(--dark-color_1);
+        color: var(--white);
+        padding: 50px 0 20px;
+        position: relative;
+        height: auto;
+    }
 
+    .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+        margin-bottom: 40px;
+    }
+
+    .footer-section {
+        padding: 0 20px;
+    }
+
+    .footer-section.about {
+        grid-column: 1;
+    }
+
+    .footer-section.links {
+        grid-column: 2;
+    }
+
+    .footer-section.newsletter {
+        grid-column: 3;
+    }
+
+    .footer-logo img {
+        height: 100px;
+        margin-bottom: 40px;
+    }
+
+    .footer-about-text {
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+
+    .footer-section h4 {
+        color: var(--secondary-color);
+        font-size: 1.3rem;
+        margin-bottom: 25px;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .footer-section h4::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 50px;
+        height: 2px;
+        background-color: var(--secondary-color);
+    }
+
+    .footer-section.links ul {
+        list-style: none;
+    }
+
+    .footer-section.links li {
+        margin-bottom: 12px;
+    }
+
+    .footer-section.links a {
+        color: var(--white);
+        text-decoration: none;
+        transition: var(--transition);
+        display: block;
+    }
+
+    .footer-section.links a:hover {
+        color: var(--secondary-color);
+        padding-right: 10px;
+    }
+
+    .footer-contact .contact-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .footer-contact i {
+        margin-left: 10px;
+        color: var(--secondary-color);
+        width: 20px;
+        text-align: center;
+    }
+
+    .newsletter-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .newsletter-form input {
+        padding: 12px 15px;
+        border: none;
+        border-radius: 6px;
+        background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    .newsletter-form button {
+        background-color: var(--secondary-color);
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .newsletter-form button:hover {
+        background-color: #e07f00;
+    }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .copyright {
+        font-size: 0.9rem;
+    }
+
+    .social-icons a {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        text-align: center;
+        line-height: 40px;
+        color: var(--white);
+        margin-right: 10px;
+        transition: var(--transition);
+    }
+
+    .social-icons a:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-3px);
+    }
+
+    @media (max-width: 992px) {
         .footer-content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 40px;
-            margin-bottom: 20px;
+            grid-template-columns: 1fr;
         }
 
-        .footer-logo img {
-            height: 60px;
-            width: auto;
-            margin-bottom: 20px;
-        }
-
-        .footer-links h4,
-        .footer-contact h4 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            color: var(--secondary-color);
-        }
-
-        .footer-links ul {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 10px;
-        }
-
-        .footer-links a {
-            color: var(--white);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: var(--secondary-color);
-            padding-right: 5px;
-        }
-
-        .footer-contact p {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-
-        .footer-contact i {
-            margin-left: 10px;
-            color: var(--secondary-color);
+        .footer-section {
+            grid-column: auto !important;
         }
 
         .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
         }
+    }
 
         .social-icons a {
             display: inline-block;
@@ -560,31 +658,32 @@
                     <img src="/logo.png" alt="شعار المركز">
                 </div>
                 <div class="org-name">
-                    <span class="org-name-line1">المركز السوري للتنمية المستدامة</span>
-                    <span class="org-name-line2">والتمكين المجتمعي</span>
+                    <span class="org-name-line1" data-translate = "nav.sit_n1">المركز السوري للتنمية المستدامة</span>
+                    <span class="org-name-line2" data-translate = "nav.sit_n2">والتمكين المجتمعي</span>
                 </div>
             </div>
             <div class="buttons-container">
-                <nav class="nav">
-                    <ul class="nav-list">
-                        <li><a href="{{ route('home') }}">الرئيسية</a></li>
-                        <li><a href="{{ route('sections') }}">الخدمات</a></li>
-                        <li><a href="{{ route('events') }}">النشاطات والفعاليات</a></li>
-                        <li><a href="{{ route('compliants') }}">تقديم شكوى</a></li>
-                        <li class="language-switcher" style="list-style: none;">
-                            <button class="language-btn">
-                                <i class="fas fa-globe"></i>
-                                <span class="current-lang">العربية</span>
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                            <ul class="language-menu">
-                                <li><a href="#" data-lang="ar"><i class="fas fa-language"></i> العربية</a></li>
-                                <li><a href="#" data-lang="en"><i class="fas fa-language"></i> English</a></li>
-                            </ul>
-                        </li>
-                        <li class="login-btn"><a href="/login">تسجيل الدخول</a></li>
-                    </ul>
-                </nav>
+               <!-- في قسم الشريط العلوي -->
+<nav class="nav">
+    <ul class="nav-list">
+        <li><a href="{{ route('home') }}" data-translate="nav.home">الرئيسية</a></li>
+        <li><a href="{{ route('sections') }}" data-translate="nav.services">الخدمات</a></li>
+        <li><a href="{{ route('events') }}" data-translate="nav.events">النشاطات والفعاليات</a></li>
+        <li><a href="{{ route('compliants') }}" data-translate="nav.complaints">تقديم شكوى</a></li>
+        <li class="language-switcher" style="list-style: none;">
+            <button class="language-btn">
+                <i class="fas fa-globe"></i>
+                <span class="current-lang" data-translate="language.current">العربية</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <ul class="language-menu">
+                <li><a href="#" data-lang="ar" data-translate="language.ar"><i class="fas fa-language"></i> العربية</a></li>
+                <li><a href="#" data-lang="en" data-translate="language.en"><i class="fas fa-language"></i> English</a></li>
+            </ul>
+        </li>
+        <li class="login-btn"><a href="/logout" data-translate="nav.login">تسجيل الخروج</a></li>
+    </ul>
+</nav>
             </div>
         </div>
     </header>
@@ -602,35 +701,41 @@
                     <i class="fas fa-check-circle"></i> تم إرسال شكواك بنجاح، شكراً لك على تواصلك معنا.
                 </div>
 
-                <form class="complaint-form" id="complaintForm" method="POST" action="{{ route('compliants.store') }}">
-                    @csrf
-
-                    <div class="form-group">
-                        <label for="email">البريد الإلكتروني</label>
-                        <input type="email" id="email" name="email" class="form-control"
-                            placeholder="example@domain.com" required>
-                        <div class="error-message" id="emailError">يرجى إدخال بريد إلكتروني صحيح</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="content">محتوى الشكوى</label>
-                        <textarea id="content" name="content" class="form-control" placeholder="يرجى كتابة تفاصيل شكواك هنا..." required style="min-height: 250px;"></textarea>
-                        <div class="error-message" id="contentError">يرجى إدخال محتوى الشكوى (10 أحرف على الأقل)</div>
-                    </div>
-
-                    <button type="submit" class="submit-btn">
-                        <i class="fas fa-paper-plane"></i> إرسال الشكوى
-                    </button>
-
-                    <p class="form-note">
-                        <i class="fas fa-info-circle"></i> نعدك بمعالجة شكواك بكل سرية واهتمام
-                    </p>
-                </form>
+              <!-- في قسم النموذج -->
+              <form class="complaint-form" id="complaintForm" method="POST" action="{{ route('compliants.store') }}">
+                @csrf
+                @auth
+                    <input type="hidden" name="id" value="{{ Auth::id() }}">
+                @endauth
+            
+                <div class="form-group">
+                    <label for="email" data-translate="form.email">البريد الإلكتروني</label>
+                    <input type="email" id="email" name="email" class="form-control"
+                        placeholder="example@domain.com" data-translate-placeholder="form.email_placeholder" required>
+                    <div class="error-message" id="emailError" data-translate="form.email_error">يرجى إدخال بريد إلكتروني صحيح</div>
+                </div>
+            
+                <div class="form-group">
+                    <label for="content" data-translate="form.content">محتوى الشكوى</label>
+                    <textarea id="content" name="content" class="form-control" 
+                        placeholder="يرجى كتابة تفاصيل شكواك هنا..." 
+                        data-translate-placeholder="form.content_placeholder" required style="min-height: 250px;"></textarea>
+                    <div class="error-message" id="contentError" data-translate="form.content_error">يرجى إدخال محتوى الشكوى (10 أحرف على الأقل)</div>
+                </div>
+            
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> <span data-translate="form.submit">إرسال الشكوى</span>
+                </button>
+            
+                <p class="form-note">
+                    <i class="fas fa-info-circle"></i> <span data-translate="form.note">نعدك بمعالجة شكواك بكل سرية واهتمام</span>
+                </p>
+            </form>
             </div>
 
             <!-- قسم جهات الاتصال الجديد مع البيانات الفعلية -->
             <div class="contact-info-container">
-                <h2 class="contact-info-title">للتواصل معنا</h2>
+                <i class="fas fa-comments"></i> <!-- أيقونة المحادثة -->
                 <div class="contact-items">
                     @if(isset($contactInfo['phones']) && count($contactInfo['phones']) > 0)
                         <div class="contact-item">
@@ -683,24 +788,48 @@
     <!-- تذييل الصفحة مع روابط التواصل الاجتماعي الفعلية -->
     <footer class="footer">
         <div class="container">
+            <div class="footer-content">
+                <!-- معلومات المؤسسة -->
+                <div class="footer-section about">
+                    <div class="footer-logo">
+                        <img src="/logo.png" alt="شعار المركز" style="height: 80px;">
+                    </div>
+                    <div class="footer-contact">
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+963 11 123 4567</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>info@scsde.org</span>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- روابط سريعة -->
+                <div class="footer-section links">
+                    <h4 data-translate="footer.quick_links">روابط سريعة</h4>
+                    <ul>
+                        <li><a href="{{ route('home') }}" data-translate="nav.home">الرئيسية</a></li>
+                        <li><a href="{{ route('sections') }}" data-translate="nav.services">الخدمات</a></li>
+                        <li><a href="{{ route('events') }}" data-translate="nav.events">الفعاليات</a></li>
+                        <li><a href="{{ route('compliants') }}" data-translate="nav.complaints">اتصل بنا</a></li>
+                    </ul>
+                </div>
+    
+            </div>
+    
+            <!-- حقوق النشر ووسائل التواصل -->
             <div class="footer-bottom">
-                <p>&copy; 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.</p>
+                <div class="copyright" data-translate="footer.copyright">
+                    &copy; 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.
+                </div>
                 <div class="social-icons">
-                    @if(isset($socialMedia['facebook']))
-                        <a href="{{ $socialMedia['facebook'] }}" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                    @endif
-                    @if(isset($socialMedia['twitter']))
-                        <a href="{{ $socialMedia['twitter'] }}" target="_blank"><i class="fab fa-twitter"></i></a>
-                    @endif
-                    @if(isset($socialMedia['linkedin']))
-                        <a href="{{ $socialMedia['linkedin'] }}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                    @endif
-                    @if(isset($socialMedia['instagram']))
-                        <a href="{{ $socialMedia['instagram'] }}" target="_blank"><i class="fab fa-instagram"></i></a>
-                    @endif
-                    @if(isset($socialMedia['youtube']))
-                        <a href="{{ $socialMedia['youtube'] }}" target="_blank"><i class="fab fa-youtube"></i></a>
-                    @endif
+                    <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
         </div>
@@ -796,24 +925,29 @@
                             return response.json();
                         })
                         .then(data => {
-                            if (data.success) {
-                                // Hide form and show success message
-                                form.style.display = 'none';
-                                successMessage.style.display = 'block';
-                            } else if (data.errors) {
-                                // Handle server-side validation errors
-                                if (data.errors.email) {
-                                    emailInput.classList.add('error');
-                                    emailError.textContent = data.errors.email[0];
-                                    emailError.style.display = 'block';
-                                }
-                                if (data.errors.content) {
-                                    contentInput.classList.add('error');
-                                    contentError.textContent = data.errors.content[0];
-                                    contentError.style.display = 'block';
-                                }
-                            }
-                        })
+    if (data.status === 'success') {
+        // Hide form and show success message
+        form.style.display = 'none';
+        successMessage.style.display = 'block';
+        
+        // Optional: Redirect after 3 seconds
+        setTimeout(() => {
+            window.location.href = "{{ route('compliants') }}";
+        }, 3000);
+    } else if (data.errors) {
+        // Handle server-side validation errors
+        if (data.errors.email) {
+            emailInput.classList.add('error');
+            emailError.textContent = data.errors.email[0];
+            emailError.style.display = 'block';
+        }
+        if (data.errors.content) {
+            contentInput.classList.add('error');
+            contentError.textContent = data.errors.content[0];
+            contentError.style.display = 'block';
+        }
+    }
+})
                         .catch(error => {
                             console.error('Error:', error);
                             // Check if error is from server validation
@@ -839,7 +973,120 @@
                 });
             }
         });
+        // ملف main.js المحدث
+document.addEventListener('DOMContentLoaded', function() {
+    // ترجمة المحتوى
+    const translations = {
+        en: {
+            nav: {
+                sit_n1 : "Syrian Center for Sustainable Development",
+                sit_n2 : 'and Community Empowerment',
+                home: "Home",
+                services: "Services",
+                events: "Events",
+                complaints: "conect us",
+                login: "logout"
+            },
+            form: {
+                email: "Email",
+                email_placeholder: "example@domain.com",
+                email_error: "Please enter a valid email address",
+                content: "Complaint Content",
+                content_placeholder: "Please write your complaint details here...",
+                content_error: "Please enter complaint content (at least 10 characters)",
+                submit: "Submit Complaint",
+                note: "We promise to handle your complaint with confidentiality and care",
+            },
+            footer: {
+                copyright: "&copy; 2023 Syrian Center for Sustainable Development. All rights reserved.",
+                
+            },
+            language: {
+                current: "English",
+                ar: "Arabic",
+                en: "English"
+            }
+        },
+        ar: {
+            nav: {
+                sit_n1 : 'المركز السوري للتنمية المستدامة',
+                sit_n2 : 'والتمكين المجتمعي',
+                home: "الرئيسية",
+                services: "الخدمات",
+                events: "النشاطات والفعاليات",
+                complaints: "اتصل بنا ",
+                login: "تسجيل الخروج"
+            },
+            form: {
+                email: "البريد الإلكتروني",
+                email_placeholder: "example@domain.com",
+                email_error: "يرجى إدخال بريد إلكتروني صحيح",
+                content: "محتوى الشكوى",
+                content_placeholder: "يرجى كتابة تفاصيل شكواك هنا...",
+                content_error: "يرجى إدخال محتوى الشكوى (10 أحرف على الأقل)",
+                submit: "إرسال الشكوى",
+                note: "نعدك بمعالجة شكواك بكل سرية واهتمام"
+                
+            },
+            footer: {
+                copyright: "&copy; 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة."
+            },
+            language: {
+                current: "العربية",
+                ar: "العربية",
+                en: "English"
+            }
+        }
+    };
+
+    // تغيير اللغة
+    function changeLanguage(lang) {
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        
+        // تحديث النصوص المترجمة
+        document.querySelectorAll('[data-translate]').forEach(element => {
+            const key = element.getAttribute('data-translate');
+            const keys = key.split('.');
+            if (translations[lang] && translations[lang][keys[0]] && translations[lang][keys[0]][keys[1]]) {
+                element.textContent = translations[lang][keys[0]][keys[1]];
+            }
+        });
+        
+        // تحديث النصوص البديلة
+        document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
+            const key = element.getAttribute('data-translate-placeholder');
+            const keys = key.split('.');
+            if (translations[lang] && translations[lang][keys[0]] && translations[lang][keys[0]][keys[1]]) {
+                element.setAttribute('placeholder', translations[lang][keys[0]][keys[1]]);
+            }
+        });
+        
+        // تحديث اللغة الحالية في زر اللغة
+        document.querySelector('.current-lang').textContent = translations[lang].language.current;
+    }
+
+    // معالجة تغيير اللغة
+    document.querySelectorAll('[data-lang]').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const lang = this.getAttribute('data-lang');
+            changeLanguage(lang);
+            localStorage.setItem('preferredLanguage', lang);
+        });
+    });
+
+    // تحميل اللغة المفضلة من localStorage إذا كانت موجودة
+    const preferredLanguage = localStorage.getItem('preferredLanguage') || 'ar';
+    changeLanguage(preferredLanguage);
+
+    // باقي الكود الخاص بالخلفية المتغيرة والتحقق من النموذج...
+    // ... (ابقى على الكود الأصلي كما هو)
+});
     </script>
 </body>
 
 </html>
+
+
+

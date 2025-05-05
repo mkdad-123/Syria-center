@@ -9,6 +9,7 @@ use Spatie\Translatable\HasTranslations;
 class Event extends Model
 {
     use HasTranslations;
+
     public $translatable = ['description' , 'title' ,'type' , 'location' ,];
 
     protected $fillable = [
@@ -32,12 +33,13 @@ class Event extends Model
     {
         try {
             return $this->getTranslation('content', $locale, false)
-                   ?? $this->content
-                   ?? $default
-                   ?? __('No content available');
+                ?? $this->content
+                ?? $default
+                ?? __('No content available');
         } catch (\Exception $e) {
             return $this->content ?? $default ?? __('No content available');
         }
     }
+
 
 }

@@ -239,7 +239,65 @@
         .section {
             padding: 60px 0;
         }
+/* أنماط قسم من نحن */
+.about-section {
+    position: relative;
+    padding-top: 0;
+}
 
+.about-header-image {
+    width: 100%;
+    height: 350px;
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.about-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s ease;
+}
+
+.about-header-image:hover .about-hero-img {
+    transform: scale(1.03);
+}
+
+.about-title-container {
+    background: var(--primary-color);
+    color: white;
+    padding: 25px 40px;
+    margin-top: -20px;
+    position: relative;
+    z-index: 2;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.section-title {
+    color: var(--white);
+    margin-bottom: 0;
+    text-align: center;
+    font-size: 2.2rem;
+}
+
+.section-title::after {
+    background: var(--secondary-color);
+    margin: 15px auto 0;
+}
+
+.about-content-container {
+    margin-top: 40px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: var(--box-shadow);
+}
         .section-title {
             text-align: center;
             margin-bottom: 40px;
@@ -455,20 +513,37 @@
         <!-- قسم من نحن -->
         <section class="section">
             <div class="container">
+                @php
+                    $aboutContent = '';
+                    $aboutImage = null;
+                    
+                    if (is_string($aboutUs)) {
+                        $aboutContent = $aboutUs;
+                    } elseif ($aboutUs instanceof \App\Models\Setting) {
+                        $aboutContent = $aboutUs->getTranslation('content', app()->getLocale(), false) ?? __('No content available');
+                        $aboutImage = $aboutUs->image;
+                    } else {
+                        $aboutContent = __('No content available');
+                    }
+                @endphp
+        
+                @if(!empty($image))
+                    <div class="about-header-image">
+                        <img src="{{ asset('storage/' . $image) }}" alt="{{ __('main.titles.about') }}" class="about-hero-img">
+                        <div class="about-image-overlay"></div>
+                    </div>
+                @endif
+                
                 <h1 class="section-title">{{ __('main.titles.about') }}</h1>
+                
                 <div class="about-content-container">
                     <div id="about-content">
-                        @if(is_string($aboutUs))
-                            <p>{{ $aboutUs }}</p>
-                        @else
-                            {!! $aboutUs !!}
-                        @endif
+                        {!! $aboutContent !!}
                     </div>
                 </div>
             </div>
         </section>
     </main>
-
     <!-- تذييل الصفحة -->
     <footer class="footer">
         <div class="container">
@@ -482,7 +557,7 @@
                     <ul>
                         <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
                         <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
-                        <li><a href="{{ route('events') }}">{{ __('main.menu.events') }}</a></li>
+                        <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
                         <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
                     </ul>
                 </div>

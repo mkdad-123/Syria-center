@@ -9,66 +9,74 @@
     <title>{{ __('main.site_name') }} - {{ __('main.site_subname') }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* أنماط عامة */
-        :root {
-            --primary-color: #2E86AB;
-            --secondary-color: #F18F01;
-            --accent-color: #5BBA6F;
-            --dark-color: #000000;
-            --dark-color_1: #424040;
+    :root {
+        --primary-color: #2E86AB;
+        --secondary-color: #F18F01;
+        --accent-color: #5BBA6F;
+        --dark-color: #000000;
+        --dark-color_1: #424040;
+        --light-color: #5ad27e;
+        --white: #fff;
+        --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+    }
 
-            --light-color: #5ad27e;
-            --white: #fff;
-            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
+    /* طبقة الخلفية البيضاء الشفافة */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.85);
+        z-index: -1;
+        pointer-events: none;
+    }
 
-        /* أنماط الخلفية المتغيرة */
-        .background-slideshow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.7;
-            transition: opacity 1s ease-in-out;
-        }
+    /* خلفية متغيرة للصفحة */
+    .background-slideshow {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+        opacity: 0.7;
+    }
 
-        .background-slideshow img {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
+    .background-slideshow img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+    }
 
-        .background-slideshow img.active {
-            opacity: 1;
-        }
+    .background-slideshow img.active {
+        opacity: 1;
+    }
 
-        /* تأكد من أن المحتوى يظهر فوق الخلفية */
-        main,
-        .header,
-        .footer {
-            position: relative;
-            background-color: rgba(255, 255, 255, 0.85);
-        }
+    /* تعديل العناصر الرئيسية */
+    main, .header, .footer {
+        position: relative;
+        background-color: transparent;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        body {
-            background-color: var(--light-color);
-            color: var(--dark-color);
-            line-height: 2;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial', sans-serif;
-        }
+    body {
+        color: var(--dark-color);
+        line-height: 2;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial', sans-serif;
+        min-height: 100vh;
+    }
 
         .container {
             width: calc(100% - 60px);
@@ -787,72 +795,190 @@
             color: #020202;
         }
 
-        /* تذييل الصفحة */
-        .footer {
-            background-color: var(--dark-color_1);
-            color: var(--white);
-            padding: 60px 0 0;
-        }
+    /* أنماط الفوتر المعدلة */
+    .footer {
+        background-color: var(--dark-color_1);
+        color: var(--white);
+        padding: 50px 0 0;
+        font-size: 1.05rem; /* زيادة حجم الخط العام */
+    }
 
+    .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* زيادة العرض الأدنى للعناصر */
+        gap: 40px;
+        margin-bottom: 40px;
+    }
+
+    .footer-logo {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .footer-logo img {
+        height: 80px; /* زيادة حجم الشعار */
+        width: auto;
+        margin-bottom: 20px;
+    }
+
+    .footer-logo p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .footer-links h4,
+    .footer-contact h4 {
+        font-size: 1.3rem; /* زيادة حجم العناوين */
+        margin-bottom: 25px;
+        color: var(--secondary-color);
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .footer-links h4::after,
+    .footer-contact h4::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background-color: var(--secondary-color);
+    }
+
+    .footer-links ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 12px; /* زيادة المسافة بين العناصر */
+    }
+
+    .footer-links a {
+        color: var(--white);
+        text-decoration: none;
+        transition: var(--transition);
+        font-size: 1.05rem;
+        display: inline-block;
+        padding: 5px 0;
+    }
+
+    .footer-links a:hover {
+        color: var(--secondary-color);
+        transform: translateX(5px);
+    }
+
+    .footer-contact p {
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        font-size: 1.05rem;
+    }
+
+    .footer-contact i {
+        margin-left: 12px;
+        font-size: 1.2rem;
+        color: var(--secondary-color);
+        min-width: 25px;
+        text-align: center;
+    }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 25px 0;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .footer-bottom p {
+        margin: 0;
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .social-icons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .social-icons a {
+        width: 45px;
+        height: 45px;
+        line-height: 45px;
+        font-size: 1.1rem;
+        background-color: rgba(255, 255, 255, 0.15);
+        transition: all 0.3s ease;
+    }
+
+    .social-icons a:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-5px) scale(1.1);
+    }
+
+    /* قسم معلومات الاتصال المعدل */
+    .contact-info-container {
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 25px;
+        border-radius: 8px;
+        margin-top: 30px;
+    }
+
+    .contact-info-title {
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 1.4rem;
+    }
+
+    .contact-item {
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 1.1rem;
+    }
+
+    .contact-icon {
+        font-size: 1.3rem;
+    }
+
+    /* تحسينات للشاشات الصغيرة */
+    @media (max-width: 768px) {
         .footer-content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 40px;
-            margin-bottom: 40px;
+            grid-template-columns: 1fr;
+            gap: 30px;
         }
 
-        .footer-logo img {
-            height: 60px;
-            width: auto;
-            margin-bottom: 20px;
+        .footer-logo {
+            align-items: center;
+            text-align: center;
         }
 
-        .footer-links h4,
-        .footer-contact h4 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            color: var(--secondary-color);
+        .footer-links,
+        .footer-contact {
+            text-align: center;
         }
 
-        .footer-links ul {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 10px;
-        }
-
-        .footer-links a {
-            color: var(--white);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: var(--secondary-color);
-            padding-right: 5px;
+        .footer-links h4::after,
+        .footer-contact h4::after {
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .footer-contact p {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
+            justify-content: center;
         }
 
-        .footer-contact i {
-            margin-left: 10px;
-            color: var(--secondary-color);
+        .contact-info-container {
+            padding: 20px;
         }
+    }
 
-        .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 20px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
 
         .social-icons a {
             display: inline-block;
@@ -1027,27 +1153,41 @@
                     </div>
                     <div class="about-content">
                         @php
-                            $aboutContent = '';
-                            if (is_string($aboutUs)) {
-                                $aboutContent = $aboutUs;
-                            } elseif ($aboutUs instanceof \App\Models\Setting) {
-                                $aboutContent =
-                                    $aboutUs->getTranslation('content', $locale, false) ?? __('No content available');
-                            } else {
-                                $aboutContent = __('No content available');
-                            }
-
-                            $words = preg_split('/\s+/', $aboutContent);
-                            $shortContent = implode(' ', array_slice($words, 0, 40));
-                            if (count($words) > 40) {
-                                $shortContent .= '...';
-                            }
-                        @endphp
-                        <p>{{ $shortContent }}</p>
-                        <div class="read-more-btn-container">
-                            <a href="{{ route('about-us') }}"
-                                class="read-more-btn">{{ __('main.buttons.read_more') }}</a>
+                        $aboutContent = '';
+                        if (is_string($aboutUs)) {
+                            $aboutContent = $aboutUs;
+                        } elseif ($aboutUs instanceof \App\Models\Setting) {
+                            $aboutContent = $aboutUs->getTranslation('content', $locale, false) ?? __('No content available');
+                        } else {
+                            $aboutContent = __('No content available');
+                        }
+                    
+                        // عرض المحتوى الكامل كـ HTML
+                        $fullContent = $aboutContent;
+                        
+                        // إنشاء نسخة مختصرة للنص (بدون علامات HTML)
+                        $textOnly = strip_tags($aboutContent);
+                        $words = preg_split('/\s+/', $textOnly);
+                        $shortContent = implode(' ', array_slice($words, 0, 40));
+                        if (count($words) > 40) {
+                            $shortContent .= '...';
+                        }
+                    @endphp
+                    
+                    <div class="about-content">
+                        <div class="short-content">
+                            <p>{!! nl2br(e($shortContent)) !!}</p>
+                                <div class="read-more-btn-container">
+                                    <a href="{{ route('about-us') }}" class="read-more-btn">{{ __('main.buttons.read_more') }}</a>
+                                </div>
                         </div>
+                        
+                        <!-- في صفحة about-us يمكنك استخدام: -->
+                        @if(request()->routeIs('about-us'))
+                            <div class="full-content">
+                                {!! $fullContent !!}
+                            </div>
+                        @endif
                     </div>
                 </div>
         </section>
@@ -1072,8 +1212,8 @@
                                 $missionContent = __('No content available');
                             }
                         @endphp
-                        <p>{{ $missionContent }}</p>
-                    </div>
+                    {!! $missionContent !!}
+                </div>
                     <div class="vision">
                         <h3 style="color: #000;">{{ __('main.titles.vision') }}</h3>
                         <div class="icon-wrapper">
@@ -1090,8 +1230,8 @@
                                 $visionContent = __('No content available');
                             }
                         @endphp
-                        <p>{{ $visionContent }}</p>
-                    </div>
+                    {!! $visionContent !!}
+                </div>
                 </div>
             </div>
         </section>
@@ -1115,7 +1255,7 @@
                             $targetContent = __('No content available');
                         }
                     @endphp
-                    <p>{{ $targetContent }}</p>
+                    {!!$targetContent !!}
                 </div>
             </div>
         </section>
@@ -1157,8 +1297,9 @@
                     <div class="team-slide">
                         @foreach ($team as $member)
                             <div class="team-member {{ $loop->first ? 'active' : '' }}">
-                                <img src="{{ asset($member['image']) }}" alt="{{ $member['name'] }}">
-                                <h3>{{ $member['name'] }}</h3>
+                                <a href="{{ route('volunteers', ['vol' => $member['id'] ?? null]) }}">
+                                    <img src="{{ asset('storage/' . $member['image']) }}" alt="{{ $member['name'] }}" style="cursor: pointer;">
+                                </a>                                <h3>{{ $member['name'] }}</h3>
                                 <p>{{ $member['profession'] }}</p>
                                 <p>{{ $member['bio'] }}</p>
                             </div>
@@ -1178,12 +1319,21 @@
                 <div class="partners-carousel" id="partnersCarousel">
                     <div class="partners-slide">
                         @foreach ($partners as $partner)
-                            <div class="partner {{ $loop->first ? 'active' : '' }}">
-                                <img src="{{ asset($partner->logo) }}" alt="{{ $partner->name }}">
-                                <h3>{{ $partner->name }}</h3>
-                                <p>{{ $partner->getTranslation('description', $locale) }}</p>
-                            </div>
-                        @endforeach
+                        {{-- Debug output --}}
+                        <div class="partner {{ $loop->first ? 'active' : '' }}">
+                            <img src="{{ asset('storage/' . $partner['image']) }}" alt="{{ $partner['name'] }}">
+                            <p>
+                            {!! $partner['name'] !!}
+                            </p>
+                            <p>
+                                @if(is_array($partner['description']))
+                                    {!! $partner['description'][$locale] ?? $partner['description']['en'] ?? '' !!}
+                                @else
+                                    {!! $partner['description'] !!}
+                                @endif
+                            </p>                       </div>
+                    @endforeach
+                        
                     </div>
                     <button class="carousel-btn" id="partnersPrevBtn"><i class="fas fa-chevron-left"></i></button>
                     <button class="carousel-btn" id="partnersNextBtn"><i class="fas fa-chevron-right"></i></button>
@@ -1194,13 +1344,17 @@
     </main>
 
     <!-- تذييل الصفحة -->
-    < <footer class="footer">
+    <footer class="footer">
         <div class="container">
             <div class="footer-content">
+                <!-- قسم الشعار والمعلومات -->
                 <div class="footer-logo">
                     <img src="\logo.png" alt="{{ __('main.site_name') }}">
-                    <p>{{ __('main.site_name') }} - {{ __('main.site_subname') }}</p>
+                    <p>{{ __('main.site_name') }}<br>
+                    <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span></p>
                 </div>
+    
+                <!-- قسم الروابط السريعة -->
                 <div class="footer-links">
                     <h4>{{ __('main.footer.quick_links') }}</h4>
                     <ul>
@@ -1208,78 +1362,49 @@
                         <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
                         <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
                         <li><a href="#about">{{ __('main.menu.about') }}</a></li>
-                        <li><a href="#services">{{ __('main.menu.services') }}</a></li>
-                        <li><a href="#team">{{ __('main.menu.team') }}</a></li>
-                        <li><a href="#partners">{{ __('main.menu.partners') }}</a></li>
                     </ul>
                 </div>
-            </div>
-            <div class="contact-info-container">
-                <h2 class="contact-info-title" style="color: #FF6B00;">{{ __('main.footer.contact_us') }}</h2>
-                <!-- قسم الهواتف -->
-                @if (isset($contactInfo['phones']) && count($contactInfo['phones']) > 0)
-                    <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-phone contact-icon" style="color: #FF6B00;"></i>
-                        <span>{{ $contactInfo['phones'][0] }}</span>
-                    </div>
-                @else
-                    <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-phone contact-icon" style="color: #FF6B00;"></i>
-                        <span>+963 11 123 4567</span>
-                    </div>
-                @endif
-
-                <!-- قسم البريد الإلكتروني -->
-                @if (isset($contactInfo['emails']) && count($contactInfo['emails']) > 0)
-                    <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-envelope contact-icon" style="color: #FF6B00;"></i>
-                        <span>{{ $contactInfo['emails'][0] }}</span>
-                    </div>
-                @else
-                    <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-envelope contact-icon" style="color: #FF6B00;"></i>
-                        <span>info@example.com</span>
-                    </div>
-                @endif
-
-                <!-- قسم العنوان -->
-                @if (isset($contactInfo['address']))
-                    <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-map-marker-alt contact-icon" style="color: #FF6B00;"></i>
-                        <span>{{ $contactInfo['address'] }}</span>
-                    </div>
-                @else
-                    <div class="contact-item" style="display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-map-marker-alt contact-icon" style="color: #FF6B00;"></i>
-                        <span>دمشق، سوريا - ميدان بناء جريدة تشرين</span>
-                    </div>
-                @endif
-            </div>
-
-            <!-- قسم ساعات العمل (اختياري) -->
-            @if (isset($contactInfo['working_hours']))
-                <div class="working-hours" style="display: flex; align-items: center; gap: 10px; margin-top: 20px;">
-                    <i class="fas fa-clock contact-icon" style="color: #FF6B00;"></i>
-                    <span>ساعات العمل: {{ $contactInfo['working_hours'] }}</span>
+    
+                <!-- قسم معلومات الاتصال -->
+                <div class="footer-contact">
+                    <h4>{{ __('main.footer.contact_us') }}</h4>
+                    @if (isset($contactInfo['phones']) && count($contactInfo['phones']) > 0)
+                        <p><i class="fas fa-phone"></i> {{ $contactInfo['phones'][0] }}</p>
+                    @endif
+                    @if (isset($contactInfo['emails']) && count($contactInfo['emails']) > 0)
+                        <p><i class="fas fa-envelope"></i> {{ $contactInfo['emails'][0] }}</p>
+                    @endif
+                    @if (isset($contactInfo['address']))
+                        <p><i class="fas fa-map-marker-alt"></i> {{ $contactInfo['address'] }}</p>
+                    @endif
                 </div>
-            @endif
-        </div>
-        </div>
-        </div>
-        <div class="footer-bottom">
-            <p>{{ __('main.footer.copyright') }}</p>
-            <div class="social-icons">
-                <a href="{{ $socialMedia['facebook'] ?? '#' }}"><i class="fab fa-facebook-f"></i></a>
-                <a href="{{ $socialMedia['twitter'] ?? '#' }}"><i class="fab fa-twitter"></i></a>
-                <a href="{{ $socialMedia['linkedin'] ?? '#' }}"><i class="fab fa-linkedin-in"></i></a>
-                <a href="{{ $socialMedia['instagram'] ?? '#' }}"><i class="fab fa-instagram"></i></a>
-                @if (isset($socialMedia['youtube']))
-                    <a href="{{ $socialMedia['youtube'] }}"><i class="fab fa-youtube"></i></a>
-                @endif
+            </div>
+    
+            
+    
+            <!-- حقوق النشر ووسائل التواصل الاجتماعي -->
+            <div class="footer-bottom">
+                <p>{{ __('main.footer.copyright') }} &copy; {{ date('Y') }}</p>
+                <div class="social-icons">
+                    @if (isset($socialMedia['facebook']))
+                        <a href="{{ $socialMedia['facebook'] }}" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    @endif
+                    @if (isset($socialMedia['twitter']))
+                        <a href="{{ $socialMedia['twitter'] }}" target="_blank"><i class="fab fa-twitter"></i></a>
+                    @endif
+                    @if (isset($socialMedia['linkedin']))
+                        <a href="{{ $socialMedia['linkedin'] }}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    @endif
+                    @if (isset($socialMedia['instagram']))
+                        <a href="{{ $socialMedia['instagram'] }}" target="_blank"><i class="fab fa-instagram"></i></a>
+                    @endif
+                    @if (isset($socialMedia['youtube']))
+                        <a href="{{ $socialMedia['youtube'] }}" target="_blank"><i class="fab fa-youtube"></i></a>
+                    @endif
+                </div>
             </div>
         </div>
-        </div>
-        </footer>
+    </footer>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
