@@ -21,4 +21,8 @@ class CustomUser extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function compliants()
+    {
+        $this->hasMany(Compliants::class );
+    }
 }

@@ -12,5 +12,11 @@ class Compliants extends Model
     use HasApiTokens , Notifiable , HasTranslations;
 
     protected $table = 'compliants';
+
     protected $fillable = ['content', 'email', 'date'];
+
+    public function customUser()
+    {
+        $this->belongsTo(CustomUser::class );
+    }
 }

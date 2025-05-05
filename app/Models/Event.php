@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\EventType;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
 class Event extends Model
 {
     use HasTranslations;
-    public $translatable = ['description' , 'title' ,'type' , 'location' ,'max_participants'];
+    public $translatable = ['description' , 'title' ,'type' , 'location' ,];
 
     protected $fillable = [
         'title',
@@ -24,18 +25,19 @@ class Event extends Model
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
+        'type' => EventType::class,
     ];
 
-public function getTranslatedContent($locale, $default = null)
-{
-    try {
-        return $this->getTranslation('content', $locale, false)
-               ?? $this->content
-               ?? $default
-               ?? __('No content available');
-    } catch (\Exception $e) {
-        return $this->content ?? $default ?? __('No content available');
+    public function getTranslatedContent($locale, $default = null)
+    {
+        try {
+            return $this->getTranslation('content', $locale, false)
+                   ?? $this->content
+                   ?? $default
+                   ?? __('No content available');
+        } catch (\Exception $e) {
+            return $this->content ?? $default ?? __('No content available');
+        }
     }
-}
 
 }

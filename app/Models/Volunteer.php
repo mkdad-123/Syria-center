@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\GenderEnum;
-use App\VolunteerAvailabilityEnum;
+use App\Enums\GenderEnum;
+use App\Enums\VolunteerAvailabilityEnum;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 

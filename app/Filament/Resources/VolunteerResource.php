@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\GenderEnum;
+use App\Enums\VolunteerAvailabilityEnum;
 use App\Filament\Resources\VolunteerResource\Pages;
-use App\GenderEnum;
 use App\Models\Volunteer;
-use App\VolunteerAvailabilityEnum;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;

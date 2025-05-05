@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\CustomUser;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,7 @@ class CompliantSeeder extends Seeder
     {
         DB::table('compliants')->insert([
             [
+                'custom_user_id' => CustomUser::all()->first()->id,
                 'content' => 'شكوى بخصوص تأخر صرف المنح',
                 'email' => 'user1@example.com',
                 'date' => '2024-05-01',
@@ -22,6 +24,7 @@ class CompliantSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'custom_user_id' => CustomUser::all()->first()->id,
                 'content' => 'اقتراح لتنظيم ورش عمل جديدة',
                 'email' => 'user2@example.com',
                 'date' => '2024-05-05',

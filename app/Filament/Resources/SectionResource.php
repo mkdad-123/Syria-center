@@ -56,7 +56,8 @@ class SectionResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
                     ->label('image')
-                    ->disk('public'),
+                    ->disk('public')
+                    ->circular(),
 
                 Tables\Columns\TextColumn::make('name')
                     ->label('name')
@@ -79,6 +80,7 @@ class SectionResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

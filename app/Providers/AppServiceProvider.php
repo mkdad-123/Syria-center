@@ -29,5 +29,6 @@ class AppServiceProvider extends ServiceProvider
 
         URL::defaults(['lang' => app()->getLocale()]);
 
-        Route::pattern('lang', 'ar|en');    }
+        Route::pattern('lang', 'ar|en');
+    }
 }
