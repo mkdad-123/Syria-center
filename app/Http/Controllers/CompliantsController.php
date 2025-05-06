@@ -4,40 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Models\Compliants;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CompliantsController extends Controller
 {
     public function addCompliants(Request $request) {
-        // Validate the request data
-        $validator = Validator::make($request->all(), [
+        $validated = $request->validate([
             'content' => 'required|string|min:10',
             'email' => 'required|email|max:255',
         ]);
-    
-        // If validation fails, return errors
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-    
-        // Get the authenticated user's ID or use the one from the form
-        $userId = $request->id ?? null;
-        
-        // Create the complaint with current date
-        $complaint = Compliants::create([
-            'custom_user_id' => $userId,
-            'content' => $request->content,
-            'email' => $request->email,
+
+        $data = [
+            'content' => $validated['content'],
+            'email' => $validated['email'],
             'date' => now()->toDateString(),
-        ]);
-        
+        ];
+
+        // أضف custom_user_id فقط إذا كان المستخدم معرّفاً
+        if (Auth::guard('custom')->check()) {
+            $data['custom_user_id'] = Auth::guard('custom')->id();
+        }
+
+        $complaint = Compliants::create($data);
+
         return response()->json([
             'status' => 'success',
             'message' => 'تم إرسال الشكوى بنجاح'
         ]);
     }
-
 }

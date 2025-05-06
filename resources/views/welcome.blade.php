@@ -663,7 +663,27 @@
             font-size: 1.8rem;
             transition: all 0.3s ease;
         }
+/* إضافة هذه الأنماط في قسم CSS */
+.team-carousel.single-member,
+.partners-carousel.single-partner {
+    height: auto !important;
+    perspective: none !important;
+}
 
+.team-carousel.single-member .team-member,
+.partners-carousel.single-partner .partner {
+    position: relative !important;
+    opacity: 1 !important;
+    transform: none !important;
+    display: block !important;
+}
+
+.team-carousel.single-member .carousel-btn,
+.partners-carousel.single-partner .carousel-btn,
+.team-carousel.single-member .carousel-indicators,
+.partners-carousel.single-partner .carousel-indicators {
+    display: none !important;
+}
         .partner p {
             color: var(--white);
             font-size: 1.1rem;
@@ -1161,10 +1181,10 @@
                         } else {
                             $aboutContent = __('No content available');
                         }
-                    
+
                         // عرض المحتوى الكامل كـ HTML
                         $fullContent = $aboutContent;
-                        
+
                         // إنشاء نسخة مختصرة للنص (بدون علامات HTML)
                         $textOnly = strip_tags($aboutContent);
                         $words = preg_split('/\s+/', $textOnly);
@@ -1173,7 +1193,7 @@
                             $shortContent .= '...';
                         }
                     @endphp
-                    
+
                     <div class="about-content">
                         <div class="short-content">
                             <p>{!! nl2br(e($shortContent)) !!}</p>
@@ -1181,7 +1201,7 @@
                                     <a href="{{ route('about-us') }}" class="read-more-btn">{{ __('main.buttons.read_more') }}</a>
                                 </div>
                         </div>
-                        
+
                         <!-- في صفحة about-us يمكنك استخدام: -->
                         @if(request()->routeIs('about-us'))
                             <div class="full-content">
@@ -1293,7 +1313,7 @@
         <section id="team" class="section team-section">
             <div class="container">
                 <h2 class="section-title">{{ __('main.titles.team') }}</h2>
-                <div class="team-carousel" id="teamCarousel">
+                <div class="team-carousel {{ count($team) <= 1 ? 'single-member' : '' }}" id="teamCarousel">
                     <div class="team-slide">
                         @foreach ($team as $member)
                             <div class="team-member {{ $loop->first ? 'active' : '' }}">
@@ -1333,7 +1353,7 @@
                                 @endif
                             </p>                       </div>
                     @endforeach
-                        
+
                     </div>
                     <button class="carousel-btn" id="partnersPrevBtn"><i class="fas fa-chevron-left"></i></button>
                     <button class="carousel-btn" id="partnersNextBtn"><i class="fas fa-chevron-right"></i></button>
@@ -1353,7 +1373,7 @@
                     <p>{{ __('main.site_name') }}<br>
                     <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span></p>
                 </div>
-    
+
                 <!-- قسم الروابط السريعة -->
                 <div class="footer-links">
                     <h4>{{ __('main.footer.quick_links') }}</h4>
@@ -1364,7 +1384,7 @@
                         <li><a href="#about">{{ __('main.menu.about') }}</a></li>
                     </ul>
                 </div>
-    
+
                 <!-- قسم معلومات الاتصال -->
                 <div class="footer-contact">
                     <h4>{{ __('main.footer.contact_us') }}</h4>
@@ -1379,9 +1399,9 @@
                     @endif
                 </div>
             </div>
-    
-            
-    
+
+
+
             <!-- حقوق النشر ووسائل التواصل الاجتماعي -->
             <div class="footer-bottom">
                 <p>{{ __('main.footer.copyright') }} &copy; {{ date('Y') }}</p>
@@ -1406,194 +1426,215 @@
         </div>
     </footer>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Background slideshow functionality
-                const backgroundImages = document.querySelectorAll('.background-slideshow img');
-                let currentImage = 0;
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Background slideshow functionality
+            const backgroundImages = document.querySelectorAll('.background-slideshow img');
+            let currentImage = 0;
 
-                function changeBackground() {
-                    backgroundImages[currentImage].classList.remove('active');
-                    currentImage = (currentImage + 1) % backgroundImages.length;
-                    backgroundImages[currentImage].classList.add('active');
+            function changeBackground() {
+                backgroundImages[currentImage].classList.remove('active');
+                currentImage = (currentImage + 1) % backgroundImages.length;
+                backgroundImages[currentImage].classList.add('active');
+            }
+
+            // Start background slideshow
+            setInterval(changeBackground, 5000);
+
+            // Initialize carousels
+            initCarousel('teamCarousel', 'prevBtn', 'nextBtn');
+            initCarousel('partnersCarousel', 'partnersPrevBtn', 'partnersNextBtn');
+
+            // Enhanced language switcher
+            const languageSwitcher = document.querySelector('.language-switcher');
+            if (languageSwitcher) {
+                const languageBtn = languageSwitcher.querySelector('.language-btn');
+                const languageMenu = languageSwitcher.querySelector('.language-menu');
+
+                // Toggle language menu on button click
+                languageBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const isOpen = languageMenu.style.display === 'block';
+                    languageMenu.style.display = isOpen ? 'none' : 'block';
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!languageSwitcher.contains(e.target)) {
+                        languageMenu.style.display = 'none';
+                    }
+                });
+
+                // Prevent menu from closing when clicking inside it
+                languageMenu.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+
+                // Handle language selection
+                document.querySelectorAll('.language-menu a').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const lang = this.getAttribute('data-lang');
+
+                        // Show loading indicator
+                        const currentLangText = languageBtn.querySelector('.current-lang').textContent;
+                        languageBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${currentLangText}`;
+
+                        // Change language after a small delay
+                        setTimeout(() => {
+                            const url = new URL(window.location.href);
+                            url.searchParams.set('lang', lang);
+                            window.location.href = url.toString();
+                        }, 300);
+                    });
+                });
+            }
+
+            // Mobile dropdown handling
+            const dropdowns = document.querySelectorAll('.dropdown');
+            dropdowns.forEach(dropdown => {
+                if (window.innerWidth <= 768) {
+                    const dropbtn = dropdown.querySelector('.dropbtn');
+                    dropbtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        dropdown.classList.toggle('active');
+                    });
+                }
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.matches('.dropbtn') && !event.target.matches('.dropbtn *')) {
+                    dropdowns.forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                }
+            });
+
+            // Carousel initialization function
+            function initCarousel(carouselId, prevBtnId, nextBtnId) {
+                const carousel = document.getElementById(carouselId);
+                if (!carousel) return;
+
+                const slides = carousel.querySelectorAll('.team-member, .partner');
+
+                // إذا كان هناك عضو فريق واحد فقط، لا نبدأ الكاروسيل
+                if (slides.length <= 1) {
+                    // إخفاء أزرار التنقل والمؤشرات
+                    const prevBtn = document.getElementById(prevBtnId);
+                    const nextBtn = document.getElementById(nextBtnId);
+                    const indicatorsContainer = carousel.querySelector('.carousel-indicators');
+
+                    if (prevBtn) prevBtn.style.display = 'none';
+                    if (nextBtn) nextBtn.style.display = 'none';
+                    if (indicatorsContainer) indicatorsContainer.style.display = 'none';
+
+                    // إظهار العضو الوحيد
+                    if (slides.length === 1) {
+                        slides[0].classList.add('active');
+                        slides[0].style.display = 'block';
+                        slides[0].style.opacity = '1';
+                        slides[0].style.transform = 'scale(1)';
+                    }
+
+                    return; // الخروج من الدالة
                 }
 
-                // Start background slideshow
-                setInterval(changeBackground, 5000);
+                const prevBtn = document.getElementById(prevBtnId);
+                const nextBtn = document.getElementById(nextBtnId);
+                let currentIndex = 0;
+                let slideInterval;
+                const slideDuration = 5000;
 
-                // Initialize carousels
-                initCarousel('teamCarousel', 'prevBtn', 'nextBtn');
-                initCarousel('partnersCarousel', 'partnersPrevBtn', 'partnersNextBtn');
-
-                // Enhanced language switcher
-                const languageSwitcher = document.querySelector('.language-switcher');
-                if (languageSwitcher) {
-                    const languageBtn = languageSwitcher.querySelector('.language-btn');
-                    const languageMenu = languageSwitcher.querySelector('.language-menu');
-
-                    // Toggle language menu on button click
-                    languageBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        const isOpen = languageMenu.style.display === 'block';
-                        languageMenu.style.display = isOpen ? 'none' : 'block';
+                // Create indicators
+                const indicatorsContainer = carousel.querySelector('.carousel-indicators');
+                if (indicatorsContainer) {
+                    slides.forEach((_, index) => {
+                        const indicator = document.createElement('div');
+                        indicator.className = 'carousel-indicator';
+                        if (index === 0) indicator.classList.add('active');
+                        indicator.addEventListener('click', () => goToSlide(index));
+                        indicatorsContainer.appendChild(indicator);
                     });
+                }
 
-                    // Close menu when clicking outside
-                    document.addEventListener('click', function(e) {
-                        if (!languageSwitcher.contains(e.target)) {
-                            languageMenu.style.display = 'none';
+                const indicators = carousel.querySelectorAll('.carousel-indicator');
+
+                function init() {
+                    slides.forEach((slide, index) => {
+                        if (index === 0) {
+                            slide.classList.add('active');
+                        } else {
+                            slide.style.display = 'none';
+                        }
+                    });
+                    startSlideShow();
+                }
+
+                function goToSlide(index) {
+                    if (index === currentIndex) return;
+                    clearInterval(slideInterval);
+
+                    const prevIndex = currentIndex;
+                    currentIndex = index;
+
+                    updateCarousel(prevIndex, currentIndex);
+                    startSlideShow();
+                }
+
+                function moveSlide(direction) {
+                    clearInterval(slideInterval);
+                    const prevIndex = currentIndex;
+                    currentIndex = (currentIndex + direction + slides.length) % slides.length;
+                    updateCarousel(prevIndex, currentIndex);
+                    startSlideShow();
+                }
+
+                function updateCarousel(prevIndex, newIndex) {
+                    indicators.forEach((indicator, idx) => {
+                        if (idx === newIndex) {
+                            indicator.classList.add('active');
+                        } else {
+                            indicator.classList.remove('active');
                         }
                     });
 
-                    // Prevent menu from closing when clicking inside it
-                    languageMenu.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                    });
+                    const outgoingSlide = slides[prevIndex];
+                    outgoingSlide.classList.remove('active');
+                    outgoingSlide.style.opacity = '0';
+                    outgoingSlide.style.transform = 'scale(0.8)';
 
-                    // Handle language selection
-                    document.querySelectorAll('.language-menu a').forEach(link => {
-                        link.addEventListener('click', function(e) {
-                            e.preventDefault();
-                            const lang = this.getAttribute('data-lang');
+                    const incomingSlide = slides[newIndex];
+                    incomingSlide.style.display = 'block';
 
-                            // Show loading indicator
-                            const currentLangText = languageBtn.querySelector('.current-lang')
-                                .textContent;
-                            languageBtn.innerHTML =
-                                `<i class="fas fa-spinner fa-spin"></i> ${currentLangText}`;
-
-                            // Change language after a small delay
-                            setTimeout(() => {
-                                const url = new URL(window.location.href);
-                                url.searchParams.set('lang', lang);
-                                window.location.href = url.toString();
-                            }, 300);
-                        });
-                    });
-                }
-
-                // Mobile dropdown handling
-                const dropdowns = document.querySelectorAll('.dropdown');
-                dropdowns.forEach(dropdown => {
-                    if (window.innerWidth <= 768) {
-                        const dropbtn = dropdown.querySelector('.dropbtn');
-                        dropbtn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            dropdown.classList.toggle('active');
-                        });
-                    }
-                });
-
-                // Close dropdowns when clicking outside
-                document.addEventListener('click', function(event) {
-                    if (!event.target.matches('.dropbtn') && !event.target.matches('.dropbtn *')) {
-                        dropdowns.forEach(dropdown => {
-                            dropdown.classList.remove('active');
-                        });
-                    }
-                });
-
-                // Carousel initialization function
-                function initCarousel(carouselId, prevBtnId, nextBtnId) {
-                    const carousel = document.getElementById(carouselId);
-                    if (!carousel) return;
-
-                    const slides = carousel.querySelectorAll('.team-member, .partner');
-                    const prevBtn = document.getElementById(prevBtnId);
-                    const nextBtn = document.getElementById(nextBtnId);
-                    let currentIndex = 0;
-                    let slideInterval;
-                    const slideDuration = 5000;
-
-                    // Create indicators
-                    const indicatorsContainer = carousel.querySelector('.carousel-indicators');
-                    if (indicatorsContainer) {
-                        slides.forEach((_, index) => {
-                            const indicator = document.createElement('div');
-                            indicator.className = 'carousel-indicator';
-                            if (index === 0) indicator.classList.add('active');
-                            indicator.addEventListener('click', () => goToSlide(index));
-                            indicatorsContainer.appendChild(indicator);
-                        });
-                    }
-
-                    const indicators = carousel.querySelectorAll('.carousel-indicator');
-
-                    function init() {
-                        slides.forEach((slide, index) => {
-                            if (index === 0) {
-                                slide.classList.add('active');
-                            } else {
-                                slide.style.display = 'none';
-                            }
-                        });
-                        startSlideShow();
-                    }
-
-                    function goToSlide(index) {
-                        if (index === currentIndex) return;
-                        clearInterval(slideInterval);
-
-                        const prevIndex = currentIndex;
-                        currentIndex = index;
-
-                        updateCarousel(prevIndex, currentIndex);
-                        startSlideShow();
-                    }
-
-                    function moveSlide(direction) {
-                        clearInterval(slideInterval);
-                        const prevIndex = currentIndex;
-                        currentIndex = (currentIndex + direction + slides.length) % slides.length;
-                        updateCarousel(prevIndex, currentIndex);
-                        startSlideShow();
-                    }
-
-                    function updateCarousel(prevIndex, newIndex) {
-                        indicators.forEach((indicator, idx) => {
-                            if (idx === newIndex) {
-                                indicator.classList.add('active');
-                            } else {
-                                indicator.classList.remove('active');
-                            }
-                        });
-
-                        const outgoingSlide = slides[prevIndex];
-                        outgoingSlide.classList.remove('active');
-                        outgoingSlide.style.opacity = '0';
-                        outgoingSlide.style.transform = 'scale(0.8)';
-
-                        const incomingSlide = slides[newIndex];
-                        incomingSlide.style.display = 'block';
+                    setTimeout(() => {
+                        incomingSlide.classList.add('active');
+                        incomingSlide.style.opacity = '1';
+                        incomingSlide.style.transform = 'scale(1)';
 
                         setTimeout(() => {
-                            incomingSlide.classList.add('active');
-                            incomingSlide.style.opacity = '1';
-                            incomingSlide.style.transform = 'scale(1)';
-
-                            setTimeout(() => {
-                                outgoingSlide.style.display = 'none';
-                            }, 800);
-                        }, 10);
-                    }
-
-                    function startSlideShow() {
-                        clearInterval(slideInterval);
-                        slideInterval = setInterval(() => {
-                            moveSlide(1);
-                        }, slideDuration);
-                    }
-
-                    if (prevBtn) prevBtn.addEventListener('click', () => moveSlide(-1));
-                    if (nextBtn) nextBtn.addEventListener('click', () => moveSlide(1));
-
-                    init();
-                    carousel.addEventListener('mouseenter', () => clearInterval(slideInterval));
-                    carousel.addEventListener('mouseleave', startSlideShow);
+                            outgoingSlide.style.display = 'none';
+                        }, 800);
+                    }, 10);
                 }
-            });
-        </script>
+
+                function startSlideShow() {
+                    clearInterval(slideInterval);
+                    slideInterval = setInterval(() => {
+                        moveSlide(1);
+                    }, slideDuration);
+                }
+
+                if (prevBtn) prevBtn.addEventListener('click', () => moveSlide(-1));
+                if (nextBtn) nextBtn.addEventListener('click', () => moveSlide(1));
+
+                init();
+                carousel.addEventListener('mouseenter', () => clearInterval(slideInterval));
+                carousel.addEventListener('mouseleave', startSlideShow);
+            }
+        });
+    </script>
 
 </body>
 
