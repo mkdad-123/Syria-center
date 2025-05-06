@@ -705,28 +705,28 @@
               <form class="complaint-form" id="complaintForm" method="POST" action="{{ route('compliants.store') }}">
                 @csrf
                 @auth
-                    <input type="hidden" name="id" value="{{ Auth::id() }}">
+                    <input type="hidden" name="id" value="{{ Auth::guard('custom')->id() }}">
                 @endauth
-            
+
                 <div class="form-group">
                     <label for="email" data-translate="form.email">البريد الإلكتروني</label>
                     <input type="email" id="email" name="email" class="form-control"
                         placeholder="example@domain.com" data-translate-placeholder="form.email_placeholder" required>
                     <div class="error-message" id="emailError" data-translate="form.email_error">يرجى إدخال بريد إلكتروني صحيح</div>
                 </div>
-            
+
                 <div class="form-group">
                     <label for="content" data-translate="form.content">محتوى الشكوى</label>
-                    <textarea id="content" name="content" class="form-control" 
-                        placeholder="يرجى كتابة تفاصيل شكواك هنا..." 
+                    <textarea id="content" name="content" class="form-control"
+                        placeholder="يرجى كتابة تفاصيل شكواك هنا..."
                         data-translate-placeholder="form.content_placeholder" required style="min-height: 250px;"></textarea>
                     <div class="error-message" id="contentError" data-translate="form.content_error">يرجى إدخال محتوى الشكوى (10 أحرف على الأقل)</div>
                 </div>
-            
+
                 <button type="submit" class="submit-btn">
                     <i class="fas fa-paper-plane"></i> <span data-translate="form.submit">إرسال الشكوى</span>
                 </button>
-            
+
                 <p class="form-note">
                     <i class="fas fa-info-circle"></i> <span data-translate="form.note">نعدك بمعالجة شكواك بكل سرية واهتمام</span>
                 </p>
@@ -805,7 +805,7 @@
                         </div>
                     </div>
                 </div>
-    
+
                 <!-- روابط سريعة -->
                 <div class="footer-section links">
                     <h4 data-translate="footer.quick_links">روابط سريعة</h4>
@@ -816,9 +816,9 @@
                         <li><a href="{{ route('compliants') }}" data-translate="nav.complaints">اتصل بنا</a></li>
                     </ul>
                 </div>
-    
+
             </div>
-    
+
             <!-- حقوق النشر ووسائل التواصل -->
             <div class="footer-bottom">
                 <div class="copyright" data-translate="footer.copyright">
@@ -836,156 +836,144 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // تغيير خلفية الصفحة تلقائياً
-            const backgroundImages = document.querySelectorAll('.background-slideshow img');
-            let currentImage = 0;
-            
-            // بدء العرض بالصورة الأولى
-            if (backgroundImages.length > 0) {
-                backgroundImages[0].classList.add('active');
-            }
-    
-            function changeBackground() {
-                // إخفاء الصورة الحالية
-                backgroundImages[currentImage].classList.remove('active');
-                
-                // الانتقال للصورة التالية
-                currentImage = (currentImage + 1) % backgroundImages.length;
-                
-                // إظهار الصورة الجديدة
-                backgroundImages[currentImage].classList.add('active');
-                
-                console.log('Changed to background image:', currentImage + 1); // لأغراض debugging
-            }
-    
-            // بدء التغيير التلقائي كل 5 ثواني
-            if (backgroundImages.length > 1) {
-                setInterval(changeBackground, 5000);
-            }
-    
-            // التحقق من صحة النموذج وإرساله
-            const form = document.getElementById('complaintForm');
+     document.addEventListener('DOMContentLoaded', function() {
+    // تغيير خلفية الصفحة تلقائياً
+    const backgroundImages = document.querySelectorAll('.background-slideshow img');
+    let currentImage = 0;
+
+    if (backgroundImages.length > 0) {
+        backgroundImages[0].classList.add('active');
+    }
+
+    function changeBackground() {
+        backgroundImages[currentImage].classList.remove('active');
+        currentImage = (currentImage + 1) % backgroundImages.length;
+        backgroundImages[currentImage].classList.add('active');
+    }
+
+    if (backgroundImages.length > 1) {
+        setInterval(changeBackground, 5000);
+    }
+
+    // التحقق من صحة النموذج وإرساله
+    const form = document.getElementById('complaintForm');
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Reset errors and success message
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.querySelectorAll('.form-control').forEach(el => {
+                el.classList.remove('error');
+            });
+            document.getElementById('successMessage').style.display = 'none';
+
+            // Validate form
             const emailInput = document.getElementById('email');
             const contentInput = document.getElementById('content');
             const emailError = document.getElementById('emailError');
             const contentError = document.getElementById('contentError');
-            const successMessage = document.getElementById('successMessage');
-    
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-    
-                    // Reset errors and success message
-                    emailError.style.display = 'none';
-                    contentError.style.display = 'none';
-                    successMessage.style.display = 'none';
-                    emailInput.classList.remove('error');
-                    contentInput.classList.remove('error');
-    
-                    let isValid = true;
-    
-                    // Email validation
-                    if (!emailInput.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
-                        emailInput.classList.add('error');
-                        emailError.style.display = 'block';
-                        isValid = false;
-                    }
-    
-                    // Content validation
-                    if (!contentInput.value || contentInput.value.length < 10) {
-                        contentInput.classList.add('error');
-                        contentError.style.display = 'block';
-                        isValid = false;
-                    }
-    
-                    if (!isValid) return;
-    
-                    // Show loading state
-                    const submitBtn = form.querySelector('.submit-btn');
-                    const originalBtnText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-                    submitBtn.disabled = true;
-    
-                    // Send form data
-                    fetch(form.action, {
-                            method: 'POST',
-                            body: new FormData(form),
-                            headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                                'Accept': 'application/json'
-                            }
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                return response.json().then(err => {
-                                    throw err;
-                                });
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-    if (data.status === 'success') {
-        // Hide form and show success message
-        form.style.display = 'none';
-        successMessage.style.display = 'block';
-        
-        // Optional: Redirect after 3 seconds
-        setTimeout(() => {
-            window.location.href = "{{ route('compliants') }}";
-        }, 3000);
-    } else if (data.errors) {
-        // Handle server-side validation errors
-        if (data.errors.email) {
-            emailInput.classList.add('error');
-            emailError.textContent = data.errors.email[0];
-            emailError.style.display = 'block';
-        }
-        if (data.errors.content) {
-            contentInput.classList.add('error');
-            contentError.textContent = data.errors.content[0];
-            contentError.style.display = 'block';
-        }
-    }
-})
-                        .catch(error => {
-                            console.error('Error:', error);
-                            // Check if error is from server validation
-                            if (error.errors) {
-                                if (error.errors.email) {
-                                    emailInput.classList.add('error');
-                                    emailError.textContent = error.errors.email[0];
-                                    emailError.style.display = 'block';
-                                }
-                                if (error.errors.content) {
-                                    contentInput.classList.add('error');
-                                    contentError.textContent = error.errors.content[0];
-                                    contentError.style.display = 'block';
-                                }
-                            } else {
-                                alert('حدث خطأ أثناء إرسال الشكوى، يرجى المحاولة مرة أخرى');
-                            }
-                        })
-                        .finally(() => {
-                            submitBtn.innerHTML = originalBtnText;
-                            submitBtn.disabled = false;
-                        });
+
+            let isValid = true;
+
+            // Email validation
+            if (!emailInput.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+                emailInput.classList.add('error');
+                emailError.style.display = 'block';
+                isValid = false;
+            }
+
+            // Content validation
+            if (!contentInput.value || contentInput.value.length < 10) {
+                contentInput.classList.add('error');
+                contentError.style.display = 'block';
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            // Show loading state
+            const submitBtn = form.querySelector('.submit-btn');
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+            submitBtn.disabled = true;
+
+            try {
+                // Create FormData object
+                const formData = new FormData(form);
+
+                // Convert FormData to plain object
+                const plainFormData = Object.fromEntries(formData.entries());
+
+                // Add date to the form data
+                plainFormData.date = new Date().toISOString().split('T')[0];
+
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(plainFormData)
                 });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw data;
+                }
+
+                if (data.status === 'success') {
+                    // Hide form and show success message
+                    form.style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'block';
+
+                    // Optional: Redirect after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = "{{ route('compliants') }}";
+                    }, 3000);
+                } else {
+                    throw new Error(data.message || 'حدث خطأ غير متوقع');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+
+                // Handle server-side validation errors
+                if (error.errors) {
+                    if (error.errors.email) {
+                        emailInput.classList.add('error');
+                        emailError.textContent = error.errors.email[0];
+                        emailError.style.display = 'block';
+                    }
+                    if (error.errors.content) {
+                        contentInput.classList.add('error');
+                        contentError.textContent = error.errors.content[0];
+                        contentError.style.display = 'block';
+                    }
+                } else {
+                    alert(error.message || 'حدث خطأ أثناء إرسال الشكوى، يرجى المحاولة مرة أخرى');
+                }
+            } finally {
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
             }
         });
-        // ملف main.js المحدث
-document.addEventListener('DOMContentLoaded', function() {
+    }
+
     // ترجمة المحتوى
     const translations = {
         en: {
             nav: {
-                sit_n1 : "Syrian Center for Sustainable Development",
-                sit_n2 : 'and Community Empowerment',
+                sit_n1: "Syrian Center for Sustainable Development",
+                sit_n2: 'and Community Empowerment',
                 home: "Home",
                 services: "Services",
                 events: "Events",
-                complaints: "conect us",
-                login: "logout"
+                complaints: "Contact Us",
+                login: "Logout"
             },
             form: {
                 email: "Email",
@@ -999,7 +987,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             footer: {
                 copyright: "&copy; 2023 Syrian Center for Sustainable Development. All rights reserved.",
-                
+                quick_links: "Quick Links"
             },
             language: {
                 current: "English",
@@ -1009,12 +997,12 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         ar: {
             nav: {
-                sit_n1 : 'المركز السوري للتنمية المستدامة',
-                sit_n2 : 'والتمكين المجتمعي',
+                sit_n1: 'المركز السوري للتنمية المستدامة',
+                sit_n2: 'والتمكين المجتمعي',
                 home: "الرئيسية",
                 services: "الخدمات",
                 events: "النشاطات والفعاليات",
-                complaints: "اتصل بنا ",
+                complaints: "اتصل بنا",
                 login: "تسجيل الخروج"
             },
             form: {
@@ -1026,10 +1014,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 content_error: "يرجى إدخال محتوى الشكوى (10 أحرف على الأقل)",
                 submit: "إرسال الشكوى",
                 note: "نعدك بمعالجة شكواك بكل سرية واهتمام"
-                
             },
             footer: {
-                copyright: "&copy; 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة."
+                copyright: "&copy; 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.",
+                quick_links: "روابط سريعة"
             },
             language: {
                 current: "العربية",
@@ -1043,7 +1031,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function changeLanguage(lang) {
         document.documentElement.lang = lang;
         document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-        
+
         // تحديث النصوص المترجمة
         document.querySelectorAll('[data-translate]').forEach(element => {
             const key = element.getAttribute('data-translate');
@@ -1052,7 +1040,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 element.textContent = translations[lang][keys[0]][keys[1]];
             }
         });
-        
+
         // تحديث النصوص البديلة
         document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
             const key = element.getAttribute('data-translate-placeholder');
@@ -1061,7 +1049,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 element.setAttribute('placeholder', translations[lang][keys[0]][keys[1]]);
             }
         });
-        
+
         // تحديث اللغة الحالية في زر اللغة
         document.querySelector('.current-lang').textContent = translations[lang].language.current;
     }
@@ -1079,9 +1067,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // تحميل اللغة المفضلة من localStorage إذا كانت موجودة
     const preferredLanguage = localStorage.getItem('preferredLanguage') || 'ar';
     changeLanguage(preferredLanguage);
-
-    // باقي الكود الخاص بالخلفية المتغيرة والتحقق من النموذج...
-    // ... (ابقى على الكود الأصلي كما هو)
 });
     </script>
 </body>
