@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\SectionEnum;
 use App\Filament\Resources\SettingResource\Pages;
 use App\Models\Setting;
-use App\SectionEnum;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -14,8 +14,6 @@ use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 
 class SettingResource extends Resource
@@ -41,15 +39,11 @@ class SettingResource extends Resource
                     Select::make('section')
                         ->label('key')
                         ->required()
-                        ->unique()
                         ->options([
-                            SectionEnum::AboutUs->value => 'About Us',
-                            SectionEnum::Vision->value => 'Vision',
-                            SectionEnum::Message->value => 'Message',
-                            SectionEnum::TargetGroup->value => 'Target Group',
-                            SectionEnum::SocialMedia->value => 'Social Media',
-                            SectionEnum::ContactInfo->value => 'Contact Info',
-                            SectionEnum::Partners->value => 'Partners',
+                            SectionEnum::AboutUs->value =>  __('main.titles.about') ,
+                            SectionEnum::Vision->value => __('main.titles.vision'),
+                            SectionEnum::Mission->value => __('main.titles.mission'),
+                            SectionEnum::TargetGroup->value => __('main.titles.target'),
                         ])
                         ->live()
                         ->afterStateUpdated(function ($state , Forms\Set $set){
@@ -78,6 +72,7 @@ class SettingResource extends Resource
                             'redo',
                             'undo',
                         ])
+                        ->required()
                         ->columnSpanFull(),
 
                     Forms\Components\KeyValue::make('extra')
@@ -95,7 +90,7 @@ class SettingResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
-                    ->label('image')
+                    ->label('')
                     ->circular()
                     ->size(50)
                     ->grow(false),

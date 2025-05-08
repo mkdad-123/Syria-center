@@ -38,32 +38,18 @@ class PartnerResource extends Resource
                             ->imageEditor()
                             ->columnSpanFull(),
 
-                        Forms\Components\Tabs::make('الترجمات')
-                            ->tabs([
-                                Forms\Components\Tabs\Tab::make('العربية')
-                                    ->schema([
-                                        Forms\Components\TextInput::make('name.ar')
-                                            ->label('الاسم بالعربية')
-                                            ->required(),
-                                        Forms\Components\RichEditor::make('description.ar')
-                                            ->label('الوصف بالعربية')
-                                            ->toolbarButtons([
-                                                'bold', 'italic', 'link',
-                                                'bulletList', 'orderedList',
-                                            ]),
-                                    ]),
-                                Forms\Components\Tabs\Tab::make('English')
-                                    ->schema([
-                                        Forms\Components\TextInput::make('name.en')
-                                            ->label('Name (English)')
-                                            ->required(),
-                                        Forms\Components\RichEditor::make('description.en')
-                                            ->label('Description (English)'),
-                                    ]),
-                            ])
-                            ->columnSpanFull(),
-                    ])
-                    ->columns(1),
+                        Forms\Components\TextInput::make('name')
+                            ->label('الاسم')
+                            ->required(),
+
+                        Forms\Components\RichEditor::make('description')
+                            ->label('الوصف')
+                            ->toolbarButtons([
+                                'bold', 'italic', 'link',
+                                'bulletList', 'orderedList',
+                            ]),
+                    ]),
+
             ]);
     }
 

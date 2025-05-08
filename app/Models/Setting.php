@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-use App\SectionEnum;
+use App\Enums\SectionEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Translatable\HasTranslations;
@@ -40,7 +40,7 @@ class Setting extends Model
     public static function getSocialMediaLinks()
     {
         $setting = self::where('section', 'social_media')->first();
-        
+
         $defaults = [
             'facebook' => '#',
             'instagram' => '#',
@@ -62,7 +62,7 @@ class Setting extends Model
     public static function getContactInfo()
     {
         $setting = self::where('section', 'contact_info')->first();
-        
+
         $defaults = [
             'emails' => ['info@example.com'],
             'phones' => ['123-456-789'],

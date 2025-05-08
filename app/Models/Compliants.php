@@ -8,6 +8,10 @@ class Compliants extends Model
 {
     protected $table = 'compliants';
 
+    public function customUser()
+    {
+        $this->belongsTo(CustomUser::class );
+    }
     protected $fillable = [
         'custom_user_id',
         'content',

@@ -37,7 +37,7 @@ class CompliantResource extends Resource
             ->columns([
                 Tables\Columns\Layout\Panel::make([
 
-//                    Tables\Columns\TextColumn::make('custom_user.name')
+//                    Tables\Columns\TextColumn::make('customUser.name')
 //                        ->label('المستخدم')
 //                        ->description(fn ($record) => $record->email)
 //                        ->searchable()
@@ -83,21 +83,21 @@ class CompliantResource extends Resource
             ->filters([
 //                Tables\Filters\SelectFilter::make('custom_user_id')
 //                    ->label('تصفية بالمستخدم')
-//                    ->relationship('custom_user', 'name')
+//                    ->relationship('customUser', 'name')
 //                    ->searchable()
 //                    ->preload(),
-
+//
                 Tables\Filters\Filter::make('today')
                     ->label('شكاوى اليوم')
                     ->query(fn ($query) => $query->whereDate('date', today())),
             ])
             ->actions([
-//                Tables\Actions\ViewAction::make()
-//                    ->icon('heroicon-o-eye')
-//                    ->color('gray')
-//                    ->modalHeading('تفاصيل الشكوى')
-//                    ->modalDescription(fn ($record) => Str::limit($record->content, 200))
-//                    ->modalContent(fn ($record) => static::getCompliantDetails($record)),
+                Tables\Actions\ViewAction::make()
+                    ->icon('heroicon-o-eye')
+                    ->color('gray')
+                    ->modalHeading('تفاصيل الشكوى')
+                    ->modalDescription(fn ($record) => Str::limit($record->content, 200))
+                    ->modalContent(fn ($record) => static::getCompliantDetails($record)),
 
                 Tables\Actions\DeleteAction::make()
                     ->icon('heroicon-o-trash')
@@ -121,7 +121,7 @@ class CompliantResource extends Resource
             ])
             ->defaultSort('date', 'desc')
             ->groups([
-//                Tables\Grouping\Group::make('custom_user.name')
+//                Tables\Grouping\Group::make('customUser.name')
 //                    ->label('حسب المستخدم')
 //                    ->collapsible(),
 
