@@ -14,7 +14,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
-    
+
     protected $middlewareGroups = [
         'web' => [
             \Illuminate\Cookie\Middleware\EncryptCookies::class,
@@ -24,6 +24,8 @@ class Kernel extends HttpKernel
             \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\SetLocale::class,
+            \App\Http\Middleware\SetLanguage::class,
+
 
         ],
         'api' => [
@@ -31,7 +33,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
-    
+
     protected $routeMiddleware = [
         'custom.auth' => \App\Http\Middleware\CustomAuthenticate::class,
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,

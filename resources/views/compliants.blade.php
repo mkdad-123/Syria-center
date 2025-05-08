@@ -669,7 +669,6 @@
         <li><a href="{{ route('home') }}" data-translate="nav.home">الرئيسية</a></li>
         <li><a href="{{ route('sections') }}" data-translate="nav.services">الخدمات</a></li>
         <li><a href="{{ route('events') }}" data-translate="nav.events">النشاطات والفعاليات</a></li>
-        <li><a href="{{ route('compliants') }}" data-translate="nav.complaints">تقديم شكوى</a></li>
         <li class="language-switcher" style="list-style: none;">
             <button class="language-btn">
                 <i class="fas fa-globe"></i>
@@ -681,8 +680,16 @@
                 <li><a href="#" data-lang="en" data-translate="language.en"><i class="fas fa-language"></i> English</a></li>
             </ul>
         </li>
-        <li class="login-btn"><a href="/logout" data-translate="nav.login">تسجيل الخروج</a></li>
-    </ul>
+        <li class="login-btn">
+            <a href="{{ route('logout') }}"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                {{ __('main.buttons.logout') }}
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                style="display: none;">
+                @csrf
+            </form>
+        </li>    </ul>
 </nav>
             </div>
         </div>

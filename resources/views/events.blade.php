@@ -472,129 +472,162 @@
         }
 
            /* أنماط الفوتر المعدلة */
-    .footer {
-        background-color: var(--dark-color_1);
-        color: var(--white);
-        padding: 50px 0 0;
-        font-size: 1.05rem; /* زيادة حجم الخط العام */
-    }
+  /* أنماط الفوتر المعدلة */
+.footer {
+    background-color: var(--dark-color_1);
+    color: var(--white);
+    padding: 50px 0 0;
+    font-size: 1.05rem;
+    margin-top: 0;
+}
 
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+    padding: 0 20px;
+}
+
+.footer-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-logo img {
+    height: 80px;
+    width: auto;
+    margin-bottom: 20px;
+}
+
+.footer-logo p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.footer-links h4,
+.footer-contact h4 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+    padding-bottom: 0; /* إزالة الحشو السفلي */
+    position: relative;
+}
+
+/* إزالة الخط البرتقالي تحت العناوين */
+.footer-links h4::after,
+.footer-contact h4::after {
+    content: none; /* إزالة الخط البرتقالي */
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 15px;
+}
+
+.footer-links a {
+    color: var(--white);
+    text-decoration: none;
+    transition: var(--transition);
+    font-size: 1.05rem;
+    display: inline-block;
+    padding: 5px 0;
+}
+
+.footer-links a:hover {
+    color: var(--secondary-color);
+    padding-right: 8px;
+}
+
+.footer-contact p {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.05rem;
+}
+
+.footer-contact i {
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    min-width: 25px;
+    text-align: center;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 25px 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-bottom p {
+    margin: 0;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-icons a {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 1.1rem;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    color: var(--white);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-icons a:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-3px);
+}
+
+/* تحسينات للشاشات الصغيرة */
+@media (max-width: 768px) {
     .footer-content {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* زيادة العرض الأدنى للعناصر */
-        gap: 40px;
-        margin-bottom: 40px;
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
     }
 
     .footer-logo {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
     }
 
-    .footer-logo img {
-        height: 80px; /* زيادة حجم الشعار */
-        width: auto;
-        margin-bottom: 20px;
-    }
-
-    .footer-logo p {
-        font-size: 1.1rem;
-        line-height: 1.6;
-    }
-
-    .footer-links h4,
-    .footer-contact h4 {
-        font-size: 1.3rem; /* زيادة حجم العناوين */
-        margin-bottom: 25px;
-        color: var(--secondary-color);
-        position: relative;
-        padding-bottom: 10px;
-    }
-
-    .footer-links h4::after,
-    .footer-contact h4::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 50px;
-        height: 3px;
-        background-color: var(--secondary-color);
-    }
-
-    .footer-links ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .footer-links li {
-        margin-bottom: 12px; /* زيادة المسافة بين العناصر */
-    }
-
-    .footer-links a {
-        color: var(--white);
-        text-decoration: none;
-        transition: var(--transition);
-        font-size: 1.05rem;
-        display: inline-block;
-        padding: 5px 0;
-    }
-
-    .footer-links a:hover {
-        color: var(--secondary-color);
-        transform: translateX(5px);
+    .footer-links,
+    .footer-contact {
+        text-align: center;
     }
 
     .footer-contact p {
-        margin-bottom: 18px;
-        display: flex;
-        align-items: center;
-        font-size: 1.05rem;
+        justify-content: center;
     }
 
-    .footer-contact i {
-        margin-left: 12px;
-        font-size: 1.2rem;
-        color: var(--secondary-color);
-        min-width: 25px;
-        text-align: center;
+    .footer-links a:hover {
+        padding-right: 0;
+        padding-left: 8px;
     }
-
-    .footer-bottom {
-        border-top: 1px solid rgba(255, 255, 255, 0.15);
-        padding: 25px 0;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .footer-bottom p {
-        margin: 0;
-        font-size: 1rem;
-        color: rgba(255, 255, 255, 0.8);
-    }
-
-        .social-icons a {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            text-align: center;
-            line-height: 40px;
-            color: var(--white);
-            margin-right: 10px;
-            transition: var(--transition);
-        }
-
-        .social-icons a:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-3px);
-        }
-
+}
         /* التجاوب مع الشاشات الصغيرة */
         @media (max-width: 992px) {
             .header .container {
@@ -658,8 +691,8 @@
                 <nav class="nav">
                     <ul class="nav-list">
                         <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
+                        <li><a href="{{ route('about-us') }}">{{ __('main.menu.about') }}</a></li>
                         <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
-                        <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
                         <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
                     </li>
                     <li class="language-switcher">
@@ -672,8 +705,16 @@
                             <li><a href="#" data-lang="ar"><i class="fas fa-language"></i> العربية</a></li>
                             <li><a href="#" data-lang="en"><i class="fas fa-language"></i> English</a></li>
                         </ul>
-                    </li>
-                        <li class="login-btn"><a href="/logout">{{ __('main.buttons.logout') }}</a></li>
+                        <li class="login-btn">
+                            <a href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                {{ __('main.buttons.logout') }}
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                style="display: none;">
+                                @csrf
+                            </form>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -694,7 +735,7 @@
                             @else
                                 <img src="{{ asset('default-event.jpg') }}" alt="{{ __('events.default_image_alt') }}" class="event-image">
                             @endif
-                           
+
                         </div>
                         <div class="event-content">
                          <span class="event-type {{ $event['type'] }}" style="margin-bottom: 15px; display: inline-block;">
@@ -790,8 +831,8 @@
             <div class="modal-description">
                 <h3>{{ __('main.events.description') }}:</h3>
                 <p class="event-description">
-                    {!! Str::limit(strip_tags($event['description'], 100)) !!}
-                </p>            </div>
+                    {!! strip_tags($event['description']) !!}</p>
+                </div>
             @endif
         </div>
     </div>
@@ -807,7 +848,7 @@
                     <p>{{ __('main.site_name') }}<br>
                     <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span></p>
                 </div>
-    
+
                 <!-- قسم الروابط السريعة -->
                 <div class="footer-links">
                     <h4>{{ __('main.footer.quick_links') }}</h4>
@@ -818,13 +859,13 @@
                         <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
                     </ul>
                 </div>
-    
+
                 <!-- قسم معلومات الاتصال -->
-               
+
             </div>
-    
-            
-    
+
+
+
             <!-- حقوق النشر ووسائل التواصل الاجتماعي -->
             <div class="footer-bottom">
                 <p>{{ __('main.footer.copyright') }} &copy; {{ date('Y') }}</p>
@@ -851,6 +892,32 @@
 
 
     <script>
+        function setLanguageCookie(lang) {
+    // الكوكي سيكون ساري المفعول لمدة 30 يومًا
+    document.cookie = `preferred_language=${lang};path=/;max-age=${30 * 24 * 60 * 60}`;
+}
+
+// وظيفة لقراءة الكوكي
+function getLanguageCookie() {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        if (name === 'preferred_language') {
+            return value;
+        }
+    }
+    return null;
+}
+document.addEventListener('DOMContentLoaded', function() {
+    const preferredLang = getLanguageCookie();
+    const currentLang = '{{ $locale }}';
+
+    if (preferredLang && preferredLang !== currentLang) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', preferredLang);
+        window.location.href = url.toString();
+    }
+});
         // تغيير خلفية الصفحة تلقائياً
         document.addEventListener('DOMContentLoaded', function() {
             const backgroundImages = document.querySelectorAll('.background-slideshow img');
@@ -867,14 +934,19 @@
 
             // تبديل اللغة
             document.querySelectorAll('.language-menu a').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const lang = this.getAttribute('data-lang');
-                    const url = new URL(window.location.href);
-                    url.searchParams.set('lang', lang);
-                    window.location.href = url.toString();
-                });
-            });
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const lang = this.getAttribute('data-lang');
+
+        // حفظ التفضيل في الكوكي
+        setLanguageCookie(lang);
+
+        // الانتقال إلى الصفحة نفسها مع معلمة اللغة
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', lang);
+        window.location.href = url.toString();
+    });
+});
         });
 
         // وظائف نافذة التفاصيل العائمة
