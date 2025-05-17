@@ -106,10 +106,13 @@ class ShowController extends Controller
         $aboutUs = Setting::where('section', 'about-us')->first();
 
         if (!$aboutUs) {
-            return response()->json([
-                'message' => __('Content not found'),
-                'data' => null
-            ], 404);
+            return view('about-us', [
+                'locale' => "",
+                'aboutUs' => "",
+                'socialMedia' => "",
+                'contactInfo' => "",
+                'image' => "" ,
+            ]);
         }
 
         // معلومات التواصل ووسائل التواصل الاجتماعي
@@ -129,7 +132,7 @@ class ShowController extends Controller
     {
         $locale = $request->has('lang') ? $request->lang : 'ar';
         app()->setLocale($locale);
-    
+
         $events = Event::where('is_published', '1')
             ->orderByDesc('id')
             ->get()
@@ -148,7 +151,7 @@ class ShowController extends Controller
                     'updated_at' => $event->updated_at
                 ];
             });
-    
+
         return view('events', [
             'events' => $events,
             'locale' => $locale
@@ -161,12 +164,12 @@ class ShowController extends Controller
         if (is_string($value) && $decoded = json_decode($value, true)) {
             return $decoded[$locale] ?? 'No content available';
         }
-        
+
         // If it's already an array (if using casts)
         if (is_array($value)) {
             return $value[$locale] ?? 'No content available';
         }
-        
+
         // If no translation exists, return the raw value
         return $value ?? 'No content available';
     }

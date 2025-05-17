@@ -423,7 +423,7 @@
                 flex-wrap: wrap;
                 justify-content: center;
             }
-            
+
             .nav-list {
                 order: 3;
                 width: 100%;
@@ -438,27 +438,27 @@
                 text-align: center;
                 padding: 20px;
             }
-            
+
             .volunteer-meta {
                 justify-content: center;
             }
-            
+
             .volunteer-image {
                 margin-bottom: 20px;
             }
-            
+
             .btn {
                 width: 100%;
             }
-            
+
             .section-title {
                 font-size: 1.5rem;
             }
-            
+
             .volunteer-name {
                 font-size: 1.6rem;
             }
-            
+
             .volunteer-profession {
                 font-size: 1.1rem;
             }
@@ -468,31 +468,31 @@
             .volunteer-image {
                 flex: 0 0 150px;
             }
-            
+
             .volunteer-image img {
                 width: 150px;
                 height: 150px;
             }
-            
+
             .volunteer-meta {
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .meta-item {
                 width: 100%;
                 justify-content: center;
             }
-            
+
             .nav-list {
                 gap: 8px;
             }
-            
+
             .nav-list a {
                 padding: 6px 10px;
                 font-size: 0.85rem;
             }
-            
+
             .login-btn a {
                 padding: 6px 15px;
             }
@@ -526,7 +526,7 @@
             <nav class="nav">
                 <ul class="nav-list">
                     <li><a href="{{ route('home', ['lang' => $locale]) }}">{{ __('main.menu.home') }}</a></li>
-                    
+
                     <li class="language-switcher">
                         <button class="language-btn">
                             <i class="fas fa-globe"></i>
@@ -542,7 +542,7 @@
                             </a></li>
                         </ul>
                     </li>
-                    
+
                     @if (Auth::guard('custom')->check())
                         <li class="login-btn">
                             <a href="{{ route('logout') }}"
@@ -573,14 +573,14 @@
                 <!-- بطاقة المعلومات الأساسية -->
                 <div class="volunteer-header">
                     <div class="volunteer-image">
-                        <img src="{{ $volunteer['profile_photo'] ? asset('storage/' . $volunteer['profile_photo']) : asset('images/default-avatar.png') }}" 
-                             alt="{{ $volunteer['name'] }}" 
+                        <img src="{{ $volunteer['profile_photo'] ? asset('storage/' . $volunteer['profile_photo']) : asset('images/default-avatar.png') }}"
+                             alt="{{ $volunteer['name'] }}"
                              onerror="this.src='{{ asset('images/default-avatar.png') }}'">
                     </div>
                     <div class="volunteer-info">
                         <h1 class="volunteer-name">{{ $volunteer['name'] ?? __('volunteer.default_name') }}</h1>
                         <p class="volunteer-profession">{{ $volunteer['profession'] ?? __('volunteer.default_profession') }}</p>
-                        
+
                         <div class="volunteer-meta">
                             @if($volunteer['email'])
                             <div class="meta-item">
@@ -588,14 +588,14 @@
                                 <span>{{ $volunteer['email'] }}</span>
                             </div>
                             @endif
-                            
+
                             @if($volunteer['phone'])
                             <div class="meta-item">
                                 <i class="fas fa-phone"></i>
                                 <span>{{ $volunteer['phone'] }}</span>
                             </div>
                             @endif
-                            
+
                             @if($volunteer['gender'])
                             <div class="meta-item">
                                 <i class="fas fa-{{ $volunteer['gender'] == 'male' ? 'male' : 'female' }}"></i>
@@ -608,14 +608,14 @@
                                 </span>
                             </div>
                             @endif
-                            
+
                             @if($volunteer['birth_date'])
                             <div class="meta-item">
                                 <i class="fas fa-calendar-alt"></i>
                                 <span>{{ $volunteer['birth_date'] }}</span>
                             </div>
                             @endif
-                            
+
                             @if($volunteer['join_date'])
                             <div class="meta-item">
                                 <i class="fas fa-calendar-check"></i>
@@ -623,7 +623,7 @@
                             </div>
                             @endif
                         </div>
-                        
+
                         @if($volunteer['CV'])
                         <a href="{{ asset('storage/' . $volunteer['CV']) }}" class="btn" download>
                             <i class="fas fa-download"></i> {{ __('volunteer.download_cv') }}
@@ -641,14 +641,14 @@
                         <p>{{ $volunteer['national_id'] }}</p>
                     </div>
                     @endif
-                    
+
                     @if($volunteer['availability'])
                     <div class="detail-card">
                         <h3>{{ __('main.volunteer.availability') }}</h3>
                         <p>{{ $volunteer['availability'] }}</p>
                     </div>
                     @endif
-             
+
                 </div>
 
                 <!-- المهارات -->
@@ -692,13 +692,43 @@
     </footer>
 
     <script>
+        // وظيفة لتعيين الكوكي
+        function setLanguageCookie(lang) {
+            // الكوكي سيكون ساري المفعول لمدة 30 يومًا
+            document.cookie = `preferred_language=${lang};path=/;max-age=${30 * 24 * 60 * 60}`;
+        }
+
+        // وظيفة لقراءة الكوكي
+        function getLanguageCookie() {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                const [name, value] = cookie.trim().split('=');
+                if (name === 'preferred_language') {
+                    return value;
+                }
+            }
+            return null;
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Language switcher functionality
+            // 1. التحقق من تفضيل اللغة عند تحميل الصفحة
+            const preferredLang = getLanguageCookie();
+            const currentLang = '{{ $locale }}';
+
+            if (preferredLang && preferredLang !== currentLang) {
+                const url = new URL(window.location.href);
+                url.searchParams.set('lang', preferredLang);
+                window.location.href = url.toString();
+                return; // الخروج لتجنب تنفيذ باقي الكود أثناء إعادة التوجيه
+            }
+
+            // 2. إعداد معالج تغيير اللغة
             const languageSwitcher = document.querySelector('.language-switcher');
             if (languageSwitcher) {
                 const languageBtn = languageSwitcher.querySelector('.language-btn');
                 const languageMenu = languageSwitcher.querySelector('.language-menu');
 
+                // معالج النقر على زر اللغة
                 languageBtn.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -706,18 +736,36 @@
                     languageMenu.style.display = isOpen ? 'none' : 'block';
                 });
 
+                // إغلاق القائمة عند النقر خارجها
                 document.addEventListener('click', function(e) {
                     if (!languageSwitcher.contains(e.target)) {
                         languageMenu.style.display = 'none';
                     }
                 });
 
+                // منع إغلاق القائمة عند النقر داخلها
                 languageMenu.addEventListener('click', function(e) {
                     e.stopPropagation();
                 });
+
+                // معالج اختيار اللغة
+                document.querySelectorAll('.language-menu a').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const lang = this.getAttribute('data-lang');
+
+                        // حفظ اللغة المختارة في الكوكي
+                        setLanguageCookie(lang);
+
+                        // إعادة تحميل الصفحة باللغة الجديدة
+                        const url = new URL(window.location.href);
+                        url.searchParams.set('lang', lang);
+                        window.location.href = url.toString();
+                    });
+                });
             }
 
-            // Add animation class to elements
+            // 3. إضافة تأثيرات الحركة (ابقيه كما هو)
             const animateElements = document.querySelectorAll('.volunteer-header, .detail-card, .skills-container, .notes-container');
             animateElements.forEach((el, index) => {
                 setTimeout(() => {

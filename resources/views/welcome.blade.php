@@ -516,11 +516,10 @@
 
         /* قسم فريقنا المحسن */
         .team-section {
-            background-color: #f8f9fa;
-            overflow: hidden;
-            padding: 60px 0;
-        }
-
+    background-color: rgba(255, 255, 255, 0.3);
+    padding: 60px 0;
+    position: relative;
+}
         .team-carousel {
             position: relative;
             max-width: 800px;
@@ -597,11 +596,11 @@
 
         /* قسم الشركاء المحسن */
         .partners-section {
-            background-color: var(--primary-color);
-            color: var(--white);
-            overflow: hidden;
-            padding: 60px 0;
-        }
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 60px 0 0; /* إزالة الحشو السفلي */
+    margin-bottom: 0; /* إزالة أي هوامش */
+}
 
         .partners-carousel {
             position: relative;
@@ -622,8 +621,8 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            padding: 20px;
+            height: 110%;
+            padding: 24px;
             text-align: center;
             opacity: 0;
             transform: scale(0.8);
@@ -816,131 +815,162 @@
         }
 
     /* أنماط الفوتر المعدلة */
-    .footer {
-        background-color: var(--dark-color_1);
-        color: var(--white);
-        padding: 50px 0 0;
-        font-size: 1.05rem; /* زيادة حجم الخط العام */
-    }
+  /* أنماط الفوتر المعدلة */
+.footer {
+    background-color: var(--dark-color_1);
+    color: var(--white);
+    padding: 50px 0 0;
+    font-size: 1.05rem;
+    margin-top: 0;
+}
 
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+    padding: 0 20px;
+}
+
+.footer-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-logo img {
+    height: 80px;
+    width: auto;
+    margin-bottom: 20px;
+}
+
+.footer-logo p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.footer-links h4,
+.footer-contact h4 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+    padding-bottom: 0; /* إزالة الحشو السفلي */
+    position: relative;
+}
+
+/* إزالة الخط البرتقالي تحت العناوين */
+.footer-links h4::after,
+.footer-contact h4::after {
+    content: none; /* إزالة الخط البرتقالي */
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 15px;
+}
+
+.footer-links a {
+    color: var(--white);
+    text-decoration: none;
+    transition: var(--transition);
+    font-size: 1.05rem;
+    display: inline-block;
+    padding: 5px 0;
+}
+
+.footer-links a:hover {
+    color: var(--secondary-color);
+    padding-right: 8px;
+}
+
+.footer-contact p {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.05rem;
+}
+
+.footer-contact i {
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    min-width: 25px;
+    text-align: center;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 25px 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-bottom p {
+    margin: 0;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-icons a {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 1.1rem;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    color: var(--white);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-icons a:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-3px);
+}
+
+/* تحسينات للشاشات الصغيرة */
+@media (max-width: 768px) {
     .footer-content {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* زيادة العرض الأدنى للعناصر */
-        gap: 40px;
-        margin-bottom: 40px;
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
     }
 
     .footer-logo {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
     }
 
-    .footer-logo img {
-        height: 80px; /* زيادة حجم الشعار */
-        width: auto;
-        margin-bottom: 20px;
-    }
-
-    .footer-logo p {
-        font-size: 1.1rem;
-        line-height: 1.6;
-    }
-
-    .footer-links h4,
-    .footer-contact h4 {
-        font-size: 1.3rem; /* زيادة حجم العناوين */
-        margin-bottom: 25px;
-        color: var(--secondary-color);
-        position: relative;
-        padding-bottom: 10px;
-    }
-
-    .footer-links h4::after,
-    .footer-contact h4::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 50px;
-        height: 3px;
-        background-color: var(--secondary-color);
-    }
-
-    .footer-links ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .footer-links li {
-        margin-bottom: 12px; /* زيادة المسافة بين العناصر */
-    }
-
-    .footer-links a {
-        color: var(--white);
-        text-decoration: none;
-        transition: var(--transition);
-        font-size: 1.05rem;
-        display: inline-block;
-        padding: 5px 0;
-    }
-
-    .footer-links a:hover {
-        color: var(--secondary-color);
-        transform: translateX(5px);
+    .footer-links,
+    .footer-contact {
+        text-align: center;
     }
 
     .footer-contact p {
-        margin-bottom: 18px;
-        display: flex;
-        align-items: center;
-        font-size: 1.05rem;
-    }
-
-    .footer-contact i {
-        margin-left: 12px;
-        font-size: 1.2rem;
-        color: var(--secondary-color);
-        min-width: 25px;
-        text-align: center;
-    }
-
-    .footer-bottom {
-        border-top: 1px solid rgba(255, 255, 255, 0.15);
-        padding: 25px 0;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .footer-bottom p {
-        margin: 0;
-        font-size: 1rem;
-        color: rgba(255, 255, 255, 0.8);
-    }
-
-    .social-icons {
-        display: flex;
         justify-content: center;
-        gap: 15px;
     }
 
-    .social-icons a {
-        width: 45px;
-        height: 45px;
-        line-height: 45px;
-        font-size: 1.1rem;
-        background-color: rgba(255, 255, 255, 0.15);
-        transition: all 0.3s ease;
+    .footer-links a:hover {
+        padding-right: 0;
+        padding-left: 8px;
     }
-
-    .social-icons a:hover {
-        background-color: var(--secondary-color);
-        transform: translateY(-5px) scale(1.1);
-    }
-
+}
     /* قسم معلومات الاتصال المعدل */
     .contact-info-container {
         background-color: rgba(0, 0, 0, 0.2);
@@ -1112,6 +1142,7 @@
             <div class="buttons-container">
                 <nav class="nav">
                     <ul class="nav-list">
+                        <li><a href="{{ route('about-us') }}">{{ __('main.menu.about') }}</a></li>
                         <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
                         <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
                         <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
@@ -1336,7 +1367,7 @@
         <section id="partners" class="section partners-section">
             <div class="container">
                 <h2 class="section-title">{{ __('main.titles.partners') }}</h2>
-                <div class="partners-carousel" id="partnersCarousel">
+                <div class="partners-carousel {{ count($partners) <= 1 ? 'single-partner' : '' }}" id="partnersCarousel">
                     <div class="partners-slide">
                         @foreach ($partners as $partner)
                         {{-- Debug output --}}
@@ -1427,6 +1458,35 @@
     </footer>
 
     <script>
+
+                // وظيفة لتعيين الكوكي
+function setLanguageCookie(lang) {
+    // الكوكي سيكون ساري المفعول لمدة 30 يومًا
+    document.cookie = `preferred_language=${lang};path=/;max-age=${30 * 24 * 60 * 60}`;
+}
+
+// وظيفة لقراءة الكوكي
+function getLanguageCookie() {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        if (name === 'preferred_language') {
+            return value;
+        }
+    }
+    return null;
+}
+document.addEventListener('DOMContentLoaded', function() {
+    const preferredLang = getLanguageCookie();
+    const currentLang = '{{ $locale }}';
+
+    if (preferredLang && preferredLang !== currentLang) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', preferredLang);
+        window.location.href = url.toString();
+    }
+});
+
         document.addEventListener('DOMContentLoaded', function() {
             // Background slideshow functionality
             const backgroundImages = document.querySelectorAll('.background-slideshow img');
@@ -1473,22 +1533,19 @@
 
                 // Handle language selection
                 document.querySelectorAll('.language-menu a').forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const lang = this.getAttribute('data-lang');
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const lang = this.getAttribute('data-lang');
 
-                        // Show loading indicator
-                        const currentLangText = languageBtn.querySelector('.current-lang').textContent;
-                        languageBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${currentLangText}`;
+        // حفظ التفضيل في الكوكي
+        setLanguageCookie(lang);
 
-                        // Change language after a small delay
-                        setTimeout(() => {
-                            const url = new URL(window.location.href);
-                            url.searchParams.set('lang', lang);
-                            window.location.href = url.toString();
-                        }, 300);
-                    });
-                });
+        // الانتقال إلى الصفحة نفسها مع معلمة اللغة
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', lang);
+        window.location.href = url.toString();
+    });
+});
             }
 
             // Mobile dropdown handling
@@ -1634,6 +1691,7 @@
                 carousel.addEventListener('mouseleave', startSlideShow);
             }
         });
+
     </script>
 
 </body>
