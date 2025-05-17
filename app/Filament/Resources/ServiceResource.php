@@ -19,9 +19,27 @@ class ServiceResource extends Resource
 
     protected static ?string $model = Service::class;
     protected static ?string $navigationIcon = 'heroicon-o-wrench-screwdriver';
-    protected static ?string $modelLabel = 'Service';
-    protected static ?string $pluralModelLabel = 'Services';
-    protected static ?string $navigationGroup = 'Content Management';
+    protected static ?int $navigationSort = 2;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('filament.service.navigation_label');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('filament.service.model_label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('filament.service.plural_model_label');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('filament.service.navigation_group');
+    }
 
     public static function form(Form $form): Form
     {
@@ -30,17 +48,17 @@ class ServiceResource extends Resource
                 Section::make()
                     ->schema([
                         Forms\Components\Select::make('section_id')
-                            ->label('Section')
+                            ->label(__('filament.service.fields.section'))
                             ->relationship('section', 'name')
                             ->required(),
 
                         Forms\Components\TextInput::make('name')
-                            ->label('name')
+                            ->label(__('filament.service.fields.name'))
                             ->required()
                             ->maxLength(255),
 
                         Forms\Components\RichEditor::make('description')
-                            ->label('description')
+                            ->label(__('filament.service.fields.description'))
                             ->nullable()
                             ->columnSpanFull()
                             ->toolbarButtons([
@@ -61,37 +79,40 @@ class ServiceResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('section.name')
-                    ->label('section name')
+                    ->label(__('filament.service.fields.section_name'))
                     ->sortable()
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('name')
-                    ->label('service name')
+                    ->label(__('filament.service.fields.service_name'))
                     ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('articles_count')
-                    ->label('articles count')
+                    ->label(__('filament.service.fields.articles_count'))
                     ->counts('articles'),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('created at')
+                    ->label(__('filament.service.fields.created_at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('section')
-                    ->label('filter by name')
+                    ->label(__('filament.service.filters.section'))
                     ->relationship('section', 'name'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->label(__('filament.service.actions.edit')),
+                Tables\Actions\DeleteAction::make()
+                    ->label(__('filament.service.actions.delete')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->label(__('filament.service.bulk_actions.delete')),
                 ]),
             ]);
     }

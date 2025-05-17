@@ -12,10 +12,5 @@ class CreateCompliant extends CreateRecord
 
     protected static string $resource = CompliantResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\LocaleSwitcher::make(),
-        ];
-    }
+
 }

@@ -22,11 +22,12 @@ class ServicesRelationManager extends RelationManager
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label(__('filament.service.fields.name'))
                     ->required()
                     ->maxLength(255),
 
                 Forms\Components\RichEditor::make('description')
-                    ->label('الوصف')
+                    ->label(__('filament.service.fields.description'))
                     ->columnSpanFull(),
             ]);
     }
@@ -36,29 +37,34 @@ class ServicesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('name')
+                    ->label(__('filament.service.fields.name')),
 
                 Tables\Columns\TextColumn::make('articles_count')
-                    ->label('عدد المقالات')
+                    ->label(__('filament.service.fields.articles_count'))
                     ->counts('articles'),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('تاريخ الإنشاء')
+                    ->label(__('filament.service.fields.created_at'))
                     ->dateTime('d/m/Y H:i'),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label(__('filament.service.actions.create')),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->label(__('filament.service.actions.edit')),
+                Tables\Actions\DeleteAction::make()
+                    ->label(__('filament.service.actions.delete')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->label(__('filament.service.bulk_actions.delete')),
                 ]),
             ]);
     }

@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CompliantResource\Pages;
 use App\Models\Compliants;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
@@ -18,17 +17,32 @@ class CompliantResource extends Resource
 
     protected static ?string $model = Compliants::class;
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-ellipsis';
-    protected static ?string $modelLabel = 'شكوى/مقترح';
-    protected static ?string $pluralModelLabel = 'الشكاوى والمقترحات';
-    protected static ?string $navigationGroup = 'Public Setting';
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 9;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('filament.compliant.navigation_label');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('filament.compliant.model_label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('filament.compliant.plural_model_label');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('filament.compliant.navigation_group');
+    }
 
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-
-            ]);
+            ->schema([]);
     }
 
     public static function table(Table $table): Table
@@ -37,19 +51,19 @@ class CompliantResource extends Resource
             ->columns([
                 Tables\Columns\Layout\Panel::make([
 
-//                    Tables\Columns\TextColumn::make('customUser.name')
-//                        ->label('المستخدم')
-//                        ->description(fn ($record) => $record->email)
-//                        ->searchable()
-//                        ->sortable()
-//                        ->color('primary')
-//                        ->icon('heroicon-o-user-circle')
-//                        ->iconPosition('before')
-//                        ->weight('bold')
-//                        ->extraAttributes(['class' => 'px-4 pt-4']),
+                    Tables\Columns\TextColumn::make('customUser.name')
+                        ->label(__('filament.compliant.user.label'))
+                        ->description(fn ($record) => $record->email)
+                        ->searchable()
+                        ->sortable()
+                        ->color('primary')
+                        ->icon('heroicon-o-user-circle')
+                        ->iconPosition('before')
+                        ->weight('bold')
+                        ->extraAttributes(['class' => 'px-4 pt-4']),
 
                     Tables\Columns\TextColumn::make('content')
-                        ->label('محتوى الشكوى')
+                        ->label(__('filament.compliant.content.label'))
                         ->limit(200)
                         ->searchable()
                         ->wrap()
@@ -81,57 +95,57 @@ class CompliantResource extends Resource
                 'xl' => 3,
             ])
             ->filters([
-//                Tables\Filters\SelectFilter::make('custom_user_id')
-//                    ->label('تصفية بالمستخدم')
-//                    ->relationship('customUser', 'name')
-//                    ->searchable()
-//                    ->preload(),
-//
+                Tables\Filters\SelectFilter::make('custom_user_id')
+                    ->label(__('filament.compliant.filters.user'))
+                    ->relationship('customUser', 'name')
+                    ->searchable()
+                    ->preload(),
+
                 Tables\Filters\Filter::make('today')
-                    ->label('شكاوى اليوم')
+                    ->label(__('filament.compliant.filters.today'))
                     ->query(fn ($query) => $query->whereDate('date', today())),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()
                     ->icon('heroicon-o-eye')
                     ->color('gray')
-                    ->modalHeading('تفاصيل الشكوى')
-                    ->modalDescription(fn ($record) => Str::limit($record->content, 200))
-                    ->modalContent(fn ($record) => static::getCompliantDetails($record)),
+                    ->modalHeading(__('filament.compliant.actions.view.modal_heading'))
+                    ->modalDescription(fn ($record) => Str::limit($record->content, 200)),
+                    //->modalContent(fn ($record) => static::getCompliantDetails($record)),
 
                 Tables\Actions\DeleteAction::make()
                     ->icon('heroicon-o-trash')
                     ->color('danger')
-                    ->modalHeading('حذف الشكوى')
-                    ->modalDescription('سيتم حذف الشكوى بشكل دائم ولا يمكن استرجاعها لاحقاً.')
-                    ->modalSubmitActionLabel('تأكيد الحذف')
-                    ->modalCancelActionLabel('إلغاء'),
+                    ->modalHeading(__('filament.compliant.actions.delete.modal_heading'))
+                    ->modalDescription(__('filament.compliant.actions.delete.modal_description'))
+                    ->modalSubmitActionLabel(__('filament.compliant.actions.delete.modal_submit'))
+                    ->modalCancelActionLabel(__('filament.compliant.actions.delete.modal_cancel')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->label('حذف المحدد')
-                        ->modalHeading('حذف الشكاوى المحددة'),
+                        ->label(__('filament.compliant.bulk_actions.delete'))
+                        ->modalHeading(__('filament.compliant.bulk_actions.delete_modal')),
 
                     Tables\Actions\BulkAction::make('mark_as_important')
-                        ->label('وضع علامة مهم')
+                        ->label(__('filament.compliant.bulk_actions.mark_important'))
                         ->icon('heroicon-o-flag')
                         ->color('warning'),
                 ]),
             ])
             ->defaultSort('date', 'desc')
             ->groups([
-//                Tables\Grouping\Group::make('customUser.name')
-//                    ->label('حسب المستخدم')
-//                    ->collapsible(),
+                Tables\Grouping\Group::make('customUser.name')
+                    ->label(__('filament.compliant.groups.by_user'))
+                    ->collapsible(),
 
                 Tables\Grouping\Group::make('date')
-                    ->label('حسب التاريخ')
+                    ->label(__('filament.compliant.groups.by_date'))
                     ->date()
                     ->collapsible(),
             ])
-            ->emptyStateHeading('لا توجد شكاوى مسجلة')
-            ->emptyStateDescription('سيتم عرض الشكاوى هنا تلقائياً عند إرسالها من الموقع');
+            ->emptyStateHeading(__('filament.compliant.empty_state.heading'))
+            ->emptyStateDescription(__('filament.compliant.empty_state.description'));
     }
 
     public static function getPages(): array

@@ -18,9 +18,27 @@ class SectionResource extends Resource
 
     protected static ?string $model = Section::class;
     protected static ?string $navigationIcon = 'heroicon-o-folder';
-    protected static ?string $modelLabel = 'Section';
-    protected static ?string $pluralModelLabel = 'Sections';
-    protected static ?string $navigationGroup = 'Content Management';
+    protected static ?int $navigationSort = 1;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('filament.section.navigation_label');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('filament.section.model_label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('filament.section.plural_model_label');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('filament.section.navigation_group');
+    }
 
     public static function form(Form $form): Form
     {
@@ -29,24 +47,24 @@ class SectionResource extends Resource
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\TextInput::make('name')
-                            ->label('name')
+                            ->label(__('filament.section.fields.name'))
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
                             ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
 
                         Forms\Components\Textarea::make('description')
-                            ->label('description')
+                            ->label(__('filament.section.fields.description'))
                             ->required()
                             ->columnSpanFull(),
 
                         Forms\Components\FileUpload::make('image')
-                            ->label('image')
+                            ->label(__('filament.section.fields.image'))
                             ->image()
                             ->directory('sections')
                             ->required()
                             ->columnSpanFull(),
-                            ])
+                    ])
             ]);
     }
 
@@ -55,36 +73,40 @@ class SectionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
-                    ->label('image')
+                    ->label(__('filament.section.fields.image'))
                     ->disk('public')
                     ->circular(),
 
                 Tables\Columns\TextColumn::make('name')
-                    ->label('name')
+                    ->label(__('filament.section.fields.name'))
                     ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('services_count')
-                    ->label('services_count')
+                    ->label(__('filament.section.fields.services_count'))
                     ->counts('services'),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('created at')
+                    ->label(__('filament.section.fields.created_at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-
+                //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->label(__('filament.section.actions.edit')),
+                Tables\Actions\DeleteAction::make()
+                    ->label(__('filament.section.actions.delete')),
+                Tables\Actions\ViewAction::make()
+                    ->label(__('filament.section.actions.view')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->label(__('filament.section.bulk_actions.delete')),
                 ]),
             ]);
     }

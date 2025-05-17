@@ -17,19 +17,36 @@ class PartnerResource extends Resource
 
     protected static ?string $model = Partner::class;
     protected static ?string $navigationIcon = 'heroicon-o-hand-raised';
-    protected static ?string $modelLabel = 'Partner';
-    protected static ?string $pluralModelLabel = 'Partners';
-    protected static ?string $navigationGroup = 'member management';
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 7;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('filament.partner.navigation_label');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('filament.partner.model_label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('filament.partner.plural_model_label');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('filament.partner.navigation_group');
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('المعلومات الأساسية')
+                Forms\Components\Section::make(__('filament.partner.sections.basic_info'))
                     ->schema([
                         Forms\Components\FileUpload::make('image')
-                            ->label('شعار الشريك')
+                            ->label(__('filament.partner.fields.logo'))
                             ->directory('partners/logos')
                             ->image()
                             ->imageEditorViewportWidth('500')
@@ -39,17 +56,16 @@ class PartnerResource extends Resource
                             ->columnSpanFull(),
 
                         Forms\Components\TextInput::make('name')
-                            ->label('الاسم')
+                            ->label(__('filament.partner.fields.name'))
                             ->required(),
 
                         Forms\Components\RichEditor::make('description')
-                            ->label('الوصف')
+                            ->label(__('filament.partner.fields.description'))
                             ->toolbarButtons([
                                 'bold', 'italic', 'link',
                                 'bulletList', 'orderedList',
                             ]),
                     ]),
-
             ]);
     }
 
@@ -58,26 +74,24 @@ class PartnerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\Layout\Panel::make([
-                        Tables\Columns\ImageColumn::make('image')
-                            ->label('الشعار')
-                            ->size(100)
-                            ->grow(false)
-                            ->extraImgAttributes(['class' => 'rounded-lg']),
+                    Tables\Columns\ImageColumn::make('image')
+                        ->label(__('filament.partner.fields.logo'))
+                        ->size(100)
+                        ->grow(false)
+                        ->extraImgAttributes(['class' => 'rounded-lg']),
 
-                        Tables\Columns\TextColumn::make('name')
-                            ->label('الاسم')
-                            ->searchable()
-                            ->weight('bold')
-                            ->size('lg'),
+                    Tables\Columns\TextColumn::make('name')
+                        ->label(__('filament.partner.fields.name'))
+                        ->searchable()
+                        ->weight('bold')
+                        ->size('lg'),
 
-
-                        Tables\Columns\Layout\Split::make([
-                            Tables\Columns\TextColumn::make('description')
-                                ->label('الوصف')
-                                ->html()
-                                ->wrap(),
-                        ])->extraAttributes(['class' => 'px-4 pb-4 border-t border-gray-100']),
-
+                    Tables\Columns\Layout\Split::make([
+                        Tables\Columns\TextColumn::make('description')
+                            ->label(__('filament.partner.fields.description'))
+                            ->html()
+                            ->wrap(),
+                    ])->extraAttributes(['class' => 'px-4 pb-4 border-t border-gray-100']),
                 ])->extraAttributes(['class' => 'bg-white dark:bg-gray-800 p-4 rounded-xl shadow hover:shadow-md transition-shadow']),
             ])
             ->contentGrid([
@@ -89,14 +103,15 @@ class PartnerResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
-
                     Tables\Actions\EditAction::make()
-                        ->icon('heroicon-o-pencil'),
+                        ->icon('heroicon-o-pencil')
+                        ->label(__('filament.partner.actions.edit')),
 
                     Tables\Actions\DeleteAction::make()
-                        ->modalHeading('حذف الشريك')
-                        ->modalDescription('هل أنت متأكد من رغبتك في حذف هذا الشريك؟ سيتم حذف جميع البيانات المرتبطة به.')
-                        ->successNotificationTitle('تم حذف الشريك بنجاح'),
+                        ->modalHeading(__('filament.partner.actions.delete.modal_heading'))
+                        ->modalDescription(__('filament.partner.actions.delete.modal_description'))
+                        ->successNotificationTitle(__('filament.partner.actions.delete.success_message'))
+                        ->label(__('filament.partner.actions.delete.label')),
                 ])
                     ->dropdown(false)
                     ->icon('heroicon-s-cog-6-tooth')
@@ -106,19 +121,19 @@ class PartnerResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->label('حذف المحدد')
-                        ->modalHeading('حذف الشركاء المحددين'),
+                        ->label(__('filament.partner.bulk_actions.delete'))
+                        ->modalHeading(__('filament.partner.bulk_actions.delete_modal')),
                 ]),
             ])
             ->defaultSort('created_at', 'desc')
             ->groups([
                 Tables\Grouping\Group::make('created_at')
-                    ->label('حسب تاريخ الإضافة')
+                    ->label(__('filament.partner.groups.by_date'))
                     ->date()
                     ->collapsible(),
             ])
-            ->emptyStateHeading('لا يوجد شركاء مسجلين بعد')
-            ->emptyStateDescription('اضغط على زر "إضافة شريك" لبدء التسجيل');
+            ->emptyStateHeading(__('filament.partner.empty_state.heading'))
+            ->emptyStateDescription(__('filament.partner.empty_state.description'));
     }
 
     public static function getPages(): array
@@ -129,5 +144,4 @@ class PartnerResource extends Resource
             'edit' => Pages\EditPartner::route('/{record}/edit'),
         ];
     }
-
 }

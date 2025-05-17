@@ -21,67 +21,79 @@ class SettingResource extends Resource
     use Translatable;
 
     protected static ?string $model = Setting::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static ?int $navigationSort = 8;
 
-    protected static ?string $modelLabel = 'Setting';
+    public static function getNavigationLabel(): string
+    {
+        return __('filament.setting.navigation_label');
+    }
 
-    protected static ?string $navigationLabel = 'Setting';
+    public static function getModelLabel(): string
+    {
+        return __('filament.setting.model_label');
+    }
 
-    protected static ?string $navigationGroup = 'Public Setting';
+    public static function getPluralLabel(): string
+    {
+        return __('filament.setting.plural_label');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('filament.setting.navigation_group');
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-               Section::make()
-                ->schema([
-                    Select::make('section')
-                        ->label('key')
-                        ->required()
-                        ->options([
-                            SectionEnum::AboutUs->value =>  __('main.titles.about') ,
-                            SectionEnum::Vision->value => __('main.titles.vision'),
-                            SectionEnum::Mission->value => __('main.titles.mission'),
-                            SectionEnum::TargetGroup->value => __('main.titles.target'),
-                        ])
-                        ->live()
-                        ->afterStateUpdated(function ($state , Forms\Set $set){
-                            $set('title' , Str::headline($state));
-                        }),
+                Section::make()
+                    ->schema([
+                        Select::make('section')
+                            ->label(__('filament.setting.section.label'))
+                            ->required()
+                            ->options([
+                                SectionEnum::AboutUs->value => __('filament.setting.section.options.about_us'),
+                                SectionEnum::Vision->value => __('filament.setting.section.options.vision'),
+                                SectionEnum::Mission->value => __('filament.setting.section.options.mission'),
+                                SectionEnum::TargetGroup->value => __('filament.setting.section.options.target_group'),
+                            ])
+                            ->live()
+                            ->afterStateUpdated(function ($state, Forms\Set $set) {
+                                $set('title', Str::headline($state));
+                            }),
 
+                        TextInput::make('title')
+                            ->label(__('filament.setting.title.label'))
+                            ->required(),
 
-                    TextInput::make('title')
-                    ->label('title')
-                    ->required(),
+                        Forms\Components\FileUpload::make('image')
+                            ->label(__('filament.setting.image.label'))
+                            ->directory('Setting')
+                            ->image()
+                            ->imageEditor(),
 
-                    Forms\Components\FileUpload::make('image')
-                    ->label('image')
-                    ->directory('Setting')
-                    ->image()
-                    ->imageEditor(),
+                        Forms\Components\RichEditor::make('content')
+                            ->label(__('filament.setting.content.label'))
+                            ->toolbarButtons([
+                                'bold',
+                                'bulletList',
+                                'italic',
+                                'link',
+                                'orderedList',
+                                'redo',
+                                'undo',
+                            ])
+                            ->required()
+                            ->columnSpanFull(),
 
-                    Forms\Components\RichEditor::make('content')
-                        ->label('content')
-                        ->toolbarButtons([
-                            'bold',
-                            'bulletList',
-                            'italic',
-                            'link',
-                            'orderedList',
-                            'redo',
-                            'undo',
-                        ])
-                        ->required()
-                        ->columnSpanFull(),
-
-                    Forms\Components\KeyValue::make('extra')
-                        ->label('Additional setting')
-                        ->keyLabel('field name')
-                        ->valueLabel('value')
-                        ->columnSpanFull(),
-                ])
-
+                        Forms\Components\KeyValue::make('extra')
+                            ->label(__('filament.setting.extra.label'))
+                            ->keyLabel(__('filament.setting.extra.key_label'))
+                            ->valueLabel(__('filament.setting.extra.value_label'))
+                            ->columnSpanFull(),
+                    ])
             ]);
     }
 
@@ -95,16 +107,15 @@ class SettingResource extends Resource
                     ->size(50)
                     ->grow(false),
 
-
                 Tables\Columns\TextColumn::make('title')
-                    ->label('title')
+                    ->label(__('filament.setting.table.title'))
                     ->searchable()
                     ->sortable()
                     ->wrap()
                     ->tooltip(fn ($record) => $record->title),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label(' updated at')
+                    ->label(__('filament.setting.table.updated_at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->color('gray'),
@@ -113,10 +124,10 @@ class SettingResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->label(__('filament.setting.actions.edit')),
             ])
             ->bulkActions([]);
-
     }
 
     public static function getRelations(): array

@@ -23,6 +23,6 @@ class CustomUser extends Authenticatable
 
     public function compliants()
     {
-        $this->hasMany(Compliants::class );
+        return $this->hasMany(Compliants::class );
     }
 }

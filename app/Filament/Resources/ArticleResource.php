@@ -18,21 +18,39 @@ class ArticleResource extends Resource
 
     protected static ?string $model = Article::class;
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
-    protected static ?string $modelLabel = 'Article';
-    protected static ?string $pluralModelLabel = 'Articles';
-    protected static ?string $navigationGroup = 'Content Management';
+    protected static ?int $navigationSort = 3;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('filament.article.navigation_label');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('filament.article.model_label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('filament.article.plural_model_label');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('filament.article.navigation_group');
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('service_id')
-                    ->label('service')
+                    ->label(__('filament.article.service.label'))
                     ->relationship('service', 'name')
                     ->required(),
 
                 Forms\Components\TextInput::make('title')
-                    ->label('title')
+                    ->label(__('filament.article.title.label'))
                     ->required()
                     ->maxLength(255),
 
@@ -41,10 +59,9 @@ class ArticleResource extends Resource
                     ->fileAttachmentsDisk('public')
                     ->fileAttachmentsVisibility('public')
                     ->fileAttachmentsDirectory('articles')
-                    ->hint('Upload images and use them easily')
+                    ->hint(__('filament.article.content.hint'))
                     ->required()
                     ->columnSpanFull(),
-
             ]);
     }
 
@@ -53,48 +70,52 @@ class ArticleResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('service.name')
-                    ->label('service')
+                    ->label(__('filament.article.service.label'))
                     ->sortable()
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('service.section.name')
-                    ->label('service')
+                    ->label(__('filament.article.section.label'))
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('title')
-                    ->label('title')
+                    ->label(__('filament.article.title.label'))
                     ->searchable()
                     ->sortable()
                     ->limit(50),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('created_at')
+                    ->label(__('filament.article.created_at.label'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label('updated at')
+                    ->label(__('filament.article.updated_at.label'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('service')
-                    ->label('filter by service')
+                    ->label(__('filament.article.filters.service'))
                     ->relationship('service', 'name'),
 
                 Tables\Filters\SelectFilter::make('section')
-                    ->label('filter by section')
+                    ->label(__('filament.article.filters.section'))
                     ->relationship('service.section', 'name'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->label(__('filament.article.actions.edit')),
+                Tables\Actions\DeleteAction::make()
+                    ->label(__('filament.article.actions.delete')),
+                Tables\Actions\ViewAction::make()
+                    ->label(__('filament.article.actions.view')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->label(__('filament.article.bulk_actions.delete')),
                 ]),
             ]);
     }

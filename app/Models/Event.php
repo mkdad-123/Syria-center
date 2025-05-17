@@ -10,7 +10,7 @@ class Event extends Model
 {
     use HasTranslations;
 
-    public $translatable = ['description' , 'title' ,'type' , 'location' ,];
+    public $translatable = ['description' , 'title' , 'location' ,];
 
     protected $fillable = [
         'title',

@@ -10,7 +10,7 @@ class Compliants extends Model
 
     public function customUser()
     {
-        $this->belongsTo(CustomUser::class );
+        return $this->belongsTo(CustomUser::class ,'custom_user_id' );
     }
     protected $fillable = [
         'custom_user_id',

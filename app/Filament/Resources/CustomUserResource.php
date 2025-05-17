@@ -10,16 +10,31 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-
 class CustomUserResource extends Resource
 {
-
     protected static ?string $model = CustomUser::class;
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $modelLabel = 'User';
-    protected static ?string $pluralModelLabel = 'Users';
-    protected static ?string $navigationGroup = 'member management';
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 5;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('filament.user.navigation_label');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('filament.user.model_label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('filament.user.plural_model_label');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('filament.user.navigation_group');
+    }
 
     public static function form(Form $form): Form
     {
@@ -32,19 +47,19 @@ class CustomUserResource extends Resource
             ->columns([
                 Tables\Columns\Layout\Panel::make([
                     Tables\Columns\TextColumn::make('name')
-                        ->label('الاسم')
+                        ->label(__('filament.user.columns.name'))
                         ->searchable()
                         ->sortable()
                         ->weight('bold'),
 
                     Tables\Columns\TextColumn::make('email')
-                        ->label('البريد')
+                        ->label(__('filament.user.columns.email'))
                         ->searchable()
                         ->icon('heroicon-o-envelope')
                         ->iconPosition('after'),
 
                     Tables\Columns\TextColumn::make('created_at')
-                        ->label('تاريخ التسجيل')
+                        ->label(__('filament.user.columns.registration_date'))
                         ->date('d/m/Y')
                         ->sortable(),
                 ])
@@ -55,22 +70,19 @@ class CustomUserResource extends Resource
                 'xl' => 3,
             ])
             ->filters([
-
                 Tables\Filters\Filter::make('registered_this_month')
-                    ->label('مسجلون هذا الشهر')
+                    ->label(__('filament.user.filters.registered_this_month'))
                     ->query(fn ($query) => $query->where('created_at', '>=', now()->startOfMonth())),
-
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\DeleteAction::make()
                         ->icon('heroicon-o-trash')
                         ->requiresConfirmation()
-                        ->modalHeading('حذف المستخدم')
-                        ->modalDescription('هل أنت متأكد من رغبتك في حذف هذا المستخدم؟ سيتم إزالة جميع البيانات المرتبطة به بشكل دائم.')
-                        ->modalSubmitActionLabel('نعم، احذف')
-                        ->modalCancelActionLabel('إلغاء'),
-
+                        ->modalHeading(__('filament.user.actions.delete.modal_heading'))
+                        ->modalDescription(__('filament.user.actions.delete.modal_description'))
+                        ->modalSubmitActionLabel(__('filament.user.actions.delete.modal_submit'))
+                        ->modalCancelActionLabel(__('filament.user.actions.delete.modal_cancel')),
                 ])
                     ->dropdown(false)
                     ->icon('heroicon-s-cog-6-tooth')
@@ -79,26 +91,24 @@ class CustomUserResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->label(__('filament.user.bulk_actions.delete')),
+                    Tables\Actions\RestoreBulkAction::make()
+                        ->label(__('filament.user.bulk_actions.restore')),
                 ]),
             ])
             ->defaultSort('created_at', 'desc')
             ->groups([
                 Tables\Grouping\Group::make('created_at')
-                    ->label('حسب تاريخ التسجيل')
+                    ->label(__('filament.user.groups.by_registration_date'))
                     ->date()
                     ->collapsible(),
-
             ]);
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

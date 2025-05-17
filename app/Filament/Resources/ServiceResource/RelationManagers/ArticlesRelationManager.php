@@ -20,14 +20,14 @@ class ArticlesRelationManager extends RelationManager
         return $form
             ->schema([
                 Forms\Components\TextInput::make('title')
+                    ->label(__('filament.article.fields.title'))
                     ->required()
                     ->maxLength(255),
 
                 Forms\Components\RichEditor::make('content')
-                    ->label('المحتوى')
+                    ->label(__('filament.article.fields.content'))
                     ->required()
                     ->columnSpanFull(),
-
             ]);
     }
 
@@ -37,30 +37,35 @@ class ArticlesRelationManager extends RelationManager
             ->recordTitleAttribute('title')
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->label('العنوان')
+                    ->label(__('filament.article.fields.title'))
                     ->searchable()
                     ->limit(50),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('تاريخ النشر')
+                    ->label(__('filament.article.fields.publish_date'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
-                ])
+            ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label(__('filament.article.actions.create')),
                 Tables\Actions\LocaleSwitcher::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->label(__('filament.article.actions.edit')),
+                Tables\Actions\DeleteAction::make()
+                    ->label(__('filament.article.actions.delete')),
+                Tables\Actions\ViewAction::make()
+                    ->label(__('filament.article.actions.view')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->label(__('filament.article.bulk_actions.delete')),
                 ]),
             ]);
     }
