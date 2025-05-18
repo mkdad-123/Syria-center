@@ -5,7 +5,7 @@ return [
     'menu' => [
         'services' => 'Services',
         'news' => 'News & Events',
-        'contact' => 'Contact Us',
+        'contact' => 'Get involved ',
         'sections' => 'Page Sections',
         'about' => 'About Us',
         'target' => 'Target Group',
@@ -35,7 +35,7 @@ return [
         'services' => 'Our Services',
         'team' => 'Our Team',
         'partners' => 'Our Partners',
-        'sections'=> 'sections',
+        'sections'=> 'Programs & Projects',
         'services_count' => 'services count' ,
         'services' => 'services',
         'related_articles' => 'related articles',
