@@ -1,0 +1,583 @@
+  /* أنماط عامة */
+        :root {
+            --primary-color: #2E86AB;
+            --secondary-color: #F18F01;
+            --accent-color: #5BBA6F;
+            --dark-color: #000000;
+            --dark-color_1: #424040;
+            --light-color: #5ad27e;
+            --white: #fff;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        /* أنماط الخلفية المتغيرة */
+        .background-slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.7;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .background-slideshow img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .background-slideshow img.active {
+            opacity: 1;
+        }
+
+        /* تأكد من أن المحتوى يظهر فوق الخلفية */
+        main,
+        .header,
+        .footer {
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: calc(100% - 60px);
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        /* شريط التنقل */
+        .header {
+            height: 100px;
+            background-color: var(--white);
+            box-shadow: var(--box-shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 10px 0;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            padding: 0 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo img {
+            height: 70px;
+            width: auto;
+        }
+
+        .org-name {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .org-name-line1 {
+            font-size: 1.5rem;
+            white-space: nowrap;
+        }
+
+        .org-name-line2 {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            white-space: nowrap;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 20px;
+        }
+
+        .nav-list li {
+            margin: 0;
+        }
+
+        .nav-list a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            padding: 8px 15px;
+            transition: var(--transition);
+            border-radius: 4px;
+            display: block;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .nav-list a:hover {
+            color: var(--primary-color);
+            background-color: rgba(46, 134, 171, 0.1);
+        }
+
+        .login-btn a {
+            background-color: var(--secondary-color);
+            color: var(--white) !important;
+            padding: 8px 15px;
+            border-radius: 4px;
+            margin-right: 60px;
+            text-decoration: none !important;
+        }
+
+        .login-btn a:hover {
+            background-color: #e07f00;
+        }
+
+        .language-switcher {
+            position: relative;
+            margin-right: 0;
+            display: inline-flex;
+            align-items: center;
+            list-style: none !important;
+        }
+
+        .language-btn {
+            background: none;
+            border: none;
+            color: var(--dark-color);
+            cursor: pointer;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            border-radius: 4px;
+            transition: var(--transition);
+            text-decoration: none;
+            font-size: inherit;
+        }
+
+        .language-btn:hover {
+            color: var(--primary-color);
+            background-color: rgba(46, 134, 171, 0.1);
+        }
+
+        .language-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--white);
+            min-width: 150px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            z-index: 100;
+            list-style: none;
+            padding: 10px 0;
+            margin-top: 5px;
+        }
+
+        .language-switcher:hover .language-menu {
+            display: block;
+        }
+
+        /* حاوية المحتوى الرئيسي */
+        .article-content-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .article-content-container.translucent {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .article-content-container:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* تنسيقات للعناوين داخل الحاوية */
+        .article-content-container .article-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .article-content-container.bordered {
+            border: 1px solid #e0e0e0;
+        }
+
+        .article-body {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--dark-color);
+            text-align: justify;
+            padding: 0 20px;
+        }
+
+        .article-image-main {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            color: var(--dark-color_1);
+            font-size: 0.9rem;
+        }
+
+        .language-menu li a {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .language-menu li a:hover {
+            background-color: rgba(46, 134, 171, 0.1);
+            color: var(--primary-color);
+        }
+
+        /* المحتوى الرئيسي */
+        main {
+            margin-top: 100px;
+            padding: 40px 0;
+        }
+
+        .section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--dark-color);
+            font-size: 2rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--secondary-color);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+
+  /* أنماط الفوتر المعدلة */
+.footer {
+    background-color: var(--dark-color_1);
+    color: var(--white);
+    padding: 50px 0 0;
+    font-size: 1.05rem;
+    margin-top: 0;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+    padding: 0 20px;
+}
+
+.footer-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-logo img {
+    height: 80px;
+    width: auto;
+    margin-bottom: 20px;
+}
+
+.footer-logo p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.footer-links h4,
+.footer-contact h4 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+    padding-bottom: 0; /* إزالة الحشو السفلي */
+    position: relative;
+}
+
+/* إزالة الخط البرتقالي تحت العناوين */
+.footer-links h4::after,
+.footer-contact h4::after {
+    content: none; /* إزالة الخط البرتقالي */
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 15px;
+}
+
+.footer-links a {
+    color: var(--white);
+    text-decoration: none;
+    transition: var(--transition);
+    font-size: 1.05rem;
+    display: inline-block;
+    padding: 5px 0;
+}
+
+.footer-links a:hover {
+    color: var(--secondary-color);
+    padding-right: 8px;
+}
+
+.footer-contact p {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.05rem;
+}
+
+.footer-contact i {
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    min-width: 25px;
+    text-align: center;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 25px 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-bottom p {
+    margin: 0;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-icons a {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 1.1rem;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    color: var(--white);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-icons a:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-3px);
+}
+
+/* تحسينات للشاشات الصغيرة */
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .footer-logo {
+        align-items: center;
+    }
+
+    .footer-links,
+    .footer-contact {
+        text-align: center;
+    }
+
+    .footer-contact p {
+        justify-content: center;
+    }
+
+    .footer-links a:hover {
+        padding-right: 0;
+        padding-left: 8px;
+    }
+}
+/* تحسينات للشاشات الصغيرة */
+@media (max-width: 1200px) {
+    .sections-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .sections-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 768px) {
+    .header {
+        height: auto;
+        padding: 10px 0;
+    }
+
+    .header .container {
+        flex-direction: column;
+        gap: 10px;
+        padding: 0 15px;
+    }
+
+    .buttons-container {
+        order: 1;
+        width: 100%;
+    }
+
+    .nav-list {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+        width: 100%;
+        margin-top: 0;
+    }
+
+    .nav-list li {
+        margin: 0;
+    }
+
+    .nav-list a {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+    }
+
+    .login-btn {
+        margin-right: 0;
+    }
+
+    .logo-container {
+        order: 2;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(0,0,0,0.1);
+        width: 100%;
+    }
+
+    .logo img {
+        height: 50px;
+    }
+
+    .org-name {
+        text-align: center;
+    }
+
+    .org-name-line1 {
+        font-size: 1.2rem;
+    }
+
+    .org-name-line2 {
+        font-size: 0.9rem;
+    }
+
+    main {
+        margin-top: 180px; /* زيادة الهوامش العلوية لاستيعاب الهيدر الأطول */
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        padding: 8px 0;
+    }
+
+    .nav-list {
+        gap: 3px;
+    }
+
+    .nav-list a {
+        padding: 5px 8px;
+        font-size: 0.8rem;
+    }
+
+    .login-btn a,
+    .language-btn {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+    }
+
+    .logo img {
+        height: 40px;
+    }
+
+    .org-name-line1 {
+        font-size: 1.1rem;
+    }
+
+    .org-name-line2 {
+        font-size: 0.8rem;
+    }
+
+    main {
+        margin-top: 160px;
+    }
+        }

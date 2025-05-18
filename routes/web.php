@@ -10,6 +10,7 @@ use App\Http\Middleware\CustomAuthenticate;
 
 // الصفحة الرئيسية متاحة للجميع
 Route::get('/', [ShowController::class, 'showHomePage'])->name('home');
+Route::get('/home/about-us', [ShowController::class, 'showAbout_usPage'])->name('about-us');
 
 // مسارات المصادقة (لا تتطلب تسجيل دخول)
 Route::middleware('guest:custom')->group(function () {
@@ -48,7 +49,7 @@ Route::middleware(CustomAuthenticate::class)->group(function () {
     Route::post('/logout', [AuhtController::class, 'logout'])->name('logout');
 
     // المسارات المحمية
-    Route::get('/home/about-us', [ShowController::class, 'showAbout_usPage'])->name('about-us');
+    // Route::get('/home/about-us', [ShowController::class, 'showAbout_usPage'])->name('about-us');
     Route::get('/home/events', [ShowController::class, 'showEventsPage'])->name('events');
     Route::get('/home/sections', [ShowController::class, 'showSectionsPage'])->name('sections');
     Route::get('/home/sections/{section?}/services', [ShowController::class, 'showServicesPage'])->name('services');
