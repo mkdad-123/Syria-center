@@ -25,6 +25,9 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\SetLanguage::class,
+            \Illuminate\Routing\Middleware\ThrottleRequests::class,
+
+
 
 
         ],
@@ -43,5 +46,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'cacheResponse' => \Spatie\ResponseCache\Middlewares\CacheResponse::class,
+
     ];
 }

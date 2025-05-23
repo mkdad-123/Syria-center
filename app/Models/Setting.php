@@ -2,6 +2,7 @@
 
 namespace App\Models;
 use App\Enums\SectionEnum;
+use App\Http\Controllers\ShowController;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Translatable\HasTranslations;

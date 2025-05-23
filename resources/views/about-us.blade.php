@@ -52,7 +52,7 @@
              <div class="buttons-container">
                 <nav class="nav">
                     <ul class="nav-list">
-                        <li><a href="{{ route('about-us') }}">{{ __('main.menu.home') }}</a></li>
+                        <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
                         <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
                         <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
                         <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
@@ -145,7 +145,7 @@
 
             </div>
             <div class="footer-bottom">
-                <p>&copy; {{ date('Y') }} {{ __('main.site_name') }}. {{ __('main.footer.all_rights') }}</p>
+                <p>&copy; {{ date('Y') }} {{ __('main.site_name') }}. {{ __('main.footer.copyright') }}</p>
                 <div class="social-icons">
                     @if (isset($socialMedia['facebook']))
                         <a href="{{ $socialMedia['facebook'] }}"><i class="fab fa-facebook-f"></i></a>

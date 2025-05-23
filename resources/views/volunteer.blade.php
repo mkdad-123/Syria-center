@@ -623,12 +623,27 @@
                             </div>
                             @endif
                         </div>
-
-                        @if($volunteer['CV'])
-                        <a href="{{ asset('storage/' . $volunteer['CV']) }}" class="btn" download>
-                            <i class="fas fa-download"></i> {{ __('volunteer.download_cv') }}
-                        </a>
+                            @if($volunteer['skills'])
+                <h2 class="section-title">{{ __('main.volunteer.skills') }}</h2>
+                <div class="meta-item">
+                    <div class="skills-list">
+                        @if(is_array($volunteer['skills']))
+                            @foreach($volunteer['skills'] as $skill)
+                                @if(trim($skill))
+                                    <span class="skill-tag">{{ trim($skill) }}</span>
+                                @endif
+                            @endforeach
+                        @else
+                            @foreach(explode(',', $volunteer['skills']) as $skill)
+                                @if(trim($skill))
+                                    <span class="skill-tag">{{ trim($skill) }}</span>
+                                @endif
+                            @endforeach
                         @endif
+                    </div>
+                </div>
+
+                            @endif
                     </div>
                 </div>
 
@@ -652,23 +667,10 @@
                 </div>
 
                 <!-- المهارات -->
-                @if($volunteer['skills'])
-                <h2 class="section-title">{{ __('main.volunteer.skills') }}</h2>
+                @if($volunteer['CV'])
                 <div class="skills-container">
-                    <div class="skills-list">
-                        @if(is_array($volunteer['skills']))
-                            @foreach($volunteer['skills'] as $skill)
-                                @if(trim($skill))
-                                    <span class="skill-tag">{{ trim($skill) }}</span>
-                                @endif
-                            @endforeach
-                        @else
-                            @foreach(explode(',', $volunteer['skills']) as $skill)
-                                @if(trim($skill))
-                                    <span class="skill-tag">{{ trim($skill) }}</span>
-                                @endif
-                            @endforeach
-                        @endif
+                    <h2 class="section-title">CV</h2>
+                    <h3>{!!$volunteer['CV']!!}</h3>
                     </div>
                 </div>
                 @endif

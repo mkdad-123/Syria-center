@@ -7,16 +7,22 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ShowController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CustomAuthenticate;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\Request;
 
 // الصفحة الرئيسية متاحة للجميع
-Route::get('/', [ShowController::class, 'showHomePage'])->name('home');
+// routes/web.php
+Route::get('/', [App\Http\Controllers\ShowController::class, 'showHomePage'])->name('home');
+
+
 Route::get('/home/about-us', [ShowController::class, 'showAbout_usPage'])->name('about-us');
 
 // مسارات المصادقة (لا تتطلب تسجيل دخول)
 Route::middleware('guest:custom')->group(function () {
     Route::post('/change-language', [LanguageController::class, 'change'])->name('change-language');
     Route::get('/login', [AuhtController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuhtController::class, 'login'])->name('login.submit');
+    Route::post('/login', [AuhtController::class, 'login'])->name('login.submit')->middleware('throttle:login');
+
     Route::get('/register', [AuhtController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [AuhtController::class, 'register'])->name('register.submit');
 

@@ -8,6 +8,7 @@ use App\Models\CustomUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Redirect;
@@ -50,7 +51,7 @@ class AuhtController extends Controller
         return view('customauth.login');
     }
 
-    public function login(Request $request)
+ public function login(Request $request)
 {
     // التحقق من صحة البيانات
     $request->validate([
@@ -62,9 +63,15 @@ class AuhtController extends Controller
     $credentials = $request->only('name', 'password');
     $remember = $request->filled('remember');
 
+    // تسجيل محاولة الدخول في السجل
+    RateLimiter::hit('login:'.$request->ip());
+
     // استخدام Guard المخصص للـ customusers
     if (Auth::guard($this->guard)->attempt($credentials, $remember)) {
         $request->session()->regenerate();
+
+        // مسح عداد المحاولات الفاشلة عند النجاح
+        RateLimiter::clear('login:'.$request->ip());
 
         return redirect()->intended('/');
     }

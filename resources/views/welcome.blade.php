@@ -85,56 +85,64 @@
     <!-- القسم الرئيسي -->
     <main>
         <!-- About Us Section - Fixed -->
-        <section id="about" class="section about-section">
-            <div class="container">
-                <h2 class="section-title">{{ __('main.titles.about') }}</h2>
-                <div class="about-container">
-                    <!-- الصورة الجديدة -->
-                    <div class="about-image">
-                        <div class="about-image-card">
-                            <img src="\image1.jpg" alt="{{ __('main.titles.about') }}">
-                        </div>
-                    </div>
-                    <div class="about-content">
-                        @php
-                        $aboutContent = '';
-                        if (is_string($aboutUs)) {
-                            $aboutContent = $aboutUs;
-                        } elseif ($aboutUs instanceof \App\Models\Setting) {
-                            $aboutContent = $aboutUs->getTranslation('content', $locale, false) ?? __('No content available');
-                        } else {
-                            $aboutContent = __('No content available');
-                        }
-
-                        // عرض المحتوى الكامل كـ HTML
-                        $fullContent = $aboutContent;
-
-                        // إنشاء نسخة مختصرة للنص (بدون علامات HTML)
-                        $textOnly = strip_tags($aboutContent);
-                        $words = preg_split('/\s+/', $textOnly);
-                        $shortContent = implode(' ', array_slice($words, 0, 40));
-                        if (count($words) > 40) {
-                            $shortContent .= '...';
-                        }
-                    @endphp
-
-                    <div class="about-content">
-                        <div class="short-content">
-                            <p>{!! nl2br(e($shortContent)) !!}</p>
-                                <div class="read-more-btn-container">
-                                    <a href="{{ route('about-us') }}" class="read-more-btn">{{ __('main.buttons.read_more') }}</a>
-                                </div>
-                        </div>
-
-                        <!-- في صفحة about-us يمكنك استخدام: -->
-                        @if(request()->routeIs('about-us'))
-                            <div class="full-content">
-                                {!! $fullContent !!}
-                            </div>
-                        @endif
-                    </div>
+      <!-- About Us Section - Fixed -->
+<section id="about" class="section about-section">
+    <div class="container">
+        <h2 class="section-title">{{ __('main.titles.about') }}</h2>
+        <div class="about-container">
+            <!-- الصورة الجديدة -->
+            <div class="about-image">
+                <div class="about-image-card">
+                    <img src="\image1.jpg" alt="{{ __('main.titles.about') }}">
                 </div>
-        </section>
+            </div>
+            
+            @php
+                // استرجاع المحتوى مع التعامل مع جميع الحالات
+                $aboutContent = '';
+                if (is_string($aboutUs)) {
+                    $aboutContent = $aboutUs;
+                } elseif ($aboutUs instanceof \App\Models\Setting) {
+                    $aboutContent = $aboutUs->getTranslation('content', $locale, false) ?? __('No content available');
+                } else {
+                    $aboutContent = __('No content available');
+                }
+
+                // إنشاء نسخة نصية فقط لعد الكلمات
+                $textOnly = strip_tags($aboutContent);
+                $words = preg_split('/\s+/', $textOnly);
+                $wordCount = count($words);
+                
+                // تحديد ما إذا كان المحتوى قصيرًا
+                $isShortContent = $wordCount <= 40;
+            @endphp
+
+            <div class="about-content">
+                @if(request()->routeIs('about-us'))
+                    <!-- عرض المحتوى كاملاً في صفحة about-us -->
+                    <div class="full-content">
+                        {!! $aboutContent !!}
+                    </div>
+                @else
+                    <!-- عرض المحتوى مع زر اقرأ المزيد دائمًا -->
+                    <div class="{{ $isShortContent ? 'full-content' : 'short-content' }}">
+                        @if($isShortContent)
+                            {!! $aboutContent !!}
+                        @else
+                            {!! Str::words($aboutContent, 40, '...') !!}
+                        @endif
+                        
+                        <div class="read-more-btn-container">
+                            <a href="{{ route('about-us') }}" class="read-more-btn">
+                                {{ __('main.buttons.read_more') }}
+                            </a>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</section>
 
         <!-- Mission & Vision Section - Fixed -->
         <section id="mission" class="section mission-section">
@@ -233,28 +241,41 @@
             </div>
         </section>
 
-        <!-- Team Section - Improved -->
-        <section id="team" class="section team-section">
-            <div class="container">
-                <h2 class="section-title">{{ __('main.titles.team') }}</h2>
-                <div class="team-carousel {{ count($team) <= 1 ? 'single-member' : '' }}" id="teamCarousel">
-                    <div class="team-slide">
-                        @foreach ($team as $member)
-                            <div class="team-member {{ $loop->first ? 'active' : '' }}">
-                                <a href="{{ route('volunteers', ['vol' => $member['id'] ?? null]) }}">
-                                    <img src="{{ asset('storage/' . $member['image']) }}" alt="{{ $member['name'] }}" style="cursor: pointer;">
-                                </a>                                <h3>{{ $member['name'] }}</h3>
-                                <p>{{ $member['profession'] }}</p>
-                                <p>{{ $member['bio'] }}</p>
+    <section id="team" class="section team-section">
+    <div class="container">
+        <h2 class="section-title">{{ __('main.titles.team') }}</h2>
+        <div class="team-carousel {{ count($team) <= 1 ? 'single-member' : '' }}" id="teamCarousel">
+            <div class="team-slide">
+                @foreach ($team as $member)
+                    <div class="team-member {{ $loop->first ? 'active' : '' }}">
+                        <a href="{{ route('volunteers', ['vol' => $member['id'] ?? null]) }}">
+                            <img src="{{ asset('storage/' . $member['image']) }}" alt="{{ $member['name'] }}" style="cursor: pointer;">
+                        </a>
+                        <h3>{{ $member['name'] }}</h3>
+                        @if(!empty($member['skills']))
+                            <div class="member-skills">
+                                @if(is_array($member['skills']))
+                                    @foreach($member['skills'] as $skill)
+                                        <span class="skill-tag">{{ $skill }}</span>
+                                    @endforeach
+                                @else
+                                    <span class="skill-tag">{{ $member['skills'] }}</span>
+                                @endif
                             </div>
-                        @endforeach
+                        @endif
+
+                        <p>{{ $member['bio'] }}</p>
                     </div>
-                    <button class="carousel-btn" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
-                    <button class="carousel-btn" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
-                    <div class="carousel-indicators"></div>
-                </div>
+                @endforeach
             </div>
-        </section>
+            @if(count($team) > 1)
+                <button class="carousel-btn" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-btn" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+                <div class="carousel-indicators"></div>
+            @endif
+        </div>
+    </div>
+</section>
 
         <!-- Partners Section - Improved -->
         <section id="partners" class="section partners-section">
@@ -269,6 +290,7 @@
                             <p>
                             {!! $partner['name'] !!}
                             </p>
+
                             <p>
                                 @if(is_array($partner['description']))
                                     {!! $partner['description'][$locale] ?? $partner['description']['en'] ?? '' !!}

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\GenderEnum;
 use App\Enums\VolunteerAvailabilityEnum;
+use App\Http\Controllers\ShowController;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
@@ -18,6 +19,7 @@ class Volunteer extends Model
         'skills',
         'availability',
         'notes',
+
     ];
 
     protected $fillable = [
@@ -57,4 +59,19 @@ class Volunteer extends Model
         'gender' => 'json',
 
     ];
+
+    protected static function booted()
+{
+    static::updated(function ($volunteer) {
+        app()->make(ShowController::class)->clearHomePageCache();
+    });
+    
+    static::created(function ($volunteer) {
+        app()->make(ShowController::class)->clearHomePageCache();
+    });
+    
+    static::deleted(function ($volunteer) {
+        app()->make(ShowController::class)->clearHomePageCache();
+    });
+}
 }
