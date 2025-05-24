@@ -3,6 +3,9 @@
 namespace App\Models;
 use App\Enums\SectionEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+use App\Http\Controllers\ShowController;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Translatable\HasTranslations;

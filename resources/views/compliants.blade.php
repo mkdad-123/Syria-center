@@ -569,86 +569,174 @@
         background-color: var(--secondary-color);
         transform: translateY(-3px);
     }
-
+  /* أنماط معدلة للجوال */
     @media (max-width: 992px) {
-        .footer-content {
-            grid-template-columns: 1fr;
+        .header {
+            height: auto;
+            padding: 10px 0;
         }
 
-        .footer-section {
-            grid-column: auto !important;
+        .header .container {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 10px;
         }
 
-        .footer-bottom {
+        .logo-container {
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 5px;
+            order: 1;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .org-name-line1 {
+            font-size: 1.2rem !important;
+        }
+
+        .org-name-line2 {
+            font-size: 0.9rem !important;
+        }
+
+        .buttons-container {
+            width: 100%;
+            order: 3;
+        }
+
+        .nav {
+            width: 100%;
+        }
+
+        .nav-list {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .nav-list li {
+            margin: 0;
+        }
+
+        .nav-list a {
+            padding: 5px 8px;
+            font-size: 0.9rem;
+        }
+
+        .language-switcher {
+            margin-right: 0;
+        }
+
+        .login-btn a {
+            margin-right: 0;
+            padding: 5px 10px;
+        }
+
+        main {
+            margin-top: 150px;
+            padding: 10px 0;
+        }
+
+        .form-container, 
+        .contact-info-container {
+            padding: 20px !important;
+            margin: 10px !important;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+        }
+
+        .contact-items {
             flex-direction: column;
-            gap: 20px;
-            text-align: center;
+            gap: 15px;
+        }
+
+        .contact-item {
+            font-size: 1rem;
+        }
+
+        .form-control {
+            padding: 10px;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
         }
     }
 
-        .social-icons a {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
+    @media (max-width: 576px) {
+        .header .container {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-container {
+            flex-direction: column;
             text-align: center;
-            line-height: 40px;
-            color: var(--white);
-            margin-right: 10px;
-            transition: var(--transition);
+            margin-bottom: 10px;
         }
 
-        .social-icons a:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-3px);
+        .org-name {
+            margin-top: 5px;
         }
 
-        /* التجاوب مع الشاشات الصغيرة */
-        @media (max-width: 992px) {
-            .header .container {
-                flex-direction: column;
-                padding: 10px 0;
-            }
-
-            .logo-container {
-                margin-bottom: 15px;
-            }
-
-            .nav-list {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .nav-list li {
-                margin: 5px;
-            }
-
-            .form-container {
-                padding: 25px;
-                margin: 20px;
-            }
-
-            main {
-                margin-top: 120px;
-                /* زيادة الهامش للأجهزة الصغيرة */
-                padding: 20px 0;
-            }
-
-            .footer {
-                height: auto;
-                padding: 20px 0;
-            }
+        .nav-list {
+            flex-direction: column;
+            align-items: center;
         }
+
+        .nav-list li {
+            width: 100%;
+            text-align: center;
+        }
+
+        .nav-list a {
+            display: block;
+            width: 100%;
+            padding: 8px 0;
+        }
+
+        .language-switcher {
+            width: 100%;
+        }
+
+        .language-menu {
+            right: auto;
+            left: 0;
+            width: 100%;
+        }
+
+        main {
+            margin-top: 180px;
+        }
+
+        .form-title {
+            font-size: 1.3rem;
+        }
+
+        .form-header-icon {
+            font-size: 2rem;
+        }
+
+        .submit-btn {
+            padding: 10px;
+            font-size: 1rem;
+        }
+    }
     </style>
 </head>
 
 <body>
     <!-- خلفية متغيرة للصفحة -->
     <div class="background-slideshow">
-        <img src="/ima1.jpg" class="active" alt="خلفية 1">
-        <img src="/ima2.jpg" alt="خلفية 2">
-        <img src="/ima3.jpg" alt="خلفية 3">
+        <img src="{{ asset('/ima1.webp') }}" class="active" alt="خلفية 1">
+        <img src="{{ asset('/ima2.webp') }}" alt="خلفية 2">
+        <img src="{{ asset('/ima3.webp') }}" alt="خلفية 3">
     </div>
 
     <header class="header">
@@ -682,8 +770,8 @@
         </li>
         <li class="login-btn">
             <a href="{{ route('logout') }}"
-                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                {{ __('main.buttons.logout') }}
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"data-translate="nav.logout">
+                تسجيل خروج 
             </a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST"
                 style="display: none;">
@@ -793,54 +881,7 @@
 
 
     <!-- تذييل الصفحة مع روابط التواصل الاجتماعي الفعلية -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <!-- معلومات المؤسسة -->
-                <div class="footer-section about">
-                    <div class="footer-logo">
-                        <img src="/logo.png" alt="شعار المركز" style="height: 80px;">
-                    </div>
-                    <div class="footer-contact">
-                        <div class="contact-item">
-                            <i class="fas fa-phone"></i>
-                            <span>+963 11 123 4567</span>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <span>info@scsde.org</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- روابط سريعة -->
-                <div class="footer-section links">
-                    <h4 data-translate="footer.quick_links">روابط سريعة</h4>
-                    <ul>
-                        <li><a href="{{ route('home') }}" data-translate="nav.home">الرئيسية</a></li>
-                        <li><a href="{{ route('sections') }}" data-translate="nav.services">الخدمات</a></li>
-                        <li><a href="{{ route('events') }}" data-translate="nav.events">الفعاليات</a></li>
-                        <li><a href="{{ route('compliants') }}" data-translate="nav.complaints">اتصل بنا</a></li>
-                    </ul>
-                </div>
-
-            </div>
-
-            <!-- حقوق النشر ووسائل التواصل -->
-            <div class="footer-bottom">
-                <div class="copyright" data-translate="footer.copyright">
-                    &copy; 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.
-                </div>
-                <div class="social-icons">
-                    <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
-                    <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
+  
 
     <script>
      document.addEventListener('DOMContentLoaded', function() {
@@ -980,7 +1021,7 @@
                 services: "Services",
                 events: "Events",
                 complaints: "Contact Us",
-                login: "Logout"
+                logout: "Logout"
             },
             form: {
                 email: "Email",
@@ -1010,7 +1051,7 @@
                 services: "الخدمات",
                 events: "النشاطات والفعاليات",
                 complaints: "اتصل بنا",
-                login: "تسجيل الخروج"
+                logout: "تسجيل خروج"
             },
             form: {
                 email: "البريد الإلكتروني",

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\GenderEnum;
 use App\Enums\VolunteerAvailabilityEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Http\Controllers\ShowController;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
@@ -56,4 +57,19 @@ class Volunteer extends Model
         'gender' =>  GenderEnum::class,
         'availability' => VolunteerAvailabilityEnum::class,
     ];
+
+    protected static function booted()
+{
+    static::updated(function ($volunteer) {
+        app()->make(ShowController::class)->clearHomePageCache();
+    });
+
+    static::created(function ($volunteer) {
+        app()->make(ShowController::class)->clearHomePageCache();
+    });
+
+    static::deleted(function ($volunteer) {
+        app()->make(ShowController::class)->clearHomePageCache();
+    });
+}
 }

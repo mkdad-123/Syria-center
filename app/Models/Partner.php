@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Http\Controllers\ShowController;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -29,4 +30,18 @@ class Partner extends Model
             return $this->content ?? $default ?? __('No content available');
         }
     }
+    protected static function booted()
+{
+    static::updated(function ($partner) {
+        app()->make(ShowController::class)->clearHomePageCache();
+    });
+
+    static::created(function ($partner) {
+        app()->make(ShowController::class)->clearHomePageCache();
+    });
+
+    static::deleted(function ($partner) {
+        app()->make(ShowController::class)->clearHomePageCache();
+    });
+}
 }

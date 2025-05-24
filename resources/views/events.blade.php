@@ -5,682 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('main.site_name') }} - {{ __('titles.events') }}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        /* أنماط عامة */
-        :root {
-            --primary-color: #2E86AB;
-            --secondary-color: #F18F01;
-            --accent-color: #5BBA6F;
-            --dark-color: #000000;
-            --dark-color_1: #424040;
-            --light-color: #5ad27e;
-            --white: #fff;
-            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
 
-        /* أنماط الخلفية المتغيرة */
-        .background-slideshow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.7;
-            transition: opacity 1s ease-in-out;
-        }
-
-        .background-slideshow img {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-
-        .background-slideshow img.active {
-            opacity: 1;
-        }
-
-        /* تأكد من أن المحتوى يظهر فوق الخلفية */
-        main,
-        .header,
-        .footer {
-            position: relative;
-            background-color: rgba(255, 255, 255, 0.85);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--light-color);
-            color: var(--dark-color);
-            line-height: 1.6;
-        }
-
-        .container {
-            width: calc(100% - 60px);
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0;
-        }
-
-        /* شريط التنقل */
-        .header {
-            height: 100px;
-            background-color: var(--white);
-            box-shadow: var(--box-shadow);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            padding: 10px 0;
-        }
-
-        .header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 40px;
-            padding: 0 20px;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo img {
-            height: 70px;
-            width: auto;
-        }
-
-        .org-name {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-
-        .org-name-line1 {
-            font-size: 1.5rem;
-            white-space: nowrap;
-        }
-
-        .org-name-line2 {
-            font-size: 1.1rem;
-            color: var(--secondary-color);
-            white-space: nowrap;
-        }
-
-        .nav-list {
-            display: flex;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            gap: 20px;
-        }
-
-        .nav-list li {
-            margin: 0;
-        }
-
-        .nav-list a {
-            text-decoration: none;
-            color: var(--dark-color);
-            font-weight: 500;
-            padding: 8px 15px;
-            transition: var(--transition);
-            border-radius: 4px;
-            display: block;
-            white-space: nowrap;
-            text-align: center;
-        }
-
-        .nav-list a:hover {
-            color: var(--primary-color);
-            background-color: rgba(46, 134, 171, 0.1);
-        }
-
-        .login-btn a {
-            background-color: var(--secondary-color);
-            color: var(--white) !important;
-            padding: 8px 15px;
-            border-radius: 4px;
-            margin-right: 60px;
-            text-decoration: none !important;
-        }
-
-        .login-btn a:hover {
-            background-color: #e07f00;
-        }
-
-        .language-switcher {
-            position: relative;
-            margin-right: 0;
-            display: inline-flex;
-            align-items: center;
-            list-style: none !important;
-        }
-
-        .language-btn {
-            background: none;
-            border: none;
-            color: var(--dark-color);
-            cursor: pointer;
-            padding: 8px 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-            border-radius: 4px;
-            transition: var(--transition);
-            text-decoration: none;
-            font-size: inherit;
-        }
-
-        .language-btn:hover {
-            color: var(--primary-color);
-            background-color: rgba(46, 134, 171, 0.1);
-        }
-
-        .language-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: var(--white);
-            min-width: 150px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            border-radius: 4px;
-            z-index: 100;
-            list-style: none;
-            padding: 10px 0;
-            margin-top: 5px;
-        }
-
-        .language-switcher:hover .language-menu {
-            display: block;
-        }
-
-        .language-menu li a {
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--dark-color);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .language-menu li a:hover {
-            background-color: rgba(46, 134, 171, 0.1);
-            color: var(--primary-color);
-        }
-
-        /* المحتوى الرئيسي */
-        main {
-            margin-top: 100px;
-            padding: 40px 0;
-        }
-
-        .section {
-            padding: 60px 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 40px;
-            color: var(--dark-color);
-            font-size: 2rem;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: var(--secondary-color);
-            margin: 15px auto;
-            border-radius: 2px;
-        }
-
-        /* أنماط الفعاليات */
-        .events-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            padding: 20px;
-        }
-
-        @media (max-width: 1200px) {
-            .events-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .events-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .event-card {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--box-shadow);
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .event-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .event-image-container {
-            height: 200px;
-            overflow: hidden;
-        }
-
-        .event-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .event-card:hover .event-image {
-            transform: scale(1.05);
-        }
-
-        .event-content {
-            padding: 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* أنماط لأنواع الفعاليات */
-        .event-type {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            align-self: flex-start;
-        }
-
-        .event-type.festival {
-            background-color: #FFD700;
-            color: #8B4513;
-        }
-
-        .event-type.volunteering {
-            background-color: #32CD32;
-            color: #006400;
-        }
-
-        .event-type.workshop {
-            background-color: #1E90FF;
-            color: #000080;
-        }
-
-        .event-title {
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
-        .event-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 15px;
-            color: var(--dark-color_1);
-        }
-
-        .event-meta-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-        }
-
-        .event-description {
-            margin-bottom: 20px;
-            line-height: 1.6;
-            color: var(--dark-color);
-            flex-grow: 1;
-        }
-
-        .read-more-btn {
-            background-color: var(--secondary-color);
-            color: var(--white);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-block;
-            text-decoration: none;
-            text-align: center;
-            margin-top: auto;
-            width: fit-content;
-        }
-
-        .read-more-btn {
-            align-self: flex-start;
-            margin-top: 20px;
-        }
-
-        .event-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            overflow-y: auto;
-        }
-
-        .modal-content {
-            background-color: var(--white);
-            margin: 50px auto;
-            padding: 30px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 800px;
-            position: relative;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
-            max-height: 90vh;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            font-size: 1.5rem;
-            color: var(--dark-color);
-            cursor: pointer;
-            transition: var(--transition);
-            z-index: 1;
-        }
-
-        .close-modal:hover {
-            color: var(--secondary-color);
-        }
-
-        .modal-image-container {
-            height: 300px;
-            overflow: hidden;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .modal-title,
-        .modal-meta,
-        .modal-description,
-        .read-more-btn {
-            max-width: 100%;
-            word-wrap: break-word;
-        }
-
-        .modal-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .modal-meta-item {
-            background-color: rgba(46, 134, 171, 0.1);
-            padding: 10px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            width: 100%;
-        }
-
-        .modal-description {
-            line-height: 1.8;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-            width: 100%;
-        }
-
-           /* أنماط الفوتر المعدلة */
-  /* أنماط الفوتر المعدلة */
-.footer {
-    background-color: var(--dark-color_1);
-    color: var(--white);
-    padding: 50px 0 0;
-    font-size: 1.05rem;
-    margin-top: 0;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 40px;
-    margin-bottom: 40px;
-    padding: 0 20px;
-}
-
-.footer-logo {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.footer-logo img {
-    height: 80px;
-    width: auto;
-    margin-bottom: 20px;
-}
-
-.footer-logo p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 15px;
-}
-
-.footer-links h4,
-.footer-contact h4 {
-    font-size: 1.3rem;
-    margin-bottom: 20px;
-    color: var(--secondary-color);
-    padding-bottom: 0; /* إزالة الحشو السفلي */
-    position: relative;
-}
-
-/* إزالة الخط البرتقالي تحت العناوين */
-.footer-links h4::after,
-.footer-contact h4::after {
-    content: none; /* إزالة الخط البرتقالي */
-}
-
-.footer-links ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.footer-links li {
-    margin-bottom: 15px;
-}
-
-.footer-links a {
-    color: var(--white);
-    text-decoration: none;
-    transition: var(--transition);
-    font-size: 1.05rem;
-    display: inline-block;
-    padding: 5px 0;
-}
-
-.footer-links a:hover {
-    color: var(--secondary-color);
-    padding-right: 8px;
-}
-
-.footer-contact p {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 1.05rem;
-}
-
-.footer-contact i {
-    color: var(--secondary-color);
-    font-size: 1.2rem;
-    min-width: 25px;
-    text-align: center;
-}
-
-.footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    padding: 25px 0;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
-.footer-bottom p {
-    margin: 0;
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.social-icons a {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    font-size: 1.1rem;
-    background-color: rgba(255, 255, 255, 0.15);
-    border-radius: 50%;
-    color: var(--white);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.social-icons a:hover {
-    background-color: var(--secondary-color);
-    transform: translateY(-3px);
-}
-
-/* تحسينات للشاشات الصغيرة */
-@media (max-width: 768px) {
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 30px;
-        text-align: center;
-    }
-
-    .footer-logo {
-        align-items: center;
-    }
-
-    .footer-links,
-    .footer-contact {
-        text-align: center;
-    }
-
-    .footer-contact p {
-        justify-content: center;
-    }
-
-    .footer-links a:hover {
-        padding-right: 0;
-        padding-left: 8px;
-    }
-}
-        /* التجاوب مع الشاشات الصغيرة */
-        @media (max-width: 992px) {
-            .header .container {
-                flex-direction: column;
-                padding: 10px 0;
-            }
-
-            .logo-container {
-                margin-bottom: 15px;
-            }
-
-            .nav-list {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .nav-list li {
-                margin: 5px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .modal-content {
-                width: 95%;
-                margin: 20px auto;
-                padding: 20px;
-            }
-
-            .modal-image-container {
-                height: 200px;
-            }
-
-            .modal-meta-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-    </style>
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ asset('css/events.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <link rel="stylesheet" href="{{ asset('css/events.css') }}">
+    </noscript>
+
+    <!-- Preload background images -->
+    <link rel="preload" href="{{ asset('/ima1.webp') }}" as="image">
+    <link rel="preload" href="{{ asset('/ima2.webp') }}" as="image">
+    <link rel="preload" href="{{ asset('/ima3.webp') }}" as="image">
+
+    <!-- Preload logo -->
+    <link rel="preload" href="{{ asset('logo.png') }}" as="image">
 </head>
 
 <body>
     <!-- خلفية متغيرة للصفحة -->
     <div class="background-slideshow">
-        <img src="{{ asset('ima1.jpg') }}" class="active" alt="{{ __('main.background_alt_1') }}">
-        <img src="{{ asset('ima2.jpg') }}" alt="{{ __('main.background_alt_2') }}">
-        <img src="{{ asset('ima3.jpg') }}" alt="{{ __('main.background_alt_3') }}">
+        <img src="{{ asset('/ima1.webp') }}" class="active" alt="خلفية 1" loading="lazy" width="1920" height="1080" decoding="async">
+        <img src="{{ asset('/ima2.webp') }}" alt="خلفية 2" loading="lazy" width="1920" height="1080" decoding="async">
+        <img src="{{ asset('/ima3.webp') }}" alt="خلفية 3" loading="lazy" width="1920" height="1080" decoding="async">
     </div>
 
     <header class="header">
         <div class="container">
             <div class="logo-container">
                 <div class="logo">
-                    <img src="{{ asset('logo.png') }}" alt="{{ __('main.site_name') }}">
+                    <img src="{{ asset('logo.png') }}" alt="{{ __('main.site_name') }}" width="50" height="50" loading="eager">
                 </div>
                 <div class="org-name">
                     <span class="org-name-line1">{{ __('main.site_name') }}</span>
@@ -694,17 +49,17 @@
                         <li><a href="{{ route('about-us') }}">{{ __('main.menu.about') }}</a></li>
                         <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
                         <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
-                    </li>
-                    <li class="language-switcher">
-                        <button class="language-btn">
-                            <i class="fas fa-globe"></i>
-                            <span class="current-lang">{{ $locale == 'ar' ? 'العربية' : 'English' }}</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <ul class="language-menu">
-                            <li><a href="#" data-lang="ar"><i class="fas fa-language"></i> العربية</a></li>
-                            <li><a href="#" data-lang="en"><i class="fas fa-language"></i> English</a></li>
-                        </ul>
+                        <li class="language-switcher">
+                            <button class="language-btn" aria-label="Change language">
+                                <i class="fas fa-globe"></i>
+                                <span class="current-lang">{{ $locale == 'ar' ? 'العربية' : 'English' }}</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <ul class="language-menu">
+                                <li><a href="#" data-lang="ar" aria-label="Switch to Arabic"><i class="fas fa-language"></i> العربية</a></li>
+                                <li><a href="#" data-lang="en" aria-label="Switch to English"><i class="fas fa-language"></i> English</a></li>
+                            </ul>
+                        </li>
                         <li class="login-btn">
                             <a href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -731,43 +86,42 @@
                     <div class="event-card">
                         <div class="event-image-container">
                             @if($event['cover_image'])
-                                <img src="{{ asset('storage/' . $event['cover_image']) }}" alt="{{ $event['title'] }}" class="event-image">
+                                <img src="{{ asset('storage/' . $event['cover_image']) }}" alt="{{ $event['title'] }}" class="event-image" loading="lazy" width="400" height="300" decoding="async">
                             @else
-                                <img src="{{ asset('default-event.jpg') }}" alt="{{ __('events.default_image_alt') }}" class="event-image">
+                                <img src="{{ asset('default-event.jpg') }}" alt="{{ __('events.default_image_alt') }}" class="event-image" loading="lazy" width="400" height="300" decoding="async">
                             @endif
-
                         </div>
                         <div class="event-content">
-                         <span class="event-type {{ $event['type'] }}" style="margin-bottom: 15px; display: inline-block;">
-                @if($event['type'] == 'festival') {{ __('main.events.festival') }}
-                @elseif($event['type'] == 'volunteering') {{ __('main.events.volunteering') }}
-                @elseif($event['type'] == 'workshop') {{ __('main.events.workshop') }}
-                @endif
-            </span>
+                            <span class="event-type {{ $event['type'] }}" style="margin-bottom: 15px; display: inline-block;">
+                                @if($event['type'] == 'festival') {{ __('main.events.festival') }}
+                                @elseif($event['type'] == 'volunteering') {{ __('main.events.volunteering') }}
+                                @elseif($event['type'] == 'workshop') {{ __('main.events.workshop') }}
+                                @endif
+                            </span>
 
                             <h3 class="event-title">{{ $event['title'] ?? 'No title available' }}</h3>
 
                             <div class="event-meta">
                                 <div class="event-meta-item">
-                                    <i class="far fa-calendar-alt"></i>
+                                    <i class="far fa-calendar-alt" aria-hidden="true"></i>
                                     <span>{{ __('main.menu.start_date') }}: {{ $event['start_date']->format('Y-m-d') }}</span>
                                 </div>
 
                                 <div class="event-meta-item">
-                                    <i class="far fa-calendar-alt"></i>
+                                    <i class="far fa-calendar-alt" aria-hidden="true"></i>
                                     <span>{{ __('main.menu.end_date') }}: {{ $event['end_date']->format('Y-m-d') }}</span>
                                 </div>
 
                                 <div class="event-meta-item">
-                                    <i class="fas fa-map-marker-alt"></i>
+                                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
                                     <span>{{ $event['location'] }}</span>
                                 </div>
                             </div>
 
                             <p class="event-description">
-                                {!! Str::limit(strip_tags($event['description'], 100)) !!}
+                                {!! Str::limit(strip_tags($event['description']), 100) !!}
                             </p>
-                            <button class="read-more-btn" onclick="openEventModal({{ $event['id'] }})">{{ __('main.menu.read_more') }}</button>
+                            <button class="read-more-btn" onclick="openEventModal({{ $event['id'] }})" aria-label="Read more about {{ $event['title'] }}">{{ __('main.menu.read_more') }}</button>
                         </div>
                     </div>
                     @endforeach
@@ -780,7 +134,7 @@
     @foreach($events as $event)
     <div id="eventModal{{ $event['id'] }}" class="event-modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeEventModal({{ $event['id'] }})">&times;</span>
+            <span class="close-modal" onclick="closeEventModal({{ $event['id'] }})" aria-label="Close modal">&times;</span>
 
             <span class="event-type {{ $event['type'] }}" style="margin-bottom: 15px; display: inline-block;">
                 @if($event['type'] == 'festival') {{ __('main.events.festival') }}
@@ -793,7 +147,7 @@
 
             <div class="modal-meta">
                 <div class="modal-meta-item">
-                    <i class="far fa-calendar-alt"></i>
+                    <i class="far fa-calendar-alt" aria-hidden="true"></i>
                     <div>
                         <strong>{{ __('main.menu.start_date') }}:</strong>
                         <p>{{ $event['start_date']->format('Y-m-d H:i') }}</p>
@@ -801,7 +155,7 @@
                 </div>
 
                 <div class="modal-meta-item">
-                    <i class="far fa-calendar-alt"></i>
+                    <i class="far fa-calendar-alt" aria-hidden="true"></i>
                     <div>
                         <strong>{{ __('main.menu.end_date') }}:</strong>
                         <p>{{ $event['end_date']->format('Y-m-d H:i') }}</p>
@@ -809,7 +163,7 @@
                 </div>
 
                 <div class="modal-meta-item">
-                    <i class="fas fa-map-marker-alt"></i>
+                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
                     <div>
                         <strong>{{ __('main.events.location') }}:</strong>
                         <p>{{ $event['location'] }}</p>
@@ -818,7 +172,7 @@
 
                 @if($event['max_participants'])
                 <div class="modal-meta-item">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-users" aria-hidden="true"></i>
                     <div>
                         <strong>{{ __('main.events.max_participants') }}:</strong>
                         <p>{{ $event['max_participants'] }}</p>
@@ -844,7 +198,7 @@
             <div class="footer-content">
                 <!-- قسم الشعار والمعلومات -->
                 <div class="footer-logo">
-                    <img src="\logo.png" alt="{{ __('main.site_name') }}">
+                    <img src="\logo.png" alt="{{ __('main.site_name') }}" width="50" height="50" loading="lazy">
                     <p>{{ __('main.site_name') }}<br>
                     <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span></p>
                 </div>
@@ -859,129 +213,34 @@
                         <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
                     </ul>
                 </div>
-
-                <!-- قسم معلومات الاتصال -->
-
             </div>
-
-
 
             <!-- حقوق النشر ووسائل التواصل الاجتماعي -->
             <div class="footer-bottom">
                 <p>{{ __('main.footer.copyright') }} &copy; {{ date('Y') }}</p>
                 <div class="social-icons">
                     @if (isset($socialMedia['facebook']))
-                        <a href="{{ $socialMedia['facebook'] }}" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="{{ $socialMedia['facebook'] }}" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                     @endif
                     @if (isset($socialMedia['twitter']))
-                        <a href="{{ $socialMedia['twitter'] }}" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="{{ $socialMedia['twitter'] }}" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
                     @endif
                     @if (isset($socialMedia['linkedin']))
-                        <a href="{{ $socialMedia['linkedin'] }}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="{{ $socialMedia['linkedin'] }}" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                     @endif
                     @if (isset($socialMedia['instagram']))
-                        <a href="{{ $socialMedia['instagram'] }}" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="{{ $socialMedia['instagram'] }}" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                     @endif
                     @if (isset($socialMedia['youtube']))
-                        <a href="{{ $socialMedia['youtube'] }}" target="_blank"><i class="fab fa-youtube"></i></a>
+                        <a href="{{ $socialMedia['youtube'] }}" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     @endif
                 </div>
             </div>
         </div>
     </footer>
 
-
-    <script>
-        function setLanguageCookie(lang) {
-    // الكوكي سيكون ساري المفعول لمدة 30 يومًا
-    document.cookie = `preferred_language=${lang};path=/;max-age=${30 * 24 * 60 * 60}`;
-}
-
-// وظيفة لقراءة الكوكي
-function getLanguageCookie() {
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-        const [name, value] = cookie.trim().split('=');
-        if (name === 'preferred_language') {
-            return value;
-        }
-    }
-    return null;
-}
-document.addEventListener('DOMContentLoaded', function() {
-    const preferredLang = getLanguageCookie();
-    const currentLang = '{{ $locale }}';
-
-    if (preferredLang && preferredLang !== currentLang) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('lang', preferredLang);
-        window.location.href = url.toString();
-    }
-});
-        // تغيير خلفية الصفحة تلقائياً
-        document.addEventListener('DOMContentLoaded', function() {
-            const backgroundImages = document.querySelectorAll('.background-slideshow img');
-            let currentImage = 0;
-
-            function changeBackground() {
-                backgroundImages[currentImage].classList.remove('active');
-                currentImage = (currentImage + 1) % backgroundImages.length;
-                backgroundImages[currentImage].classList.add('active');
-            }
-
-            // بدء التغيير التلقائي
-            setInterval(changeBackground, 5000);
-
-            // تبديل اللغة
-            document.querySelectorAll('.language-menu a').forEach(link => {
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const lang = this.getAttribute('data-lang');
-
-        // حفظ التفضيل في الكوكي
-        setLanguageCookie(lang);
-
-        // الانتقال إلى الصفحة نفسها مع معلمة اللغة
-        const url = new URL(window.location.href);
-        url.searchParams.set('lang', lang);
-        window.location.href = url.toString();
-    });
-});
-        });
-
-        // وظائف نافذة التفاصيل العائمة
-        function openEventModal(eventId) {
-            document.getElementById('eventModal' + eventId).style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            document.body.style.position = 'fixed';
-        }
-
-        function closeEventModal(eventId) {
-            document.getElementById('eventModal' + eventId).style.display = 'none';
-            document.body.style.overflow = 'auto';
-            document.body.style.position = 'static';
-        }
-
-        // إغلاق النافذة عند النقر خارجها
-        window.onclick = function(event) {
-            document.querySelectorAll('.event-modal').forEach(modal => {
-                if (event.target == modal) {
-                    closeEventModal(modal.id.replace('eventModal', ''));
-                }
-            });
-        }
-
-        // إغلاق النافذة عند الضغط على زر Escape
-        document.onkeydown = function(evt) {
-            evt = evt || window.event;
-            if (evt.keyCode == 27) {
-                document.querySelectorAll('.event-modal').forEach(modal => {
-                    if (modal.style.display == 'block') {
-                        closeEventModal(modal.id.replace('eventModal', ''));
-                    }
-                });
-            }
-        };
-    </script>
+    <!-- تحميل JavaScript بطريقة غير معيقة -->
+    <link rel="preload" href="{{ asset('js/events.js') }}" as="script">
+    <script src="{{ asset('js/events.js') }}" defer></script>
 </body>
 </html>

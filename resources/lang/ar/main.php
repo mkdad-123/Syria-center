@@ -5,7 +5,7 @@ return [
     'menu' => [
         'services' => 'الخدمات',
         'news' => 'الأخبار والفعاليات',
-        'contact' => 'اتصل بنا',
+        'contact' => 'شارك معنا',
         'sections' => 'أقسام الصفحة',
         'about' => 'من نحن',
         'target' => 'الفئة المستهدفة',
@@ -25,7 +25,7 @@ return [
         'services' => 'مجالاتنا',
         'team' => 'فريقنا',
         'partners' => 'شركاؤنا',
-        'sections'=> 'الأقسام',
+        'sections'=> 'البرامج والمشاريع ',
         'services_count' => 'عدد الخدمات' ,
         'services' => 'الخدمات',
         'related_articles' => 'مقالات ذات صلة ',
