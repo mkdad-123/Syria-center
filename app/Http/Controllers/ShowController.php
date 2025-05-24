@@ -20,7 +20,7 @@ class ShowController extends Controller
     {
         $locale = $request->has('lang') ? $request->lang : 'ar';
         $cacheKey = $this->generateCacheKey($locale);
-        
+
         $forceRefresh = $request->has('refresh') && $request->refresh == 'true';
         return Cache::remember($cacheKey, now()->addHours(24), function () use ($locale) {
             return $this->generateHomePageData($locale);
@@ -60,7 +60,7 @@ class ShowController extends Controller
         ];
 
         // توليد محتوى الـ Blade وتخزينه
-        return view('welcome', $data);
+        return view('welcome', $data)->render();
     }
 
     protected function getSectionContent($section, $locale)
@@ -149,7 +149,7 @@ class ShowController extends Controller
         $key = "about_us_page_{$locale}";
 
         $lastModified = Carbon::parse($lastModified);
-        return $lastModified ? "{$key}_{$lastModified->timestamp}" : $key; 
+        return $lastModified ? "{$key}_{$lastModified->timestamp}" : $key;
     }
 
     protected function generateAboutUsPageData($locale)
@@ -283,6 +283,9 @@ class ShowController extends Controller
 
         $key = "sections_page_{$locale}";
 
+        if ($lastModified && is_string($lastModified)) {
+            $lastModified = Carbon::parse($lastModified);
+        }
         return $lastModified ? "{$key}_{$lastModified->timestamp}" : $key;
     }
 
@@ -341,6 +344,9 @@ class ShowController extends Controller
 
         $key = "services_page_{$sectionId}_{$locale}";
 
+        if ($lastModified && is_string($lastModified)) {
+            $lastModified = Carbon::parse($lastModified);
+        }
         return $lastModified ? "{$key}_{$lastModified->timestamp}" : $key;
     }
 
@@ -395,6 +401,9 @@ class ShowController extends Controller
 
         $key = "service_details_{$serviceId}_{$locale}";
 
+        if ($lastModified && is_string($lastModified)) {
+            $lastModified = Carbon::parse($lastModified);
+        }
         return $lastModified ? "{$key}_{$lastModified->timestamp}" : $key;
     }
 
@@ -447,18 +456,32 @@ class ShowController extends Controller
         }, $forceRefresh);
     }
 
-    protected function generateArticleCacheKey($articleId, $locale)
-    {
-        // آخر تحديث للمقال أو الخدمة المرتبطة به
-        $lastModified = max(
-            Article::where('id', $articleId)->value('updated_at'),
-            Article::where('id', $articleId)->value('service.updated_at')
-        );
-
-        $key = "article_{$articleId}_{$locale}";
-
-        return $lastModified ? "{$key}_{$lastModified->timestamp}" : $key;
+    protected function generateArticleCacheKey($id)
+{
+    // الحصول على تاريخ تحديث المقال
+    $articleLastModified = Article::where('id', $id)->value('updated_at');
+    
+    // إذا كنت تحتاج إلى تاريخ تحديث الخدمة المرتبطة
+    // $serviceLastModified = Service::where(...)->value('updated_at');
+    
+    $lastModified = null;
+    
+    if ($articleLastModified) {
+        $lastModified = Carbon::parse($articleLastModified);
     }
+    
+    // إذا كنت تستخدم تاريخ تحديث الخدمة أيضاً
+    /*
+    if ($serviceLastModified) {
+        $serviceDate = Carbon::parse($serviceLastModified);
+        $lastModified = $lastModified ? max($lastModified, $serviceDate) : $serviceDate;
+    }
+    */
+    
+    $key = "article_{$id}";
+    
+    return $lastModified ? "{$key}_{$lastModified->timestamp}" : $key;
+}
 
     protected function generateArticlePageData($articleId, $locale)
     {
@@ -587,10 +610,3 @@ class ShowController extends Controller
         ])->render();
     }
 }
-
-
-
-
-
-
-
