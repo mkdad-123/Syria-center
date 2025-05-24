@@ -92,7 +92,8 @@ class SettingResource extends Resource
                             ->label(__('filament.setting.extra.label'))
                             ->keyLabel(__('filament.setting.extra.key_label'))
                             ->valueLabel(__('filament.setting.extra.value_label'))
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->hidden(fn (Forms\Get $get) : bool => $get('section') !== SectionEnum::AboutUs->value),
                     ])
             ]);
     }
