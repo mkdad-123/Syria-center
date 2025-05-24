@@ -87,8 +87,9 @@
             margin: 0 auto;
             padding: 0;
         }
-/* إضافة أنماط جديدة */
-.main-container {
+
+        /* إضافة أنماط جديدة */
+        .main-container {
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
@@ -145,6 +146,7 @@
         }
 
         @media (max-width: 768px) {
+
             .form-container,
             .contact-info-container {
                 padding: 25px !important;
@@ -155,6 +157,7 @@
                 gap: 20px;
             }
         }
+
         /* شريط التنقل */
         .header {
             height: 100px;
@@ -421,313 +424,314 @@
         }
 
         .footer {
-        background-color: var(--dark-color_1);
-        color: var(--white);
-        padding: 50px 0 20px;
-        position: relative;
-        height: auto;
-    }
-
-    .footer-content {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 40px;
-        margin-bottom: 40px;
-    }
-
-    .footer-section {
-        padding: 0 20px;
-    }
-
-    .footer-section.about {
-        grid-column: 1;
-    }
-
-    .footer-section.links {
-        grid-column: 2;
-    }
-
-    .footer-section.newsletter {
-        grid-column: 3;
-    }
-
-    .footer-logo img {
-        height: 100px;
-        margin-bottom: 40px;
-    }
-
-    .footer-about-text {
-        margin-bottom: 20px;
-        line-height: 1.6;
-    }
-
-    .footer-section h4 {
-        color: var(--secondary-color);
-        font-size: 1.3rem;
-        margin-bottom: 25px;
-        position: relative;
-        padding-bottom: 10px;
-    }
-
-    .footer-section h4::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 50px;
-        height: 2px;
-        background-color: var(--secondary-color);
-    }
-
-    .footer-section.links ul {
-        list-style: none;
-    }
-
-    .footer-section.links li {
-        margin-bottom: 12px;
-    }
-
-    .footer-section.links a {
-        color: var(--white);
-        text-decoration: none;
-        transition: var(--transition);
-        display: block;
-    }
-
-    .footer-section.links a:hover {
-        color: var(--secondary-color);
-        padding-right: 10px;
-    }
-
-    .footer-contact .contact-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
-    }
-
-    .footer-contact i {
-        margin-left: 10px;
-        color: var(--secondary-color);
-        width: 20px;
-        text-align: center;
-    }
-
-    .newsletter-form {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .newsletter-form input {
-        padding: 12px 15px;
-        border: none;
-        border-radius: 6px;
-        background-color: rgba(255, 255, 255, 0.9);
-    }
-
-    .newsletter-form button {
-        background-color: var(--secondary-color);
-        color: white;
-        border: none;
-        padding: 12px;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: var(--transition);
-    }
-
-    .newsletter-form button:hover {
-        background-color: #e07f00;
-    }
-
-    .footer-bottom {
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        padding-top: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .copyright {
-        font-size: 0.9rem;
-    }
-
-    .social-icons a {
-        display: inline-block;
-        width: 40px;
-        height: 40px;
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        text-align: center;
-        line-height: 40px;
-        color: var(--white);
-        margin-right: 10px;
-        transition: var(--transition);
-    }
-
-    .social-icons a:hover {
-        background-color: var(--secondary-color);
-        transform: translateY(-3px);
-    }
-  /* أنماط معدلة للجوال */
-    @media (max-width: 992px) {
-        .header {
+            background-color: var(--dark-color_1);
+            color: var(--white);
+            padding: 50px 0 20px;
+            position: relative;
             height: auto;
-            padding: 10px 0;
         }
 
-        .header .container {
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            padding: 0 10px;
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
         }
 
-        .logo-container {
-            width: 100%;
-            justify-content: center;
-            margin-bottom: 5px;
-            order: 1;
+        .footer-section {
+            padding: 0 20px;
         }
 
-        .logo img {
-            height: 50px;
+        .footer-section.about {
+            grid-column: 1;
         }
 
-        .org-name-line1 {
-            font-size: 1.2rem !important;
+        .footer-section.links {
+            grid-column: 2;
         }
 
-        .org-name-line2 {
-            font-size: 0.9rem !important;
+        .footer-section.newsletter {
+            grid-column: 3;
         }
 
-        .buttons-container {
-            width: 100%;
-            order: 3;
+        .footer-logo img {
+            height: 100px;
+            margin-bottom: 40px;
         }
 
-        .nav {
-            width: 100%;
+        .footer-about-text {
+            margin-bottom: 20px;
+            line-height: 1.6;
         }
 
-        .nav-list {
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 5px;
+        .footer-section h4 {
+            color: var(--secondary-color);
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
         }
 
-        .nav-list li {
-            margin: 0;
+        .footer-section h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--secondary-color);
         }
 
-        .nav-list a {
-            padding: 5px 8px;
-            font-size: 0.9rem;
+        .footer-section.links ul {
+            list-style: none;
         }
 
-        .language-switcher {
-            margin-right: 0;
+        .footer-section.links li {
+            margin-bottom: 12px;
         }
 
-        .login-btn a {
-            margin-right: 0;
-            padding: 5px 10px;
+        .footer-section.links a {
+            color: var(--white);
+            text-decoration: none;
+            transition: var(--transition);
+            display: block;
         }
 
-        main {
-            margin-top: 150px;
-            padding: 10px 0;
+        .footer-section.links a:hover {
+            color: var(--secondary-color);
+            padding-right: 10px;
         }
 
-        .form-container, 
-        .contact-info-container {
-            padding: 20px !important;
-            margin: 10px !important;
+        .footer-contact .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
         }
 
-        .form-title {
-            font-size: 1.5rem;
+        .footer-contact i {
+            margin-left: 10px;
+            color: var(--secondary-color);
+            width: 20px;
+            text-align: center;
         }
 
-        .contact-items {
+        .newsletter-form {
+            display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
-        .contact-item {
-            font-size: 1rem;
+        .newsletter-form input {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.9);
         }
 
-        .form-control {
-            padding: 10px;
+        .newsletter-form button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        textarea.form-control {
-            min-height: 150px;
+        .newsletter-form button:hover {
+            background-color: #e07f00;
         }
-    }
 
-    @media (max-width: 576px) {
-        .header .container {
-            flex-direction: column;
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
         }
 
-        .logo-container {
-            flex-direction: column;
+        .copyright {
+            font-size: 0.9rem;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
             text-align: center;
-            margin-bottom: 10px;
+            line-height: 40px;
+            color: var(--white);
+            margin-right: 10px;
+            transition: var(--transition);
         }
 
-        .org-name {
-            margin-top: 5px;
+        .social-icons a:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
         }
 
-        .nav-list {
-            flex-direction: column;
-            align-items: center;
+        /* أنماط معدلة للجوال */
+        @media (max-width: 992px) {
+            .header {
+                height: auto;
+                padding: 10px 0;
+            }
+
+            .header .container {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                padding: 0 10px;
+            }
+
+            .logo-container {
+                width: 100%;
+                justify-content: center;
+                margin-bottom: 5px;
+                order: 1;
+            }
+
+            .logo img {
+                height: 50px;
+            }
+
+            .org-name-line1 {
+                font-size: 1.2rem !important;
+            }
+
+            .org-name-line2 {
+                font-size: 0.9rem !important;
+            }
+
+            .buttons-container {
+                width: 100%;
+                order: 3;
+            }
+
+            .nav {
+                width: 100%;
+            }
+
+            .nav-list {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 5px;
+            }
+
+            .nav-list li {
+                margin: 0;
+            }
+
+            .nav-list a {
+                padding: 5px 8px;
+                font-size: 0.9rem;
+            }
+
+            .language-switcher {
+                margin-right: 0;
+            }
+
+            .login-btn a {
+                margin-right: 0;
+                padding: 5px 10px;
+            }
+
+            main {
+                margin-top: 150px;
+                padding: 10px 0;
+            }
+
+            .form-container,
+            .contact-info-container {
+                padding: 20px !important;
+                margin: 10px !important;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+            }
+
+            .contact-items {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .contact-item {
+                font-size: 1rem;
+            }
+
+            .form-control {
+                padding: 10px;
+            }
+
+            textarea.form-control {
+                min-height: 150px;
+            }
         }
 
-        .nav-list li {
-            width: 100%;
-            text-align: center;
-        }
+        @media (max-width: 576px) {
+            .header .container {
+                flex-direction: column;
+                align-items: center;
+            }
 
-        .nav-list a {
-            display: block;
-            width: 100%;
-            padding: 8px 0;
-        }
+            .logo-container {
+                flex-direction: column;
+                text-align: center;
+                margin-bottom: 10px;
+            }
 
-        .language-switcher {
-            width: 100%;
-        }
+            .org-name {
+                margin-top: 5px;
+            }
 
-        .language-menu {
-            right: auto;
-            left: 0;
-            width: 100%;
-        }
+            .nav-list {
+                flex-direction: column;
+                align-items: center;
+            }
 
-        main {
-            margin-top: 180px;
-        }
+            .nav-list li {
+                width: 100%;
+                text-align: center;
+            }
 
-        .form-title {
-            font-size: 1.3rem;
-        }
+            .nav-list a {
+                display: block;
+                width: 100%;
+                padding: 8px 0;
+            }
 
-        .form-header-icon {
-            font-size: 2rem;
-        }
+            .language-switcher {
+                width: 100%;
+            }
 
-        .submit-btn {
-            padding: 10px;
-            font-size: 1rem;
+            .language-menu {
+                right: auto;
+                left: 0;
+                width: 100%;
+            }
+
+            main {
+                margin-top: 180px;
+            }
+
+            .form-title {
+                font-size: 1.3rem;
+            }
+
+            .form-header-icon {
+                font-size: 2rem;
+            }
+
+            .submit-btn {
+                padding: 10px;
+                font-size: 1rem;
+            }
         }
-    }
     </style>
 </head>
 
@@ -751,34 +755,36 @@
                 </div>
             </div>
             <div class="buttons-container">
-               <!-- في قسم الشريط العلوي -->
-<nav class="nav">
-    <ul class="nav-list">
-        <li><a href="{{ route('home') }}" data-translate="nav.home">الرئيسية</a></li>
-        <li><a href="{{ route('sections') }}" data-translate="nav.services">الخدمات</a></li>
-        <li><a href="{{ route('events') }}" data-translate="nav.events">النشاطات والفعاليات</a></li>
-        <li class="language-switcher" style="list-style: none;">
-            <button class="language-btn">
-                <i class="fas fa-globe"></i>
-                <span class="current-lang" data-translate="language.current">العربية</span>
-                <i class="fas fa-chevron-down"></i>
-            </button>
-            <ul class="language-menu">
-                <li><a href="#" data-lang="ar" data-translate="language.ar"><i class="fas fa-language"></i> العربية</a></li>
-                <li><a href="#" data-lang="en" data-translate="language.en"><i class="fas fa-language"></i> English</a></li>
-            </ul>
-        </li>
-        <li class="login-btn">
-            <a href="{{ route('logout') }}"
-                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"data-translate="nav.logout">
-                تسجيل خروج 
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                style="display: none;">
-                @csrf
-            </form>
-        </li>    </ul>
-</nav>
+                <!-- في قسم الشريط العلوي -->
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="{{ route('home') }}" data-translate="nav.home">الرئيسية</a></li>
+                        <li><a href="{{ route('sections') }}" data-translate="nav.services">الخدمات</a></li>
+                        <li><a href="{{ route('events') }}" data-translate="nav.events">النشاطات والفعاليات</a></li>
+                        <li class="language-switcher" style="list-style: none;">
+                            <button class="language-btn">
+                                <i class="fas fa-globe"></i>
+                                <span class="current-lang" data-translate="language.current">العربية</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <ul class="language-menu">
+                                <li><a href="#" data-lang="ar" data-translate="language.ar"><i
+                                            class="fas fa-language"></i> العربية</a></li>
+                                <li><a href="#" data-lang="en" data-translate="language.en"><i
+                                            class="fas fa-language"></i> English</a></li>
+                            </ul>
+                        </li>
+                        <li class="login-btn">
+                            <a href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"data-translate="nav.logout">
+                                تسجيل خروج
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </header>
@@ -796,330 +802,341 @@
                     <i class="fas fa-check-circle"></i> تم إرسال شكواك بنجاح، شكراً لك على تواصلك معنا.
                 </div>
 
-              <!-- في قسم النموذج -->
-              <form class="complaint-form" id="complaintForm" method="POST" action="{{ route('compliants.store') }}">
-                @csrf
-                @auth
-                    <input type="hidden" name="id" value="{{ Auth::guard('custom')->id() }}">
-                @endauth
+                <!-- في قسم النموذج -->
+                <form class="complaint-form" id="complaintForm" method="POST" action="{{ route('compliants.store') }}">
+                    @csrf
+                    @auth
+                        <input type="hidden" name="id" value="{{ Auth::guard('custom')->id() }}">
+                    @endauth
 
-                <div class="form-group">
-                    <label for="email" data-translate="form.email">البريد الإلكتروني</label>
-                    <input type="email" id="email" name="email" class="form-control"
-                        placeholder="example@domain.com" data-translate-placeholder="form.email_placeholder" required>
-                    <div class="error-message" id="emailError" data-translate="form.email_error">يرجى إدخال بريد إلكتروني صحيح</div>
-                </div>
+                    <div class="form-group">
+                        <label for="email" data-translate="form.email">البريد الإلكتروني</label>
+                        <input type="email" id="email" name="email" class="form-control"
+                            placeholder="example@domain.com" data-translate-placeholder="form.email_placeholder"
+                            required>
+                        <div class="error-message" id="emailError" data-translate="form.email_error">يرجى إدخال بريد
+                            إلكتروني صحيح</div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="content" data-translate="form.content">محتوى الشكوى</label>
-                    <textarea id="content" name="content" class="form-control"
-                        placeholder="يرجى كتابة تفاصيل شكواك هنا..."
-                        data-translate-placeholder="form.content_placeholder" required style="min-height: 250px;"></textarea>
-                    <div class="error-message" id="contentError" data-translate="form.content_error">يرجى إدخال محتوى الشكوى (10 أحرف على الأقل)</div>
-                </div>
+                    <div class="form-group">
+                        <label for="content" data-translate="form.content">محتوى الشكوى</label>
+                        <textarea id="content" name="content" class="form-control" placeholder="يرجى كتابة تفاصيل شكواك هنا..."
+                            data-translate-placeholder="form.content_placeholder" required style="min-height: 250px;"></textarea>
+                        <div class="error-message" id="contentError" data-translate="form.content_error">يرجى إدخال
+                            محتوى الشكوى (10 أحرف على الأقل)</div>
+                    </div>
 
-                <button type="submit" class="submit-btn">
-                    <i class="fas fa-paper-plane"></i> <span data-translate="form.submit">إرسال الشكوى</span>
-                </button>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> <span data-translate="form.submit">إرسال الشكوى</span>
+                    </button>
 
-                <p class="form-note">
-                    <i class="fas fa-info-circle"></i> <span data-translate="form.note">نعدك بمعالجة شكواك بكل سرية واهتمام</span>
-                </p>
-            </form>
+                    <p class="form-note">
+                        <i class="fas fa-info-circle"></i> <span data-translate="form.note">نعدك بمعالجة شكواك بكل
+                            سرية واهتمام</span>
+                    </p>
+                </form>
             </div>
 
             <!-- قسم جهات الاتصال الجديد مع البيانات الفعلية -->
             <div class="contact-info-container">
-                <i class="fas fa-comments"></i> <!-- أيقونة المحادثة -->
                 <div class="contact-items">
-                    @if(isset($contactInfo['phones']) && count($contactInfo['phones']) > 0)
+                    <!-- عرض جميع الهواتف -->
+                    @forelse($contactInfo['phones'] ?? [] as $phone)
                         <div class="contact-item">
                             <i class="fas fa-phone contact-icon"></i>
-                            <span>{{ $contactInfo['phones'][0] ?? '123-456-789' }}</span>
+                            <span>{{ $phone }}</span>
                         </div>
-                    @else
+                    @empty
                         <div class="contact-item">
                             <i class="fas fa-phone contact-icon"></i>
                             <span>123-456-789</span>
                         </div>
-                    @endif
+                    @endforelse
 
-                    @if(isset($contactInfo['emails']) && count($contactInfo['emails']) > 0)
+                    <!-- عرض جميع الأرقام المحمولة -->
+                    @forelse($contactInfo['mobile_numbers'] ?? [] as $mobile)
+                        <div class="contact-item">
+                            <i class="fas fa-mobile-alt contact-icon"></i>
+                            <span>{{ $mobile }}</span>
+                        </div>
+                    @empty
+                        <!-- يمكنك إضافة عرض افتراضي هنا إذا لزم الأمر -->
+                    @endforelse
+
+                    <!-- عرض جميع الإيميلات -->
+                    @forelse($contactInfo['emails'] ?? [] as $email)
                         <div class="contact-item">
                             <i class="fas fa-envelope contact-icon"></i>
-                            <span>{{ $contactInfo['emails'][0] ?? 'info@example.com' }}</span>
+                            <span>{{ $email }}</span>
                         </div>
-                    @else
+                    @empty
                         <div class="contact-item">
                             <i class="fas fa-envelope contact-icon"></i>
                             <span>info@example.com</span>
                         </div>
-                    @endif
+                    @endforelse
 
-                    @if(isset($contactInfo['address']))
-                        <div class="contact-item">
-                            <i class="fas fa-map-marker-alt contact-icon"></i>
-                            <span>{{ $contactInfo['address'] ?? 'دمشق، سوريا' }}</span>
-                        </div>
-                    @else
-                        <div class="contact-item">
-                            <i class="fas fa-map-marker-alt contact-icon"></i>
-                            <span>دمشق، سوريا</span>
-                        </div>
-                    @endif
+                    <!-- عرض العنوان -->
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt contact-icon"></i>
+                        <span>{{ $contactInfo['address'] ?? 'دمشق، سوريا' }}</span>
+                    </div>
                 </div>
 
-                @if(isset($contactInfo['working_hours']))
+                <!-- عرض ساعات العمل -->
+                @if (isset($contactInfo['working_hours']))
                     <div class="working-hours">
                         <i class="fas fa-clock contact-icon"></i>
                         <span>ساعات العمل: {{ $contactInfo['working_hours'] }}</span>
                     </div>
                 @endif
             </div>
-        </div>
     </main>
 
 
     <!-- تذييل الصفحة مع روابط التواصل الاجتماعي الفعلية -->
-  
+
 
     <script>
-     document.addEventListener('DOMContentLoaded', function() {
-    // تغيير خلفية الصفحة تلقائياً
-    const backgroundImages = document.querySelectorAll('.background-slideshow img');
-    let currentImage = 0;
+        document.addEventListener('DOMContentLoaded', function() {
+            // تغيير خلفية الصفحة تلقائياً
+            const backgroundImages = document.querySelectorAll('.background-slideshow img');
+            let currentImage = 0;
 
-    if (backgroundImages.length > 0) {
-        backgroundImages[0].classList.add('active');
-    }
-
-    function changeBackground() {
-        backgroundImages[currentImage].classList.remove('active');
-        currentImage = (currentImage + 1) % backgroundImages.length;
-        backgroundImages[currentImage].classList.add('active');
-    }
-
-    if (backgroundImages.length > 1) {
-        setInterval(changeBackground, 5000);
-    }
-
-    // التحقق من صحة النموذج وإرساله
-    const form = document.getElementById('complaintForm');
-    if (form) {
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            // Reset errors and success message
-            document.querySelectorAll('.error-message').forEach(el => {
-                el.style.display = 'none';
-            });
-            document.querySelectorAll('.form-control').forEach(el => {
-                el.classList.remove('error');
-            });
-            document.getElementById('successMessage').style.display = 'none';
-
-            // Validate form
-            const emailInput = document.getElementById('email');
-            const contentInput = document.getElementById('content');
-            const emailError = document.getElementById('emailError');
-            const contentError = document.getElementById('contentError');
-
-            let isValid = true;
-
-            // Email validation
-            if (!emailInput.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
-                emailInput.classList.add('error');
-                emailError.style.display = 'block';
-                isValid = false;
+            if (backgroundImages.length > 0) {
+                backgroundImages[0].classList.add('active');
             }
 
-            // Content validation
-            if (!contentInput.value || contentInput.value.length < 10) {
-                contentInput.classList.add('error');
-                contentError.style.display = 'block';
-                isValid = false;
+            function changeBackground() {
+                backgroundImages[currentImage].classList.remove('active');
+                currentImage = (currentImage + 1) % backgroundImages.length;
+                backgroundImages[currentImage].classList.add('active');
             }
 
-            if (!isValid) return;
+            if (backgroundImages.length > 1) {
+                setInterval(changeBackground, 5000);
+            }
 
-            // Show loading state
-            const submitBtn = form.querySelector('.submit-btn');
-            const originalBtnText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-            submitBtn.disabled = true;
+            // التحقق من صحة النموذج وإرساله
+            const form = document.getElementById('complaintForm');
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
 
-            try {
-                // Create FormData object
-                const formData = new FormData(form);
+                    // Reset errors and success message
+                    document.querySelectorAll('.error-message').forEach(el => {
+                        el.style.display = 'none';
+                    });
+                    document.querySelectorAll('.form-control').forEach(el => {
+                        el.classList.remove('error');
+                    });
+                    document.getElementById('successMessage').style.display = 'none';
 
-                // Convert FormData to plain object
-                const plainFormData = Object.fromEntries(formData.entries());
+                    // Validate form
+                    const emailInput = document.getElementById('email');
+                    const contentInput = document.getElementById('content');
+                    const emailError = document.getElementById('emailError');
+                    const contentError = document.getElementById('contentError');
 
-                // Add date to the form data
-                plainFormData.date = new Date().toISOString().split('T')[0];
+                    let isValid = true;
 
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                    // Email validation
+                    if (!emailInput.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+                        emailInput.classList.add('error');
+                        emailError.style.display = 'block';
+                        isValid = false;
+                    }
+
+                    // Content validation
+                    if (!contentInput.value || contentInput.value.length < 10) {
+                        contentInput.classList.add('error');
+                        contentError.style.display = 'block';
+                        isValid = false;
+                    }
+
+                    if (!isValid) return;
+
+                    // Show loading state
+                    const submitBtn = form.querySelector('.submit-btn');
+                    const originalBtnText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+                    submitBtn.disabled = true;
+
+                    try {
+                        // Create FormData object
+                        const formData = new FormData(form);
+
+                        // Convert FormData to plain object
+                        const plainFormData = Object.fromEntries(formData.entries());
+
+                        // Add date to the form data
+                        plainFormData.date = new Date().toISOString().split('T')[0];
+
+                        const response = await fetch(form.action, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector(
+                                    'meta[name="csrf-token"]').content,
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(plainFormData)
+                        });
+
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            throw data;
+                        }
+
+                        if (data.status === 'success') {
+                            // Hide form and show success message
+                            form.style.display = 'none';
+                            document.getElementById('successMessage').style.display = 'block';
+
+                            // Optional: Redirect after 3 seconds
+                            setTimeout(() => {
+                                window.location.href = "{{ route('compliants') }}";
+                            }, 3000);
+                        } else {
+                            throw new Error(data.message || 'حدث خطأ غير متوقع');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+
+                        // Handle server-side validation errors
+                        if (error.errors) {
+                            if (error.errors.email) {
+                                emailInput.classList.add('error');
+                                emailError.textContent = error.errors.email[0];
+                                emailError.style.display = 'block';
+                            }
+                            if (error.errors.content) {
+                                contentInput.classList.add('error');
+                                contentError.textContent = error.errors.content[0];
+                                contentError.style.display = 'block';
+                            }
+                        } else {
+                            alert(error.message ||
+                            'حدث خطأ أثناء إرسال الشكوى، يرجى المحاولة مرة أخرى');
+                        }
+                    } finally {
+                        submitBtn.innerHTML = originalBtnText;
+                        submitBtn.disabled = false;
+                    }
+                });
+            }
+
+            // ترجمة المحتوى
+            const translations = {
+                en: {
+                    nav: {
+                        sit_n1: "Syrian Center for Sustainable Development",
+                        sit_n2: 'and Community Empowerment',
+                        home: "Home",
+                        services: "Services",
+                        events: "Events",
+                        complaints: "Contact Us",
+                        logout: "Logout"
                     },
-                    body: JSON.stringify(plainFormData)
+                    form: {
+                        email: "Email",
+                        email_placeholder: "example@domain.com",
+                        email_error: "Please enter a valid email address",
+                        content: "Complaint Content",
+                        content_placeholder: "Please write your complaint details here...",
+                        content_error: "Please enter complaint content (at least 10 characters)",
+                        submit: "Submit Complaint",
+                        note: "We promise to handle your complaint with confidentiality and care",
+                    },
+                    footer: {
+                        copyright: "&copy; 2023 Syrian Center for Sustainable Development. All rights reserved.",
+                        quick_links: "Quick Links"
+                    },
+                    language: {
+                        current: "English",
+                        ar: "Arabic",
+                        en: "English"
+                    }
+                },
+                ar: {
+                    nav: {
+                        sit_n1: 'المركز السوري للتنمية المستدامة',
+                        sit_n2: 'والتمكين المجتمعي',
+                        home: "الرئيسية",
+                        services: "الخدمات",
+                        events: "النشاطات والفعاليات",
+                        complaints: "اتصل بنا",
+                        logout: "تسجيل خروج"
+                    },
+                    form: {
+                        email: "البريد الإلكتروني",
+                        email_placeholder: "example@domain.com",
+                        email_error: "يرجى إدخال بريد إلكتروني صحيح",
+                        content: "محتوى الشكوى",
+                        content_placeholder: "يرجى كتابة تفاصيل شكواك هنا...",
+                        content_error: "يرجى إدخال محتوى الشكوى (10 أحرف على الأقل)",
+                        submit: "إرسال الشكوى",
+                        note: "نعدك بمعالجة شكواك بكل سرية واهتمام"
+                    },
+                    footer: {
+                        copyright: "&copy; 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.",
+                        quick_links: "روابط سريعة"
+                    },
+                    language: {
+                        current: "العربية",
+                        ar: "العربية",
+                        en: "English"
+                    }
+                }
+            };
+
+            // تغيير اللغة
+            function changeLanguage(lang) {
+                document.documentElement.lang = lang;
+                document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+                // تحديث النصوص المترجمة
+                document.querySelectorAll('[data-translate]').forEach(element => {
+                    const key = element.getAttribute('data-translate');
+                    const keys = key.split('.');
+                    if (translations[lang] && translations[lang][keys[0]] && translations[lang][keys[0]][
+                            keys[1]
+                        ]) {
+                        element.textContent = translations[lang][keys[0]][keys[1]];
+                    }
                 });
 
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw data;
-                }
-
-                if (data.status === 'success') {
-                    // Hide form and show success message
-                    form.style.display = 'none';
-                    document.getElementById('successMessage').style.display = 'block';
-
-                    // Optional: Redirect after 3 seconds
-                    setTimeout(() => {
-                        window.location.href = "{{ route('compliants') }}";
-                    }, 3000);
-                } else {
-                    throw new Error(data.message || 'حدث خطأ غير متوقع');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-
-                // Handle server-side validation errors
-                if (error.errors) {
-                    if (error.errors.email) {
-                        emailInput.classList.add('error');
-                        emailError.textContent = error.errors.email[0];
-                        emailError.style.display = 'block';
+                // تحديث النصوص البديلة
+                document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
+                    const key = element.getAttribute('data-translate-placeholder');
+                    const keys = key.split('.');
+                    if (translations[lang] && translations[lang][keys[0]] && translations[lang][keys[0]][
+                            keys[1]
+                        ]) {
+                        element.setAttribute('placeholder', translations[lang][keys[0]][keys[1]]);
                     }
-                    if (error.errors.content) {
-                        contentInput.classList.add('error');
-                        contentError.textContent = error.errors.content[0];
-                        contentError.style.display = 'block';
-                    }
-                } else {
-                    alert(error.message || 'حدث خطأ أثناء إرسال الشكوى، يرجى المحاولة مرة أخرى');
-                }
-            } finally {
-                submitBtn.innerHTML = originalBtnText;
-                submitBtn.disabled = false;
+                });
+
+                // تحديث اللغة الحالية في زر اللغة
+                document.querySelector('.current-lang').textContent = translations[lang].language.current;
             }
+
+            // معالجة تغيير اللغة
+            document.querySelectorAll('[data-lang]').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const lang = this.getAttribute('data-lang');
+                    changeLanguage(lang);
+                    localStorage.setItem('preferredLanguage', lang);
+                });
+            });
+
+            // تحميل اللغة المفضلة من localStorage إذا كانت موجودة
+            const preferredLanguage = localStorage.getItem('preferredLanguage') || 'ar';
+            changeLanguage(preferredLanguage);
         });
-    }
-
-    // ترجمة المحتوى
-    const translations = {
-        en: {
-            nav: {
-                sit_n1: "Syrian Center for Sustainable Development",
-                sit_n2: 'and Community Empowerment',
-                home: "Home",
-                services: "Services",
-                events: "Events",
-                complaints: "Contact Us",
-                logout: "Logout"
-            },
-            form: {
-                email: "Email",
-                email_placeholder: "example@domain.com",
-                email_error: "Please enter a valid email address",
-                content: "Complaint Content",
-                content_placeholder: "Please write your complaint details here...",
-                content_error: "Please enter complaint content (at least 10 characters)",
-                submit: "Submit Complaint",
-                note: "We promise to handle your complaint with confidentiality and care",
-            },
-            footer: {
-                copyright: "&copy; 2023 Syrian Center for Sustainable Development. All rights reserved.",
-                quick_links: "Quick Links"
-            },
-            language: {
-                current: "English",
-                ar: "Arabic",
-                en: "English"
-            }
-        },
-        ar: {
-            nav: {
-                sit_n1: 'المركز السوري للتنمية المستدامة',
-                sit_n2: 'والتمكين المجتمعي',
-                home: "الرئيسية",
-                services: "الخدمات",
-                events: "النشاطات والفعاليات",
-                complaints: "اتصل بنا",
-                logout: "تسجيل خروج"
-            },
-            form: {
-                email: "البريد الإلكتروني",
-                email_placeholder: "example@domain.com",
-                email_error: "يرجى إدخال بريد إلكتروني صحيح",
-                content: "محتوى الشكوى",
-                content_placeholder: "يرجى كتابة تفاصيل شكواك هنا...",
-                content_error: "يرجى إدخال محتوى الشكوى (10 أحرف على الأقل)",
-                submit: "إرسال الشكوى",
-                note: "نعدك بمعالجة شكواك بكل سرية واهتمام"
-            },
-            footer: {
-                copyright: "&copy; 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.",
-                quick_links: "روابط سريعة"
-            },
-            language: {
-                current: "العربية",
-                ar: "العربية",
-                en: "English"
-            }
-        }
-    };
-
-    // تغيير اللغة
-    function changeLanguage(lang) {
-        document.documentElement.lang = lang;
-        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-
-        // تحديث النصوص المترجمة
-        document.querySelectorAll('[data-translate]').forEach(element => {
-            const key = element.getAttribute('data-translate');
-            const keys = key.split('.');
-            if (translations[lang] && translations[lang][keys[0]] && translations[lang][keys[0]][keys[1]]) {
-                element.textContent = translations[lang][keys[0]][keys[1]];
-            }
-        });
-
-        // تحديث النصوص البديلة
-        document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
-            const key = element.getAttribute('data-translate-placeholder');
-            const keys = key.split('.');
-            if (translations[lang] && translations[lang][keys[0]] && translations[lang][keys[0]][keys[1]]) {
-                element.setAttribute('placeholder', translations[lang][keys[0]][keys[1]]);
-            }
-        });
-
-        // تحديث اللغة الحالية في زر اللغة
-        document.querySelector('.current-lang').textContent = translations[lang].language.current;
-    }
-
-    // معالجة تغيير اللغة
-    document.querySelectorAll('[data-lang]').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const lang = this.getAttribute('data-lang');
-            changeLanguage(lang);
-            localStorage.setItem('preferredLanguage', lang);
-        });
-    });
-
-    // تحميل اللغة المفضلة من localStorage إذا كانت موجودة
-    const preferredLanguage = localStorage.getItem('preferredLanguage') || 'ar';
-    changeLanguage(preferredLanguage);
-});
     </script>
 </body>
 
 </html>
-
-
-

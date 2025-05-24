@@ -460,16 +460,16 @@ class ShowController extends Controller
 {
     // الحصول على تاريخ تحديث المقال
     $articleLastModified = Article::where('id', $id)->value('updated_at');
-    
+
     // إذا كنت تحتاج إلى تاريخ تحديث الخدمة المرتبطة
     // $serviceLastModified = Service::where(...)->value('updated_at');
-    
+
     $lastModified = null;
-    
+
     if ($articleLastModified) {
         $lastModified = Carbon::parse($articleLastModified);
     }
-    
+
     // إذا كنت تستخدم تاريخ تحديث الخدمة أيضاً
     /*
     if ($serviceLastModified) {
@@ -477,9 +477,9 @@ class ShowController extends Controller
         $lastModified = $lastModified ? max($lastModified, $serviceDate) : $serviceDate;
     }
     */
-    
+
     $key = "article_{$id}";
-    
+
     return $lastModified ? "{$key}_{$lastModified->timestamp}" : $key;
 }
 
@@ -523,39 +523,50 @@ class ShowController extends Controller
         }, $forceRefresh);
     }
 
-    protected function generateContactInfoCacheKey()
-    {
-        $lastModified = Setting::whereIn('section', ['contact_info', 'social_media'])
-            ->max('updated_at');
+   protected function generateContactInfoCacheKey()
+{
+    $lastModified = Setting::whereIn('section', ['about us'])
+        ->max('updated_at');
 
-        return $lastModified ? "contact_info_{$lastModified->timestamp}" : "contact_info";
+    // تحقق إذا كانت القيمة نصية وتحويلها لكائن DateTime إذا لزم الأمر
+    if (is_string($lastModified)) {
+        $lastModified = \Carbon\Carbon::parse($lastModified);
     }
 
-    protected function generateContactInfoPageData()
-    {
-        $contactInfo = Setting::where('section', 'contact_info')->first();
-        $socialMedia = Setting::where('section', 'social_media')->first();
+    return $lastModified ? "contact_info_".$lastModified->timestamp : "contact_info";
+}
 
-        $contactData = [
-            'phones' => isset($contactInfo->phones) ? explode(',', $contactInfo->phones) : [],
-            'emails' => isset($contactInfo->emails) ? explode(',', $contactInfo->emails) : [],
-            'address' => $contactInfo->address ?? null,
-            'working_hours' => $contactInfo->working_hours ?? null
-        ];
+  protected function generateContactInfoPageData()
+{
+    // استخدام الدوال الجاهزة من المودل
+    $contactInfo = Setting::getContactInfo();
+    $socialMedia = Setting::getSocialMediaLinks();
 
-        $socialData = [
-            'facebook' => $socialMedia->facebook ?? null,
-            'twitter' => $socialMedia->twitter ?? null,
-            'linkedin' => $socialMedia->linkedin ?? null,
-            'instagram' => $socialMedia->instagram ?? null,
-            'youtube' => $socialMedia->youtube ?? null
-        ];
+    // إعداد بيانات التواصل
+    $contactData = [
+        'phones' => array_merge(
+            $contactInfo['phones'] ?? [],
+            $contactInfo['mobile_numbers'] ?? []
+        ),
+        'emails' => $contactInfo['emails'] ?? [],
+        'address' => $contactInfo['address'] ?? null,
+        'working_hours' => $contactInfo['working_hours'] ?? null
+    ];
 
-        return view('compliants', [
-            'contactInfo' => $contactData,
-            'socialMedia' => $socialData
-        ])->render();
-    }
+    // إعداد بيانات وسائل التواصل الاجتماعي
+    $socialData = [
+        'facebook' => $socialMedia['facebook'] ?? null,
+        'twitter' => $socialMedia['twitter'] ?? null,
+        'linkedin' => $socialMedia['linkedin'] ?? null,
+        'instagram' => $socialMedia['instagram'] ?? null,
+        'youtube' => $socialMedia['youtube'] ?? null
+    ];
+
+    return view('compliants', [
+        'contactInfo' => $contactData,
+        'socialMedia' => $socialData
+    ])->render();
+}
 
     public function showVolunteerPage(Request $request, $id)
     {

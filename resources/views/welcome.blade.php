@@ -96,7 +96,7 @@
                     <img src="\image1.jpg" alt="{{ __('main.titles.about') }}">
                 </div>
             </div>
-            
+
             @php
                 // استرجاع المحتوى مع التعامل مع جميع الحالات
                 $aboutContent = '';
@@ -112,7 +112,7 @@
                 $textOnly = strip_tags($aboutContent);
                 $words = preg_split('/\s+/', $textOnly);
                 $wordCount = count($words);
-                
+
                 // تحديد ما إذا كان المحتوى قصيرًا
                 $isShortContent = $wordCount <= 40;
             @endphp
@@ -131,7 +131,7 @@
                         @else
                             {!! Str::words($aboutContent, 40, '...') !!}
                         @endif
-                        
+
                         <div class="read-more-btn-container">
                             <a href="{{ route('about-us') }}" class="read-more-btn">
                                 {{ __('main.buttons.read_more') }}
@@ -334,13 +334,13 @@
                 <!-- قسم معلومات الاتصال -->
                 <div class="footer-contact">
                     <h4>{{ __('main.footer.contact_us') }}</h4>
-                    @if (isset($contactInfo['phones']) && count($contactInfo['phones']) > 0)
+                    @if (isset($contactInfo['phones'][0]) && count($contactInfo['phones']) > 0)
                         <p><i class="fas fa-phone"></i> {{ $contactInfo['phones'][0] }}</p>
                     @endif
-                    @if (isset($contactInfo['emails']) && count($contactInfo['emails']) > 0)
+                    @if (isset($contactInfo['emails'][0]) && count($contactInfo['emails']) > 0)
                         <p><i class="fas fa-envelope"></i> {{ $contactInfo['emails'][0] }}</p>
                     @endif
-                    @if (isset($contactInfo['address']))
+                    @if (isset($contactInfo['address'][0]))
                         <p><i class="fas fa-map-marker-alt"></i> {{ $contactInfo['address'] }}</p>
                     @endif
                 </div>

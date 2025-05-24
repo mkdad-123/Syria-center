@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use App\Enums\SectionEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -18,7 +19,8 @@ class Setting extends Model
         'title',
         'content',
         'extra',
-        'address', 'working_hours'
+        'address',
+        'working_hours'
     ];
 
     protected $fillable = [
@@ -28,7 +30,8 @@ class Setting extends Model
         'image',
         'extra',
         'section',
-        'address', 'working_hours'
+        'address',
+        'working_hours'
     ];
 
     protected $casts = [
@@ -43,7 +46,7 @@ class Setting extends Model
      */
     public static function getSocialMediaLinks()
     {
-        $setting = self::where('section', 'social_media')->first();
+        $setting = self::where('section', 'about us')->first();
 
         $defaults = [
             'facebook' => '#',
@@ -65,7 +68,7 @@ class Setting extends Model
      */
     public static function getContactInfo()
     {
-        $setting = self::where('section', 'contact_info')->first();
+        $setting = self::where('section', 'about us')->first();
 
         $defaults = [
             'emails' => ['info@example.com'],
@@ -81,9 +84,43 @@ class Setting extends Model
 
         // تأكد من أن القيم الأساسية هي مصفوفات
         $extra = $setting->extra;
-        foreach (['emails', 'phones', 'mobile_numbers'] as $arrayField) {
-            if (isset($extra[$arrayField]) && !is_array($extra[$arrayField])) {
-                $extra[$arrayField] = (array)$extra[$arrayField];
+
+        // معالجة الإيميلات (كما في السابق)
+        if (!isset($extra['emails']) || !is_array($extra['emails'])) {
+            $extra['emails'] = [];
+        }
+
+        foreach ($extra as $key => $value) {
+            if (str_starts_with($key, 'email') && is_string($value)) {
+                if (!in_array($value, $extra['emails'])) {
+                    $extra['emails'][] = $value;
+                }
+            }
+        }
+
+        // معالجة أرقام الهواتف (phones)
+        if (!isset($extra['phones']) || !is_array($extra['phones'])) {
+            $extra['phones'] = [];
+        }
+
+        foreach ($extra as $key => $value) {
+            if (str_starts_with($key, 'phone') && is_string($value)) {
+                if (!in_array($value, $extra['phones'])) {
+                    $extra['phones'][] = $value;
+                }
+            }
+        }
+
+        // معالجة الأرقام المحمولة (mobile_numbers)
+        if (!isset($extra['mobile_numbers']) || !is_array($extra['mobile_numbers'])) {
+            $extra['mobile_numbers'] = [];
+        }
+
+        foreach ($extra as $key => $value) {
+            if (str_starts_with($key, 'mobile_number') && is_string($value)) {
+                if (!in_array($value, $extra['mobile_numbers'])) {
+                    $extra['mobile_numbers'][] = $value;
+                }
             }
         }
 
