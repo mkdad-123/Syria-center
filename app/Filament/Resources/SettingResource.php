@@ -102,9 +102,12 @@ class SettingResource extends Resource
                                 Forms\Components\Select::make('key')
                                     ->label(__('filament.setting.extra.key_label'))
                                     ->options([
-                                        'meta_description' => 'Meta Description',
-                                        'meta_keywords' => 'Meta Keywords',
-                                        'author_name' => 'Author Name',
+                                        'Facebook' => 'Facebook',
+                                        'Instagram' => 'Instagram',
+                                        'Phone' => 'Phone',
+                                        'Email' => 'Email',
+                                        'Address' => 'Address',
+                                        'Youtube' => 'Youtube'
                                     ])
                                     ->required(),
 

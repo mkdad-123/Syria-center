@@ -18,7 +18,6 @@ class Setting extends Model
     public $translatable = [
         'title',
         'content',
-        'extra',
         'address',
         'working_hours'
     ];
