@@ -72,7 +72,8 @@ class SettingResource extends Resource
                             ->label(__('filament.setting.image.label'))
                             ->directory('Setting')
                             ->image()
-                            ->imageEditor(),
+                            ->imageEditor()
+                            ->hidden(fn (Forms\Get $get) : bool => $get('section') !== SectionEnum::AboutUs->value),
 
                         Forms\Components\RichEditor::make('content')
                             ->label(__('filament.setting.content.label'))
@@ -88,13 +89,33 @@ class SettingResource extends Resource
                             ->required()
                             ->columnSpanFull(),
 
-                        Forms\Components\KeyValue::make('extra')
+//                        Forms\Components\KeyValue::make('extra')
+//                            ->label(__('filament.setting.extra.label'))
+//                            ->keyLabel(__('filament.setting.extra.key_label'))
+//                            ->valueLabel(__('filament.setting.extra.value_label'))
+//                            ->columnSpanFull()
+//                            ->hidden(fn (Forms\Get $get) : bool => $get('section') !== SectionEnum::AboutUs->value),
+
+                        Forms\Components\Repeater::make('extra')
                             ->label(__('filament.setting.extra.label'))
-                            ->keyLabel(__('filament.setting.extra.key_label'))
-                            ->valueLabel(__('filament.setting.extra.value_label'))
+                            ->schema([
+                                Forms\Components\Select::make('key')
+                                    ->label(__('filament.setting.extra.key_label'))
+                                    ->options([
+                                        'meta_description' => 'Meta Description',
+                                        'meta_keywords' => 'Meta Keywords',
+                                        'author_name' => 'Author Name',
+                                    ])
+                                    ->required(),
+
+                                Forms\Components\TextInput::make('value')
+                                    ->label(__('filament.setting.extra.value_label'))
+                                    ->required(),
+                            ])
                             ->columnSpanFull()
-                            ->hidden(fn (Forms\Get $get) : bool => $get('section') !== SectionEnum::AboutUs->value),
-                    ])
+                            ->hidden(fn (Forms\Get $get) => $get('section') !== SectionEnum::AboutUs->value)
+
+        ])
             ]);
     }
 
