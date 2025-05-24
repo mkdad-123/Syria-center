@@ -1,3 +1,20 @@
+document.querySelectorAll('.language-menu a').forEach(item => {
+    item.addEventListener('click', function(e) {
+        e.preventDefault();
+        const lang = this.getAttribute('data-lang');
+        // إرسال طلب لتغيير اللغة
+        fetch('/change-language', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ locale: lang })
+        }).then(() => {
+            window.location.reload();
+        });
+    });
+});
 // تأكد من أن الكود ينفذ بعد تحميل الصفحة
 document.addEventListener('DOMContentLoaded', function() {
     // وظيفة لتعيين الكوكي

@@ -10,8 +10,7 @@ use App\Http\Middleware\CustomAuthenticate;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 
-// الصفحة الرئيسية متاحة للجميع
-// routes/web.php
+
 Route::get('/', [App\Http\Controllers\ShowController::class, 'showHomePage'])->name('home');
 
 

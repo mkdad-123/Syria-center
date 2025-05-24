@@ -1114,12 +1114,12 @@
         padding: 10px 15px;
         gap: 10px;
     }
-    
+
     .logo-container {
         flex-basis: auto;
         order: 1;
     }
-    
+
     .nav-list {
         display: flex;
         flex-direction: row;
@@ -1130,27 +1130,27 @@
         margin-top: 15px;
         gap: 8px;
     }
-    
+
     .nav-list li {
         margin: 0;
     }
-    
+
     .nav-list a {
         padding: 6px 12px;
         font-size: 0.9rem;
     }
-    
+
     .login-btn {
         order: 2;
         margin-right: 0;
     }
-    
+
     .login-btn a {
         margin-right: 0;
         padding: 6px 12px;
         font-size: 0.9rem;
     }
-    
+
     /* تعديلات القوائم المنسدلة للجوال */
     .dropdown-content {
         position: absolute;
@@ -1158,43 +1158,43 @@
         right: 0;
         box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
-    
+
     /* إظهار القوائم المنسدلة عند النقر */
     .dropdown.active .dropdown-content {
         display: block;
     }
-    
+
     /* تعديلات محول اللغة للجوال */
     .language-switcher {
         position: relative;
     }
-    
+
     .language-menu {
         position: absolute;
         width: 150px;
         right: 0;
         top: 100%;
     }
-    
+
     /* إخفاء العناصر غير الضرورية */
     .org-name-line2 {
         display: none;
     }
-    
+
     /* تعديلات حجم الخط والشعار للشاشات الصغيرة جداً */
     @media (max-width: 480px) {
         .logo img {
             height: 50px;
         }
-        
+
         .org-name-line1 {
             font-size: 1.1rem;
         }
-        
+
         .nav-list {
             gap: 5px;
         }
-        
+
         .nav-list a {
             padding: 5px 8px;
             font-size: 0.8rem;
