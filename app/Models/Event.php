@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Enums\EventType;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
 class Event extends Model
 {
-    use HasTranslations;
+    use HasFactory, HasTranslations;
 
     public $translatable = ['description' , 'title' , 'location' ,];
 

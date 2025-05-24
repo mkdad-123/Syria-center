@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,7 +11,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Service extends Model
 {
-    use HasTranslations;
+    use HasFactory, HasTranslations;
 
     public $translatable = ['description','name'];
 
@@ -42,7 +43,7 @@ class Service extends Model
 public function getTranslatedAttribute($attribute, $locale = null)
 {
     $locale = $locale ?: app()->getLocale();
-    
+
     // If the attribute is not translatable, return its normal value
     if (!in_array($attribute, $this->translatable)) {
         return $this->{$attribute};
@@ -50,15 +51,15 @@ public function getTranslatedAttribute($attribute, $locale = null)
 
     // Get the translations array
     $translations = $this->{$attribute};
-    
+
     // If translations is a JSON string, decode it
     if (is_string($translations)) {
         $translations = json_decode($translations, true) ?? [];
     }
 
     // Return the translation for the current locale or fallback to the first available
-    return $translations[$locale] ?? 
-           $translations[app()->getFallbackLocale()] ?? 
+    return $translations[$locale] ??
+           $translations[app()->getFallbackLocale()] ??
            $this->{$attribute};
 }
 }

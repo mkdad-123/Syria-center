@@ -10,10 +10,10 @@ return [
         'section' => [
             'label' => 'Key',
             'options' => [
-                'about_us' => 'About Us',
+                'about us' => 'About Us',
                 'vision' => 'Vision',
                 'mission' => 'Mission',
-                'target_group' => 'Target Group',
+                'target group' => 'Target Group',
             ],
         ],
         'title' => [

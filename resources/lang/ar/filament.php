@@ -9,10 +9,10 @@ return [
         'section' => [
             'label' => 'مفتاح',
             'options' => [
-                'about_us' => 'من نحن',
+                'about us' => 'من نحن',
                 'vision' => 'رؤيتنا',
                 'mission' => 'مهمتنا',
-                'target_group' => 'أهدافنا',
+                'target group' => 'أهدافنا',
             ],
         ],
         'title' => [

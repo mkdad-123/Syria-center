@@ -54,14 +54,14 @@ class SettingResource extends Resource
                             ->label(__('filament.setting.section.label'))
                             ->required()
                             ->options([
-                                SectionEnum::AboutUs->value => __('filament.setting.section.options.about_us'),
+                                SectionEnum::AboutUs->value => __('filament.setting.section.options.about us'),
                                 SectionEnum::Vision->value => __('filament.setting.section.options.vision'),
                                 SectionEnum::Mission->value => __('filament.setting.section.options.mission'),
-                                SectionEnum::TargetGroup->value => __('filament.setting.section.options.target_group'),
+                                SectionEnum::TargetGroup->value => __('filament.setting.section.options.target group'),
                             ])
                             ->live()
                             ->afterStateUpdated(function ($state, Forms\Set $set) {
-                                $set('title', Str::headline($state));
+                                $set('title', Str::headline(__('filament.setting.section.options.'.$state)));
                             }),
 
                         TextInput::make('title')

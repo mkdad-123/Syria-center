@@ -4,12 +4,13 @@ namespace App\Models;
 
 use App\Enums\GenderEnum;
 use App\Enums\VolunteerAvailabilityEnum;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
 class Volunteer extends Model
 {
-    use HasTranslations;
+    use HasFactory , HasTranslations;
 
     public array $translatable = [
         'name',
@@ -18,6 +19,7 @@ class Volunteer extends Model
         'skills',
         'availability',
         'notes',
+        'CV'
     ];
 
     protected $fillable = [
@@ -51,10 +53,7 @@ class Volunteer extends Model
 
     protected $casts = [
         'skills' => 'array',
-
         'gender' =>  GenderEnum::class,
         'availability' => VolunteerAvailabilityEnum::class,
-        'gender' => 'json',
-
     ];
 }

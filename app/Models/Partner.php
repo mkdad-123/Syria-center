@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -10,7 +11,7 @@ use Spatie\Translatable\HasTranslations;
 class Partner extends Model
 {
     use HasApiTokens , Notifiable;
-    use HasTranslations;
+    use HasTranslations , HasFactory;
 
     protected $table = 'partners';
     public $translatable = ['name','description'];

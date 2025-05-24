@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Translatable\HasTranslations;
@@ -9,7 +10,7 @@ use Spatie\Translatable\HasTranslations;
 class Article extends Model
 {
 
-    use HasTranslations;
+    use HasFactory, HasTranslations;
 
 
     protected $table = 'articles';
@@ -25,15 +26,15 @@ class Article extends Model
     public function getTranslatedAttribute($attribute, $locale = null)
     {
         $locale = $locale ?: app()->getLocale();
-        
+
         if (!in_array($attribute, $this->translatable)) {
             return $this->{$attribute};
         }
 
         $translations = json_decode($this->{$attribute}, true) ?? [];
-        
-        return $translations[$locale] ?? 
-               $translations[config('app.fallback_locale')] ?? 
+
+        return $translations[$locale] ??
+               $translations[config('app.fallback_locale')] ??
                $this->{$attribute};
     }
 
@@ -41,10 +42,10 @@ class Article extends Model
     {
         try {
             $translations = json_decode($this->content, true) ?? [];
-            return $translations[$locale] ?? 
-                   $translations[config('app.fallback_locale')] ?? 
-                   $this->content ?? 
-                   $default ?? 
+            return $translations[$locale] ??
+                   $translations[config('app.fallback_locale')] ??
+                   $this->content ??
+                   $default ??
                    __('No content available');
         } catch (\Exception $e) {
             return $this->content ?? $default ?? __('No content available');
