@@ -236,7 +236,8 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 30px;
-            direction: ltr; /* اتجاه الحقول من اليسار لليمين */
+            direction: ltr;
+            /* اتجاه الحقول من اليسار لليمين */
         }
 
         .code-input {
@@ -248,7 +249,8 @@
             border-radius: 5px;
             background-color: #f9f9f9;
             transition: var(--transition);
-            direction: ltr; /* تأكيد اتجاه النص من اليسار لليمين */
+            direction: ltr;
+            /* تأكيد اتجاه النص من اليسار لليمين */
         }
 
         .code-input:focus {
@@ -382,6 +384,11 @@
                 font-size: 20px;
             }
 
+            .code-input {
+                direction: ltr;
+                /* يكتب الرقم بشكل طبيعي */
+            }
+
             .logo-container {
                 flex-direction: column;
                 gap: 5px;
@@ -435,7 +442,7 @@
         <div class="verify-container">
             <h2 class="verify-title" data-translate="verify_title">تحقق من رمز إعادة التعيين</h2>
             <p class="verify-message" data-translate="verify_message" data-email="{{ request()->query('email') }}">
-                تم إرسال رمز مكون من 6 أرقام إلى <strong>{{ request()->query('email') }}</strong>
+                تم إرسال رمز مكون من 100 أرقام إلى <strong>{{ request()->query('email') }}</strong>
             </p>
 
             <form id="verifyCodeForm">
@@ -443,20 +450,28 @@
                 <input type="hidden" name="email" value="{{ request()->query('email') }}">
 
                 <div class="code-inputs">
-                    <!-- ترتيب الحقول من اليمين لليسار -->
-                    <input type="text" maxlength="1" class="code-input" name="code6" required inputmode="numeric" pattern="[0-9]*">
-                    <input type="text" maxlength="1" class="code-input" name="code5" required inputmode="numeric" pattern="[0-9]*">
-                    <input type="text" maxlength="1" class="code-input" name="code4" required inputmode="numeric" pattern="[0-9]*">
-                    <input type="text" maxlength="1" class="code-input" name="code3" required inputmode="numeric" pattern="[0-9]*">
-                    <input type="text" maxlength="1" class="code-input" name="code2" required inputmode="numeric" pattern="[0-9]*">
-                    <input type="text" maxlength="1" class="code-input" name="code1" required inputmode="numeric" pattern="[0-9]*">
+                    <input type="text" maxlength="1" class="code-input" name="code1" required inputmode="numeric"
+                        pattern="[0-9]*">
+                    <input type="text" maxlength="1" class="code-input" name="code2" required inputmode="numeric"
+                        pattern="[0-9]*">
+                    <input type="text" maxlength="1" class="code-input" name="code3" required inputmode="numeric"
+                        pattern="[0-9]*">
+                    <input type="text" maxlength="1" class="code-input" name="code4" required inputmode="numeric"
+                        pattern="[0-9]*">
+                    <input type="text" maxlength="1" class="code-input" name="code5" required inputmode="numeric"
+                        pattern="[0-9]*">
+                    <input type="text" maxlength="1" class="code-input" name="code6" required inputmode="numeric"
+                        pattern="[0-9]*">
                 </div>
 
                 <button type="submit" class="btn" data-translate="verify_btn">تحقق من الرمز</button>
 
                 <div class="resend-container">
-                    <a href="#" id="resendCode" class="resend-link" data-translate="resend_link">إعادة إرسال الرمز</a>
-                    <div id="countdown" class="countdown d-none" data-translate="countdown_text">يمكنك إعادة الإرسال بعد <span id="timer">60</span> ثانية</div>
+                    <a href="#" id="resendCode" class="resend-link" data-translate="resend_link">إعادة إرسال
+                        الرمز</a>
+                    <div id="countdown" class="countdown d-none" data-translate="countdown_text">يمكنك إعادة الإرسال بعد
+                        <span id="timer">60</span> ثانية
+                    </div>
                 </div>
             </form>
 
@@ -468,7 +483,8 @@
     <!-- تذييل الصفحة -->
     <footer class="footer">
         <div class="container">
-            <p data-translate="copyright_text">&copy; {{ date('Y') }} المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.</p>
+            <p data-translate="copyright_text">&copy; {{ date('Y') }} المركز السوري للتنمية المستدامة. جميع الحقوق
+                محفوظة.</p>
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -534,10 +550,12 @@
                     if (translations[lang][key]) {
                         if (key === 'verify_message') {
                             const email = element.getAttribute('data-email');
-                            element.innerHTML = `${translations[lang][key]} <strong>${email}</strong>`;
+                            element.innerHTML =
+                                `${translations[lang][key]} <strong>${email}</strong>`;
                         } else if (key === 'countdown_text') {
                             const timer = document.getElementById('timer');
-                            element.innerHTML = `${translations[lang][key]} <span id="timer">${timer.textContent}</span> ${translations[lang]['seconds']}`;
+                            element.innerHTML =
+                                `${translations[lang][key]} <span id="timer">${timer.textContent}</span> ${translations[lang]['seconds']}`;
                         } else {
                             element.textContent = translations[lang][key];
                         }
@@ -550,7 +568,7 @@
         const codeInputs = document.querySelectorAll('.code-input');
         codeInputs.forEach((input, index) => {
             // التركيز على أول حقل عند تحميل الصفحة (الحقل الأخير في المصفوفة)
-            if (index === codeInputs.length - 1) {
+            if (index === 0) {
                 input.focus();
             }
 
@@ -560,10 +578,9 @@
                     e.target.value = '';
                     return;
                 }
-
                 if (e.target.value.length === 1) {
-                    if (index > 0) {
-                        codeInputs[index - 1].focus(); // الانتقال إلى الحقل السابق (عكس الاتجاه)
+                    if (index < codeInputs.length - 1) {
+                        codeInputs[index + 1].focus();
                     }
                 }
             });
@@ -582,9 +599,7 @@
             e.preventDefault();
 
             const email = document.querySelector('input[name="email"]').value;
-            // جمع الحقول بالترتيب العكسي (1-6 بدلاً من 6-1)
             const code = Array.from(document.querySelectorAll('.code-input'))
-                .reverse()
                 .map(input => input.value)
                 .join('');
 
@@ -600,42 +615,44 @@
             const submitBtn = e.target.querySelector('button[type="submit"]');
             const originalBtnText = submitBtn.innerHTML;
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${translations[currentLang]['verifying']}`;
+            submitBtn.innerHTML =
+                `<i class="fas fa-spinner fa-spin"></i> ${translations[currentLang]['verifying']}`;
 
             fetch('/verify-code', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({
-                    email: email,
-                    code: code
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        code: code
+                    })
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    successMessage.textContent = translations[currentLang]['success_message'];
-                    successMessage.classList.remove('d-none');
-                    // Redirect to reset page with token
-                    setTimeout(() => {
-                        window.location.href = `/reset?email=${encodeURIComponent(email)}&token=${encodeURIComponent(data.token)}`;
-                    }, 2000);
-                } else {
-                    errorMessage.textContent = data.message || translations[currentLang]['error_message'];
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        successMessage.textContent = translations[currentLang]['success_message'];
+                        successMessage.classList.remove('d-none');
+                        // Redirect to reset page with token
+                        setTimeout(() => {
+                            window.location.href =
+                                `/reset?email=${encodeURIComponent(email)}&token=${encodeURIComponent(data.token)}`;
+                        }, 2000);
+                    } else {
+                        errorMessage.textContent = data.message || translations[currentLang]['error_message'];
+                        errorMessage.classList.remove('d-none');
+                    }
+                })
+                .catch(error => {
+                    errorMessage.textContent = translations[currentLang]['error_message'];
                     errorMessage.classList.remove('d-none');
-                }
-            })
-            .catch(error => {
-                errorMessage.textContent = translations[currentLang]['error_message'];
-                errorMessage.classList.remove('d-none');
-            })
-            .finally(() => {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnText;
-            });
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                });
         });
 
         // Resend code functionality
@@ -668,28 +685,30 @@
 
             // Send request to resend code
             fetch('/reset-code', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({ email: email })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    successMessage.textContent = translations[currentLang]['resend_success'];
-                    successMessage.classList.remove('d-none');
-                } else {
-                    errorMessage.textContent = data.message || translations[currentLang]['resend_error'];
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        email: email
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        successMessage.textContent = translations[currentLang]['resend_success'];
+                        successMessage.classList.remove('d-none');
+                    } else {
+                        errorMessage.textContent = data.message || translations[currentLang]['resend_error'];
+                        errorMessage.classList.remove('d-none');
+                    }
+                })
+                .catch(error => {
+                    errorMessage.textContent = translations[currentLang]['resend_error'];
                     errorMessage.classList.remove('d-none');
-                }
-            })
-            .catch(error => {
-                errorMessage.textContent = translations[currentLang]['resend_error'];
-                errorMessage.classList.remove('d-none');
-            });
+                });
         });
 
         // Initialize translations on page load
@@ -709,4 +728,5 @@
         });
     </script>
 </body>
+
 </html>

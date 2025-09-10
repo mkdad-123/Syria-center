@@ -61,21 +61,26 @@
                                 <li><a href="#" data-lang="en"><i class="fas fa-language"></i> English</a></li>
                             </ul>
                         </li>
-                        @if (Auth::guard('custom')->check())
+                        {{-- زر الدخول/الخروج حسب حالة المصادقة على حارس custom --}}
+                        @auth('custom')
                             <li class="login-btn">
                                 <a href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     {{ __('main.buttons.logout') }}
                                 </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                    style="display: none;">
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
                                     @csrf
                                 </form>
                             </li>
                         @else
-                            <li class="login-btn"><a href="{{ route('login') }}">{{ __('main.buttons.login') }}</a>
+                            <li class="login-btn">
+                                <a href="{{ route('login') }}">
+                                    {{ __('main.buttons.login') }}
+                                </a>
                             </li>
-                        @endif
+                        @endauth
+
                     </ul>
                 </nav>
             </div>
@@ -84,65 +89,71 @@
 
     <!-- القسم الرئيسي -->
     <main>
-        <!-- About Us Section - Fixed -->
-      <!-- About Us Section - Fixed -->
-<section id="about" class="section about-section">
-    <div class="container">
-        <h2 class="section-title">{{ __('main.titles.about') }}</h2>
-        <div class="about-container">
-            <!-- الصورة الجديدة -->
-            <div class="about-image">
-                <div class="about-image-card">
-                    <img src="\image1.jpg" alt="{{ __('main.titles.about') }}">
-                </div>
-            </div>
 
-            @php
-                // استرجاع المحتوى مع التعامل مع جميع الحالات
-                $aboutContent = '';
-                if (is_string($aboutUs)) {
-                    $aboutContent = $aboutUs;
-                } elseif ($aboutUs instanceof \App\Models\Setting) {
-                    $aboutContent = $aboutUs->getTranslation('content', $locale, false) ?? __('No content available');
-                } else {
-                    $aboutContent = __('No content available');
-                }
-
-                // إنشاء نسخة نصية فقط لعد الكلمات
-                $textOnly = strip_tags($aboutContent);
-                $words = preg_split('/\s+/', $textOnly);
-                $wordCount = count($words);
-
-                // تحديد ما إذا كان المحتوى قصيرًا
-                $isShortContent = $wordCount <= 40;
-            @endphp
-
-            <div class="about-content">
-                @if(request()->routeIs('about-us'))
-                    <!-- عرض المحتوى كاملاً في صفحة about-us -->
-                    <div class="full-content">
-                        {!! $aboutContent !!}
-                    </div>
-                @else
-                    <!-- عرض المحتوى مع زر اقرأ المزيد دائمًا -->
-                    <div class="{{ $isShortContent ? 'full-content' : 'short-content' }}">
-                        @if($isShortContent)
-                            {!! $aboutContent !!}
-                        @else
-                            {!! Str::words($aboutContent, 40, '...') !!}
-                        @endif
-
-                        <div class="read-more-btn-container">
-                            <a href="{{ route('about-us') }}" class="read-more-btn">
-                                {{ __('main.buttons.read_more') }}
-                            </a>
+        <section id="about" class="section about-section">
+            <div class="container">
+                <h2 class="section-title">{{ __('main.titles.about') }}</h2>
+                <div class="about-container">
+                    <!-- الصورة الجديدة -->
+                    <div class="about-image">
+                        <div class="about-image-card">
+                            <img src="\image1.jpg" alt="{{ __('main.titles.about') }}">
                         </div>
                     </div>
-                @endif
+
+                    @php
+                        use Illuminate\Support\Str; // لو ما عندك alias
+
+                        $aboutContent = '';
+
+                        // حوّل Array/Collection لأول عنصر (إن وُجد)
+                        if ($aboutUs instanceof \Illuminate\Support\Collection) {
+                            $aboutUs = $aboutUs->first();
+                        } elseif (is_array($aboutUs)) {
+                            $aboutUs = $aboutUs[0] ?? null;
+                        }
+
+                        if (is_string($aboutUs)) {
+                            $aboutContent = $aboutUs;
+                        } elseif ($aboutUs instanceof \App\Models\Setting) {
+                            // ملاحظة: فعّل fallback للّغة (انظر النقطة 4)
+                            $aboutContent =
+                                $aboutUs->getTranslation('content', $locale, true) ?? __('No content available');
+                        } else {
+                            $aboutContent = __('No content available');
+                        }
+
+                        $textOnly = trim(strip_tags($aboutContent));
+                        $wordCount = $textOnly === '' ? 0 : count(preg_split('/\s+/u', $textOnly));
+                        $isShortContent = $wordCount <= 40;
+                    @endphp
+
+                    <div class="about-content">
+                        @if (request()->routeIs('about-us'))
+                            <!-- عرض المحتوى كاملاً في صفحة about-us -->
+                            <div class="full-content">
+                                {!! $aboutContent !!}
+                            </div>
+                        @else
+                            <!-- عرض المحتوى مع زر اقرأ المزيد دائمًا -->
+                            <div class="{{ $isShortContent ? 'full-content' : 'short-content' }}">
+                                @if ($isShortContent)
+                                    {!! $aboutContent !!}
+                                @else
+                                    {!! Str::words($aboutContent, 40, '...') !!}
+                                @endif
+
+                                <div class="read-more-btn-container">
+                                    <a href="{{ route('about-us') }}" class="read-more-btn">
+                                        {{ __('main.buttons.read_more') }}
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
 
         <!-- Mission & Vision Section - Fixed -->
         <section id="mission" class="section mission-section">
@@ -164,8 +175,8 @@
                                 $missionContent = __('No content available');
                             }
                         @endphp
-                    {!! $missionContent !!}
-                </div>
+                        {!! $missionContent !!}
+                    </div>
                     <div class="vision">
                         <h3 style="color: #000;">{{ __('main.titles.vision') }}</h3>
                         <div class="icon-wrapper">
@@ -182,8 +193,8 @@
                                 $visionContent = __('No content available');
                             }
                         @endphp
-                    {!! $visionContent !!}
-                </div>
+                        {!! $visionContent !!}
+                    </div>
                 </div>
             </div>
         </section>
@@ -207,7 +218,7 @@
                             $targetContent = __('No content available');
                         }
                     @endphp
-                    {!!$targetContent !!}
+                    {!! $targetContent !!}
                 </div>
             </div>
         </section>
@@ -241,64 +252,67 @@
             </div>
         </section>
 
-    <section id="team" class="section team-section">
-    <div class="container">
-        <h2 class="section-title">{{ __('main.titles.team') }}</h2>
-        <div class="team-carousel {{ count($team) <= 1 ? 'single-member' : '' }}" id="teamCarousel">
-            <div class="team-slide">
-                @foreach ($team as $member)
-                    <div class="team-member {{ $loop->first ? 'active' : '' }}">
-                        <a href="{{ route('volunteers', ['vol' => $member['id'] ?? null]) }}">
-                            <img src="{{ asset('storage/' . $member['image']) }}" alt="{{ $member['name'] }}" style="cursor: pointer;">
-                        </a>
-                        <h3>{{ $member['name'] }}</h3>
-                        @if(!empty($member['skills']))
-                            <div class="member-skills">
-                                @if(is_array($member['skills']))
-                                    @foreach($member['skills'] as $skill)
-                                        <span class="skill-tag">{{ $skill }}</span>
-                                    @endforeach
-                                @else
-                                    <span class="skill-tag">{{ $member['skills'] }}</span>
+        <section id="team" class="section team-section">
+            <div class="container">
+                <h2 class="section-title">{{ __('main.titles.team') }}</h2>
+                <div class="team-carousel {{ count($team) <= 1 ? 'single-member' : '' }}" id="teamCarousel">
+                    <div class="team-slide">
+                        @foreach ($team as $member)
+                            <div class="team-member {{ $loop->first ? 'active' : '' }}">
+                                <a href="{{ route('volunteers', ['vol' => $member['id'] ?? null]) }}">
+                                    <img src="{{ asset('storage/' . $member['image']) }}"
+                                        alt="{{ $member['name'] }}" style="cursor: pointer;">
+                                </a>
+                                <h3>{{ $member['name'] }}</h3>
+                                @if (!empty($member['skills']))
+                                    <div class="member-skills">
+                                        @if (is_array($member['skills']))
+                                            @foreach ($member['skills'] as $skill)
+                                                <span class="skill-tag">{{ $skill }}</span>
+                                            @endforeach
+                                        @else
+                                            <span class="skill-tag">{{ $member['skills'] }}</span>
+                                        @endif
+                                    </div>
                                 @endif
-                            </div>
-                        @endif
 
-                        <p>{{ $member['bio'] }}</p>
+                                <p>{{ $member['bio'] }}</p>
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
+                    @if (count($team) > 1)
+                        <button class="carousel-btn" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+                        <button class="carousel-btn" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+                        <div class="carousel-indicators"></div>
+                    @endif
+                </div>
             </div>
-            @if(count($team) > 1)
-                <button class="carousel-btn" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
-                <button class="carousel-btn" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
-                <div class="carousel-indicators"></div>
-            @endif
-        </div>
-    </div>
-</section>
+        </section>
 
         <!-- Partners Section - Improved -->
         <section id="partners" class="section partners-section">
             <div class="container">
                 <h2 class="section-title">{{ __('main.titles.partners') }}</h2>
-                <div class="partners-carousel {{ count($partners) <= 1 ? 'single-partner' : '' }}" id="partnersCarousel">
+                <div class="partners-carousel {{ count($partners) <= 1 ? 'single-partner' : '' }}"
+                    id="partnersCarousel">
                     <div class="partners-slide">
                         @foreach ($partners as $partner)
-                        {{-- Debug output --}}
-                        <div class="partner {{ $loop->first ? 'active' : '' }}">
-                            <img src="{{ asset('storage/' . $partner['image']) }}" alt="{{ $partner['name'] }}">
-                            <p>
-                            {!! $partner['name'] !!}
-                            </p>
+                            {{-- Debug output --}}
+                            <div class="partner {{ $loop->first ? 'active' : '' }}">
+                                <img src="{{ asset('storage/' . $partner['image']) }}" alt="{{ $partner['name'] }}">
+                                <p>
+                                    {!! $partner['name'] !!}
+                                </p>
 
-                            <p>
-                                @if(is_array($partner['description']))
-                                    {!! $partner['description'][$locale] ?? $partner['description']['en'] ?? '' !!}
-                                @else
-                                    {!! $partner['description'] !!}
-                                @endif
-                            </p>                       </div>
-                    @endforeach
+                                <p>
+                                    @if (is_array($partner['description']))
+                                        {!! $partner['description'][$locale] ?? ($partner['description']['en'] ?? '') !!}
+                                    @else
+                                        {!! $partner['description'] !!}
+                                    @endif
+                                </p>
+                            </div>
+                        @endforeach
 
                     </div>
                     <button class="carousel-btn" id="partnersPrevBtn"><i class="fas fa-chevron-left"></i></button>
@@ -317,7 +331,8 @@
                 <div class="footer-logo">
                     <img src="\logo.png" alt="{{ __('main.site_name') }}">
                     <p>{{ __('main.site_name') }}<br>
-                    <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span></p>
+                        <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span>
+                    </p>
                 </div>
 
                 <!-- قسم الروابط السريعة -->
@@ -353,16 +368,19 @@
                 <p>{{ __('main.footer.copyright') }} &copy; {{ date('Y') }}</p>
                 <div class="social-icons">
                     @if (isset($socialMedia['facebook']))
-                        <a href="{{ $socialMedia['facebook'] }}" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="{{ $socialMedia['facebook'] }}" target="_blank"><i
+                                class="fab fa-facebook-f"></i></a>
                     @endif
                     @if (isset($socialMedia['twitter']))
                         <a href="{{ $socialMedia['twitter'] }}" target="_blank"><i class="fab fa-twitter"></i></a>
                     @endif
                     @if (isset($socialMedia['linkedin']))
-                        <a href="{{ $socialMedia['linkedin'] }}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="{{ $socialMedia['linkedin'] }}" target="_blank"><i
+                                class="fab fa-linkedin-in"></i></a>
                     @endif
                     @if (isset($socialMedia['instagram']))
-                        <a href="{{ $socialMedia['instagram'] }}" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="{{ $socialMedia['instagram'] }}" target="_blank"><i
+                                class="fab fa-instagram"></i></a>
                     @endif
                     @if (isset($socialMedia['youtube']))
                         <a href="{{ $socialMedia['youtube'] }}" target="_blank"><i class="fab fa-youtube"></i></a>
@@ -371,7 +389,7 @@
             </div>
         </div>
     </footer>
-<script src="{{ asset('js\welcome.js') }}"></script>
+    <script src="{{ asset('js\welcome.js') }}"></script>
 
 </body>
 

@@ -35,96 +35,87 @@ class Setting extends Model
 
     protected $casts = [
         'extra' => 'array',
-        'title' => 'array',
-        'content' => 'array',
+
         'section' => SectionEnum::class,
     ];
 
     /**
      * الحصول على روابط السوشيال ميديا مع قيم افتراضية آمنة
      */
-    public static function getSocialMediaLinks()
-    {
-        $setting = self::where('section', 'about us')->first();
+  public static function getSocialMediaLinks()
+{
+    $setting = self::where('section', 'about us')->first();
 
-        $defaults = [
-            'facebook' => '#',
-            'instagram' => '#',
-            'twitter' => '#',
-            'youtube' => '#',
-            'linkedin' => '#'
-        ];
+    $defaults = [
+        'facebook' => '#',
+        'instagram' => '#',
+        'twitter' => '#',
+        'youtube' => '#',
+        'linkedin' => '#'
+    ];
 
-        if (!$setting || !is_array($setting->extra)) {
-            return $defaults;
-        }
-
-        return array_merge($defaults, $setting->extra);
+    if (!$setting || !is_array($setting->extra)) {
+        return $defaults;
     }
+
+    $socialLinks = $defaults;
+
+    foreach ($setting->extra as $item) {
+        if (in_array($item['key'], ['Facebook', 'Instagram', 'Twitter', 'Youtube', 'Linkedin'])) {
+            $key = strtolower($item['key']);
+            $socialLinks[$key] = $item['value'];
+        }
+    }
+
+    return $socialLinks;
+}
 
     /**
      * الحصول على معلومات التواصل مع قيم افتراضية آمنة
      */
-    public static function getContactInfo()
-    {
-        $setting = self::where('section', 'about us')->first();
+  public static function getContactInfo()
+{
+    $setting = self::where('section', 'about us')->first();
 
-        $defaults = [
-            'emails' => ['info@example.com'],
-            'phones' => ['123-456-789'],
-            'mobile_numbers' => [],
-            'address' => __('Damascus, Syria'),
-            'working_hours' => __('9:00 AM - 5:00 PM')
-        ];
+    $defaults = [
+        'emails' => ['info@example.com'],
+        'phones' => ['123-456-789'],
+        'mobile_numbers' => [],
+        'address' => __('Damascus, Syria'),
+        'working_hours' => __('9:00 AM - 5:00 PM')
+    ];
 
-        if (!$setting || !is_array($setting->extra)) {
-            return $defaults;
-        }
-
-        // تأكد من أن القيم الأساسية هي مصفوفات
-        $extra = $setting->extra;
-
-        // معالجة الإيميلات (كما في السابق)
-        if (!isset($extra['emails']) || !is_array($extra['emails'])) {
-            $extra['emails'] = [];
-        }
-
-        foreach ($extra as $key => $value) {
-            if (str_starts_with($key, 'email') && is_string($value)) {
-                if (!in_array($value, $extra['emails'])) {
-                    $extra['emails'][] = $value;
-                }
-            }
-        }
-
-        // معالجة أرقام الهواتف (phones)
-        if (!isset($extra['phones']) || !is_array($extra['phones'])) {
-            $extra['phones'] = [];
-        }
-
-        foreach ($extra as $key => $value) {
-            if (str_starts_with($key, 'phone') && is_string($value)) {
-                if (!in_array($value, $extra['phones'])) {
-                    $extra['phones'][] = $value;
-                }
-            }
-        }
-
-        // معالجة الأرقام المحمولة (mobile_numbers)
-        if (!isset($extra['mobile_numbers']) || !is_array($extra['mobile_numbers'])) {
-            $extra['mobile_numbers'] = [];
-        }
-
-        foreach ($extra as $key => $value) {
-            if (str_starts_with($key, 'mobile_number') && is_string($value)) {
-                if (!in_array($value, $extra['mobile_numbers'])) {
-                    $extra['mobile_numbers'][] = $value;
-                }
-            }
-        }
-
-        return array_merge($defaults, $extra);
+    if (!$setting || !is_array($setting->extra)) {
+        return $defaults;
     }
+
+    $extra = [
+        'emails' => [],
+        'phones' => [],
+        'mobile_numbers' => [],
+        'address' => '',
+        'instagram' => ''
+    ];
+
+    foreach ($setting->extra as $item) {
+        switch ($item['key']) {
+            case 'Email':
+                $extra['emails'][] = $item['value'];
+                break;
+            case 'Phone':
+                $extra['phones'][] = $item['value'];
+                break;
+            case 'Address':
+                $extra['address'] = $item['value'];
+                break;
+            case 'Instagram':
+                $extra['instagram'] = $item['value'];
+                break;
+        }
+    }
+
+    return array_merge($defaults, $extra);
+}
     /**
      * الحصول على قيمة من الحقل extra
      */

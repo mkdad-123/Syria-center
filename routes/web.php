@@ -1,67 +1,73 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ShowController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\CompliantsController;
 use App\Http\Controllers\CustomUser\AuhtController;
 use App\Http\Controllers\CustomUser\ResetPasswordController;
-use App\Http\Controllers\LanguageController;
-use App\Http\Controllers\ShowController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\CustomAuthenticate;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Http\Request;
 
+/*
+|--------------------------------------------------------------------------
+| Public pages (no auth required)
+|--------------------------------------------------------------------------
+*/
+Route::get('/', [ShowController::class, 'showHomePage'])->name('home');
 
-Route::get('/', [App\Http\Controllers\ShowController::class, 'showHomePage'])->name('home');
+// لو بدك المسارات تكون كلها تحت /home مع أسماء واضحة
+Route::prefix('home')->group(function () {
+    Route::get('/about-us',        [ShowController::class, 'showAbout_usPage'])->name('about-us');
+    Route::get('/events',          [ShowController::class, 'showEventsPage'])->name('events');
+    Route::get('/sections',        [ShowController::class, 'showSectionsPage'])->name('sections');
+    Route::get('/sections/{section?}/services', [ShowController::class, 'showServicesPage'])->name('services');
+    Route::get('/sections/services/{service?}/detailes', [ShowController::class, 'showServicesDetailesPage'])->name('details');
+    Route::get('/compliants',      [ShowController::class, 'showContactInfoPage'])->name('compliants');
+    Route::get('/volunteer/{vol?}',[ShowController::class, 'showVolunteerPage'])->name('volunteers');
+});
 
+Route::get('/article/{id}', [ShowController::class, 'showArticlePage'])->name('article.show');
 
-Route::get('/home/about-us', [ShowController::class, 'showAbout_usPage'])->name('about-us');
+// تغيير اللغة متاح للجميع (مو بس guest)
+Route::post('/change-language', [LanguageController::class, 'change'])->name('change-language');
 
-// مسارات المصادقة (لا تتطلب تسجيل دخول)
+/*
+|--------------------------------------------------------------------------
+| Auth (guest) — login/register/password reset
+|--------------------------------------------------------------------------
+*/
 Route::middleware('guest:custom')->group(function () {
-    Route::post('/change-language', [LanguageController::class, 'change'])->name('change-language');
-    Route::get('/login', [AuhtController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuhtController::class, 'login'])->name('login.submit')->middleware('throttle:login');
+    Route::get('/login',    [AuhtController::class, 'showLoginForm'])->name('login');
+    Route::post('/login',   [AuhtController::class, 'login'])->name('login.submit')->middleware('throttle:login');
 
     Route::get('/register', [AuhtController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [AuhtController::class, 'register'])->name('register.submit');
+    Route::post('/register',[AuhtController::class, 'register'])->name('register.submit');
 
-    // مسارات استعادة كلمة المرور
-    Route::get('/reset-request', function () {
-        return view('customauth.reset-code');
-    })->name('password.request');
+    // Password reset (code → verify → reset)
+    Route::view('/reset-request', 'customauth.reset-code')->name('password.request');
 
     Route::get('/verify-code', function () {
-        if (!request()->has('email')) {
-            return redirect()->route('password.request');
-        }
+        if (!request()->has('email')) return redirect()->route('password.request');
         return view('customauth.verify-code');
     })->name('password.verify');
 
     Route::get('/reset', function () {
-        if (!request()->has('email') || !request()->has('token')) {
-            return redirect()->route('password.request');
-        }
+        if (!request()->has(['email','token'])) return redirect()->route('password.request');
         return view('customauth.reset');
     })->name('password.reset');
 
     Route::post('/reset-code', [ResetPasswordController::class, 'sendResetCode'])->name('password.reset-code');
-    Route::post('/verify-code', [ResetPasswordController::class, 'verifyResetCode']);
-    Route::post('/reset', [ResetPasswordController::class, 'resetPassword']);
+    Route::post('/verify-code', [ResetPasswordController::class, 'verifyResetCode'])->name('password.verify.post');
+    Route::post('/reset',      [ResetPasswordController::class, 'resetPassword'])->name('password.reset.post');
 });
 
-// المسارات التي تتطلب تسجيل دخول
-Route::middleware(CustomAuthenticate::class)->group(function () {
+/*
+|--------------------------------------------------------------------------
+| Authenticated (auth:custom) — actions need login
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth:custom')->group(function () {
     Route::post('/logout', [AuhtController::class, 'logout'])->name('logout');
 
-    // المسارات المحمية
-    // Route::get('/home/about-us', [ShowController::class, 'showAbout_usPage'])->name('about-us');
-    Route::get('/home/events', [ShowController::class, 'showEventsPage'])->name('events');
-    Route::get('/home/sections', [ShowController::class, 'showSectionsPage'])->name('sections');
-    Route::get('/home/sections/{section?}/services', [ShowController::class, 'showServicesPage'])->name('services');
-    Route::get('/home/sections/services/{service?}/detailes', [ShowController::class, 'showServicesDetailesPage'])->name('details');
-    Route::get('/article/{id}', [ShowController::class, 'showArticlePage'])->name('article.show');
-    Route::get('/home/compliants', [ShowController::class, 'showContactInfoPage'])->name('compliants');
-    Route::get('/home/volunteer/{vol?}', [ShowController::class, 'showVolunteerPage'])->name('volunteers');
-
+    // عمليات تحتاج دخول (مثلاً إرسال الشكاوى)
     Route::post('/compliants', [CompliantsController::class, 'addCompliants'])->name('compliants.store');
 });

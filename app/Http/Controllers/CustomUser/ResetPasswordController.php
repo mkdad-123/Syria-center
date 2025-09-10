@@ -21,7 +21,7 @@ class ResetPasswordController extends Controller
 
     public function sendResetCode(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:customusers',
         ]);
