@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CustomUserResource extends Resource
 {
@@ -73,6 +74,8 @@ class CustomUserResource extends Resource
                 Tables\Filters\Filter::make('registered_this_month')
                     ->label(__('filament.user.filters.registered_this_month'))
                     ->query(fn ($query) => $query->where('created_at', '>=', now()->startOfMonth())),
+
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
@@ -92,9 +95,10 @@ class CustomUserResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->label(__('filament.user.bulk_actions.delete')),
+                        ->requiresConfirmation(),
                     Tables\Actions\RestoreBulkAction::make()
-                        ->label(__('filament.user.bulk_actions.restore')),
+                        ->requiresConfirmation(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc')
@@ -121,5 +125,13 @@ class CustomUserResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         return CustomUser::count();
+    }
+
+    public static function getEloquentQuery():\Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

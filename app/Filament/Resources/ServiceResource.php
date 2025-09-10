@@ -104,15 +104,12 @@ class ServiceResource extends Resource
                     ->relationship('section', 'name'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->label(__('filament.service.actions.edit')),
-                Tables\Actions\DeleteAction::make()
-                    ->label(__('filament.service.actions.delete')),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->label(__('filament.service.bulk_actions.delete')),
                 ]),
             ]);
     }

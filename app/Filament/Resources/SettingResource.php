@@ -150,7 +150,6 @@ class SettingResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->label(__('filament.setting.actions.edit')),
             ])
             ->bulkActions([]);
     }

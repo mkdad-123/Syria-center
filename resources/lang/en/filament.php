@@ -58,6 +58,7 @@ return [
         ],
         'content' => [
             'hint' => 'Upload images and use them easily',
+            'label' => 'Content',
         ],
         'created_at' => [
             'label' => 'Created At',
@@ -73,6 +74,7 @@ return [
             'edit' => 'Edit',
             'delete' => 'Delete',
             'view' => 'View',
+            'create' => 'Create'
         ],
         'bulk_actions' => [
             'delete' => 'Delete',

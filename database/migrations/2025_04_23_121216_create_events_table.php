@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->json('title');
             $table->json('description');
-            $table->string('type');
+            $table->string('type' , 50);
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->json('location');

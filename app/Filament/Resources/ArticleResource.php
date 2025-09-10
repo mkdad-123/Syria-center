@@ -105,17 +105,13 @@ class ArticleResource extends Resource
                     ->relationship('service.section', 'name'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->label(__('filament.article.actions.edit')),
-                Tables\Actions\DeleteAction::make()
-                    ->label(__('filament.article.actions.delete')),
-                Tables\Actions\ViewAction::make()
-                    ->label(__('filament.article.actions.view')),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->label(__('filament.article.bulk_actions.delete')),
                 ]),
             ]);
     }

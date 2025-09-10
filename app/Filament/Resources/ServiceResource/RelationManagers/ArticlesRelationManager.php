@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ServiceResource\RelationManagers;
 
+use App\Models\Article;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -15,17 +16,29 @@ class ArticlesRelationManager extends RelationManager
 
     protected static string $relationship = 'articles';
 
+    public static function getTitle(\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): string
+    {
+        return __('filament.article.plural_model_label');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('filament.article.model_label');
+    }
+
+
+
     public function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('title')
-                    ->label(__('filament.article.fields.title'))
+                    ->label(__('filament.article.title.label'))
                     ->required()
                     ->maxLength(255),
 
                 Forms\Components\RichEditor::make('content')
-                    ->label(__('filament.article.fields.content'))
+                    ->label(__('filament.article.content.label'))
                     ->required()
                     ->columnSpanFull(),
             ]);
@@ -37,12 +50,12 @@ class ArticlesRelationManager extends RelationManager
             ->recordTitleAttribute('title')
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->label(__('filament.article.fields.title'))
+                    ->label(__('filament.article.title.label'))
                     ->searchable()
                     ->limit(50),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label(__('filament.article.fields.publish_date'))
+                    ->label(__('filament.article.created_at.label'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
             ])
@@ -50,22 +63,17 @@ class ArticlesRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
-                    ->label(__('filament.article.actions.create')),
+                Tables\Actions\CreateAction::make(),
                 Tables\Actions\LocaleSwitcher::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->label(__('filament.article.actions.edit')),
-                Tables\Actions\DeleteAction::make()
-                    ->label(__('filament.article.actions.delete')),
-                Tables\Actions\ViewAction::make()
-                    ->label(__('filament.article.actions.view')),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->label(__('filament.article.bulk_actions.delete')),
                 ]),
             ]);
     }

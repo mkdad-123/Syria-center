@@ -275,6 +275,7 @@ class EventResource extends Resource
 
                 Tables\Grouping\Group::make('type')
                     ->label(__('filament.event.groups.by_type'))
+                    ->getTitleFromRecordUsing(fn ($record): string => $record->type->value)
                     ->collapsible(),
             ])
             ->paginated([10, 25, 50, 'all']);

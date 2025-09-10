@@ -17,6 +17,18 @@ class ServicesRelationManager extends RelationManager
 
     protected static string $relationship = 'services';
 
+
+    public static function getModelLabel(): string
+    {
+        return __('filament.service.model_label');
+    }
+
+    public static function getTitle(\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): string
+    {
+        return __('filament.service.plural_model_label');
+    }
+
+
     public function form(Form $form): Form
     {
         return $form
@@ -53,18 +65,14 @@ class ServicesRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
-                    ->label(__('filament.service.actions.create')),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->label(__('filament.service.actions.edit')),
-                Tables\Actions\DeleteAction::make()
-                    ->label(__('filament.service.actions.delete')),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->label(__('filament.service.bulk_actions.delete')),
                 ]),
             ]);
     }
