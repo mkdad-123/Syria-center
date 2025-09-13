@@ -33,7 +33,7 @@ class HomePageService implements PageSectionService
         return view('welcome', [
             'locale'      => $locale,
             'aboutUs'     => $this->reader->sectionContent('about us', $locale),
-            'targetgroup' => $this->reader->sectionContent('target-group', $locale),
+            'targetgroup' => $this->reader->sectionContent('target group', $locale),
             'message'     => $this->reader->sectionContent('mission', $locale),
             'vision'      => $this->reader->sectionContent('vision', $locale),
             'team'        => $team,

@@ -11,7 +11,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Volunteer extends Model
 {
-    use HasFactory , HasTranslations;
+    use HasFactory, HasTranslations;
 
     public array $translatable = [
         'name',
@@ -44,9 +44,9 @@ class Volunteer extends Model
     {
         try {
             return $this->getTranslation('content', $locale, false)
-                   ?? $this->content
-                   ?? $default
-                   ?? __('No content available');
+                ?? $this->content
+                ?? $default
+                ?? __('No content available');
         } catch (\Exception $e) {
             return $this->content ?? $default ?? __('No content available');
         }
@@ -58,18 +58,18 @@ class Volunteer extends Model
         'availability' => VolunteerAvailabilityEnum::class,
     ];
 
-    protected static function booted()
-{
-    static::updated(function ($volunteer) {
-        app()->make(ShowController::class)->clearHomePageCache();
-    });
+    // protected static function booted()
+    // {
+    //     static::updated(function ($volunteer) {
+    //         app()->make(ShowController::class)->clearHomePageCache();
+    //     });
 
-    static::created(function ($volunteer) {
-        app()->make(ShowController::class)->clearHomePageCache();
-    });
+    //     static::created(function ($volunteer) {
+    //         app()->make(ShowController::class)->clearHomePageCache();
+    //     });
 
-    static::deleted(function ($volunteer) {
-        app()->make(ShowController::class)->clearHomePageCache();
-    });
-}
+    //     static::deleted(function ($volunteer) {
+    //         app()->make(ShowController::class)->clearHomePageCache();
+    //     });
+    // }
 }

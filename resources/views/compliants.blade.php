@@ -4,38 +4,86 @@
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <title>المركز السوري للتنمية المستدامة - تقديم شكوى</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* أنماط عامة */
+        /* ======================
+   المتغيرات العامة
+   ====================== */
         :root {
             --primary-color: #2E86AB;
             --secondary-color: #F18F01;
             --accent-color: #5BBA6F;
-            --dark-color: #000000;
+            --dark-color: #000;
             --dark-color_1: #424040;
             --light-color: #5ad27e;
             --white: #fff;
-            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+            --transition: all .3s ease;
+
+            /* ارتفاعات الهيدر + دعم النوتش */
+            --header-h: 78px;
+            /* Desktop  */
+            --header-h-tablet: 112px;
+            /* Tablet   */
+            --header-h-mobile: 160px;
+            /* Mobile   */
+            --safe-top: env(safe-area-inset-top, 0px);
         }
 
-        /* أنماط الخلفية المتغيرة */
+        /* ======================
+   قواعد أساسية + الحاوية
+   ====================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            background: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* حاوية عامة بعرض متكيّف */
+        .container {
+            width: min(100% - 32px, 1400px);
+            /* حواف 16px على الجانبين تلقائياً */
+            margin-inline: auto;
+        }
+
+        /* صور وعناصر وسائط لا تتجاوز العرض */
+        img,
+        svg,
+        video {
+            max-width: 100%;
+            height: auto
+        }
+
+        /* ======================
+   الخلفية المتغيّرة
+   ====================== */
         .background-slideshow {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             z-index: -2;
-            /* تحت كل المحتوى */
-            opacity: 0.7;
+            opacity: .7;
             transition: opacity 1s ease-in-out;
+            pointer-events: none;
         }
 
         .background-slideshow img {
             position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -44,149 +92,60 @@
         }
 
         .background-slideshow img.active {
-            opacity: 1;
+            opacity: 1
         }
 
-        /* تأكد من أن المحتوى يظهر فوق الخلفية */
+        /* المحتوى فوق الخلفية */
         .header,
-        .footer {
-            position: relative;
-            background-color: rgba(255, 255, 255, 0.95);
-            z-index: 1000;
-        }
-
         main {
             position: relative;
-            min-height: calc(100vh - 180px);
-            /* 100px للهيدر + 80px للفوتر */
-            margin-top: 100px;
-            /* ارتفاع الهيدر */
-            background-color: rgba(255, 255, 255, 0.92);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 0;
+            background: rgba(255, 255, 255, .85)
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* الفوتر صلب غير شفاف */
+        .footer {
+            background: var(--dark-color_1) !important
         }
 
-        body {
-            background-color: var(--light-color);
-            color: var(--dark-color);
-            line-height: 1.6;
-        }
-
-        .container {
-            width: calc(100% - 60px);
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0;
-        }
-
-        /* إضافة أنماط جديدة */
-        .main-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .form-container {
-            max-width: 100% !important;
-            padding: 50px !important;
-            margin-bottom: 30px !important;
-        }
-
-        .contact-info-container {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            margin-top: 30px;
-            text-align: center;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .contact-info-title {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 10px;
-            margin-bottom: 30px;
-            font-size: 1.8rem;
-        }
-
-        .contact-items {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            flex-wrap: wrap;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 1.2rem;
-        }
-
-        .contact-icon {
-            color: var(--secondary-color);
-            font-size: 1.8rem;
-        }
-
-        .working-hours {
-            margin-top: 30px;
-            font-size: 1.1rem;
-            color: var(--dark-color_1);
-        }
-
-        @media (max-width: 768px) {
-
-            .form-container,
-            .contact-info-container {
-                padding: 25px !important;
-            }
-
-            .contact-items {
-                flex-direction: column;
-                gap: 20px;
-            }
-        }
-
-        /* شريط التنقل */
+        /* ======================
+   الهيدر (ديناميكي)
+   ====================== */
         .header {
-            height: 100px;
-            background-color: var(--white);
-            box-shadow: var(--box-shadow);
             position: fixed;
-            width: 100%;
             top: 0;
-            z-index: 1000;
-            padding: 10px 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: #fff;
+            box-shadow: var(--box-shadow);
+            padding: max(10px, var(--safe-top)) 0 10px;
+            transition: transform .35s ease, opacity .25s ease;
+            will-change: transform;
+        }
+
+        .header.is-hidden {
+            transform: translateY(calc(-100% - var(--safe-top)));
+            opacity: 0;
+            pointer-events: none
         }
 
         .header .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 40px;
-            padding: 0 20px;
+            gap: clamp(12px, 4vw, 40px);
+            padding: 0 12px;
         }
 
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: clamp(8px, 1.6vw, 15px)
         }
 
         .logo img {
-            height: 70px;
-            width: auto;
+            height: clamp(44px, 6vw, 70px);
+            width: auto
         }
 
         .org-name {
@@ -194,545 +153,545 @@
             flex-direction: column;
             line-height: 1.2;
             color: var(--primary-color);
-            font-weight: bold;
+            font-weight: 700
         }
 
         .org-name-line1 {
-            font-size: 1.5rem;
-            white-space: nowrap;
+            font-size: clamp(1.1rem, 2.3vw, 1.5rem);
+            white-space: nowrap
         }
 
         .org-name-line2 {
-            font-size: 1.1rem;
+            font-size: clamp(.85rem, 1.8vw, 1.1rem);
             color: var(--secondary-color);
-            white-space: nowrap;
+            white-space: nowrap
         }
 
+        /* التنقل */
         .nav-list {
             display: flex;
             list-style: none;
+            gap: clamp(8px, 2vw, 20px);
             margin: 0;
             padding: 0;
-            gap: 20px;
-        }
-
-        .nav-list li {
-            margin: 0;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .nav-list a {
+            display: block;
             text-decoration: none;
+            text-align: center;
+            white-space: nowrap;
             color: var(--dark-color);
             font-weight: 500;
-            padding: 8px 15px;
+            padding: clamp(6px, 1.2vw, 8px) clamp(10px, 1.8vw, 15px);
+            border-radius: 6px;
             transition: var(--transition);
-            border-radius: 4px;
-            display: block;
-            white-space: nowrap;
-            text-align: center;
         }
 
         .nav-list a:hover {
             color: var(--primary-color);
-            background-color: rgba(46, 134, 171, 0.1);
+            background: rgba(46, 134, 171, .1)
         }
 
+        /* زر الدخول/الخروج */
         .login-btn a {
-            background-color: var(--secondary-color);
-            color: var(--white) !important;
-            padding: 8px 15px;
-            border-radius: 4px;
-            margin-right: 60px;
+            background: var(--secondary-color);
+            color: #fff !important;
+            border-radius: 8px;
+            padding: clamp(6px, 1.2vw, 8px) clamp(12px, 2vw, 16px);
             text-decoration: none !important;
+            transition: var(--transition);
         }
 
         .login-btn a:hover {
-            background-color: #e07f00;
+            background: #e07f00
         }
 
+        /* محوّل اللغة */
         .language-switcher {
             position: relative;
-            margin-right: 0;
             display: inline-flex;
             align-items: center;
-            list-style: none !important;
+            list-style: none !important
         }
 
         .language-btn {
             background: none;
-            border: none;
-            color: var(--dark-color);
+            border: 0;
             cursor: pointer;
-            padding: 8px 15px;
+            color: var(--dark-color);
+            padding: clamp(6px, 1.2vw, 8px) clamp(10px, 1.8vw, 14px);
+            border-radius: 6px;
             display: flex;
             align-items: center;
             gap: 8px;
             font-weight: 500;
-            border-radius: 4px;
             transition: var(--transition);
-            text-decoration: none;
-            font-size: inherit;
         }
 
         .language-btn:hover {
             color: var(--primary-color);
-            background-color: rgba(46, 134, 171, 0.1);
+            background: rgba(46, 134, 171, .1)
         }
 
         .language-menu {
             display: none;
             position: absolute;
             top: 100%;
-            right: 0;
-            background-color: var(--white);
-            min-width: 150px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            border-radius: 4px;
+            inset-inline-end: 0;
+            min-width: 160px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, .2);
             z-index: 100;
             list-style: none;
             padding: 10px 0;
-            margin-top: 5px;
+            margin-top: 6px;
         }
 
         .language-switcher:hover .language-menu {
-            display: block;
+            display: block
         }
 
-        /* حاوية النموذج الرئيسية */
-        .form-container {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            transition: all 0.3s ease;
+        .language-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .language-menu a:hover {
+            background: rgba(46, 134, 171, .1);
+            color: var(--primary-color)
+        }
+
+        @media(hover:none) {
+            .language-switcher:hover .language-menu {
+                display: none
+            }
+
+            .language-switcher.active .language-menu {
+                display: block
+            }
+        }
+
+        /* ======================
+   المحتوى الرئيسي (تعويض ديناميكي للهيدر)
+   ====================== */
+        main {
+            min-height: calc(100vh - 180px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0 0;
+            padding-top: calc(var(--header-dyn, var(--header-h)) + var(--safe-top) + 8px);
+        }
+
+        /* ======================
+   نموذج الشكوى + معلومات التواصل
+   ====================== */
+        .main-container {
             width: 100%;
-            max-width: 1000px;
-            /* تغيير من 800px إلى 1000px */
+            max-width: 1200px;
+            margin-inline: auto;
+            padding: 20px
+        }
+
+        .form-container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: var(--box-shadow);
+            padding: clamp(16px, 3.5vw, 40px);
+            transition: all .3s ease;
+            width: 100%;
+            max-width: clamp(320px, 90vw, 1000px);
             margin: 20px auto;
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, .1);
         }
 
         .form-container:hover {
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .15);
+            transform: translateY(-2px)
         }
 
         .form-title {
             color: var(--primary-color);
             border-bottom: 2px solid var(--secondary-color);
             padding-bottom: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
             text-align: center;
-            font-size: 2rem;
+            font-size: clamp(1.4rem, 3.2vw, 2rem);
         }
 
-        /* أنماط النموذج */
         .complaint-form {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 8px
         }
 
         .form-group label {
             font-weight: 600;
-            color: var(--dark-color_1);
+            color: var(--dark-color_1)
         }
 
         .form-control {
-            padding: 12px 15px;
+            width: 100%;
+            padding: 12px 14px;
             border: 1px solid #ddd;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 1rem;
             transition: var(--transition);
-            background-color: rgba(255, 255, 255, 0.9);
-            width: 100%;
-            /* إضافة هذه الخاصية */
+            background: rgba(255, 255, 255, .95);
         }
 
         .form-control:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(46, 134, 171, 0.2);
-            outline: none;
+            box-shadow: 0 0 0 3px rgba(46, 134, 171, .2);
+            outline: 0
         }
 
         textarea.form-control {
             min-height: 200px;
-            /* زيادة من 150px إلى 200px */
-            resize: vertical;
-            width: 100%;
-            /* إضافة هذه الخاصية */
+            resize: vertical
         }
 
         .submit-btn {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 1.1rem;
-            border-radius: 6px;
+            background: var(--secondary-color);
+            color: #fff;
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 18px;
+            font-size: 1.05rem;
             cursor: pointer;
+            font-weight: 700;
             transition: var(--transition);
-            font-weight: 600;
-            margin-top: 10px;
+            margin-top: 6px;
         }
 
         .submit-btn:hover {
-            background-color: #e07f00;
-            transform: translateY(-2px);
+            background: #e07f00;
+            transform: translateY(-2px)
         }
 
         .form-note {
-            font-size: 0.9rem;
+            font-size: .95rem;
             color: var(--dark-color_1);
             text-align: center;
-            margin-top: 20px;
+            margin-top: 12px
         }
 
         .form-header-icon {
             text-align: center;
-            font-size: 3rem;
+            font-size: clamp(2rem, 5vw, 3rem);
             color: var(--secondary-color);
-            margin-bottom: 20px;
+            margin-bottom: 16px
         }
 
-        /* رسائل التحقق */
         .error-message {
             color: #dc3545;
-            font-size: 0.9rem;
+            font-size: .9rem;
             margin-top: 5px;
-            display: none;
+            display: none
         }
 
         .form-control.error {
-            border-color: #dc3545;
+            border-color: #dc3545
         }
 
         .success-message {
             display: none;
-            background-color: #d4edda;
+            background: #d4edda;
             color: #155724;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            text-align: center;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            text-align: center
         }
 
+        /* معلومات التواصل */
+        .contact-info-container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: var(--box-shadow);
+            padding: clamp(16px, 3.5vw, 40px);
+            margin-top: 24px;
+            text-align: center;
+            border: 1px solid rgba(0, 0, 0, .1);
+        }
+
+        .contact-info-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 22px;
+            font-size: clamp(1.2rem, 2.8vw, 1.8rem);
+        }
+
+        .contact-items {
+            display: flex;
+            justify-content: center;
+            gap: clamp(16px, 6vw, 50px);
+            flex-wrap: wrap
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: clamp(1rem, 2.6vw, 1.2rem)
+        }
+
+        .contact-icon {
+            color: var(--secondary-color);
+            font-size: clamp(1.2rem, 3.2vw, 1.8rem)
+        }
+
+        .working-hours {
+            margin-top: 14px;
+            font-size: 1.05rem;
+            color: var(--dark-color_1)
+        }
+
+        /* ======================
+   الفوتر
+   ====================== */
         .footer {
-            background-color: var(--dark-color_1);
-            color: var(--white);
+            color: #fff;
             padding: 50px 0 20px;
-            position: relative;
-            height: auto;
+            position: relative
         }
 
         .footer-content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
+            gap: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            width: min(100% - 32px, 1400px);
+            margin-inline: auto;
         }
 
         .footer-section {
-            padding: 0 20px;
-        }
-
-        .footer-section.about {
-            grid-column: 1;
-        }
-
-        .footer-section.links {
-            grid-column: 2;
-        }
-
-        .footer-section.newsletter {
-            grid-column: 3;
+            padding: 0 12px
         }
 
         .footer-logo img {
-            height: 100px;
-            margin-bottom: 40px;
+            height: 90px;
+            margin-bottom: 28px
         }
 
         .footer-about-text {
-            margin-bottom: 20px;
-            line-height: 1.6;
+            line-height: 1.7;
+            opacity: .95
         }
 
         .footer-section h4 {
             color: var(--secondary-color);
-            font-size: 1.3rem;
-            margin-bottom: 25px;
+            font-size: 1.25rem;
+            margin-bottom: 18px;
             position: relative;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
         }
 
         .footer-section h4::after {
-            content: '';
+            content: "";
             position: absolute;
             bottom: 0;
-            right: 0;
-            width: 50px;
+            inset-inline-start: 0;
+            width: 56px;
             height: 2px;
-            background-color: var(--secondary-color);
+            background: var(--secondary-color);
         }
 
         .footer-section.links ul {
-            list-style: none;
+            list-style: none
         }
 
-        .footer-section.links li {
-            margin-bottom: 12px;
+        .footer-section.links li+li {
+            margin-top: 10px
         }
 
         .footer-section.links a {
-            color: var(--white);
+            color: #fff;
             text-decoration: none;
-            transition: var(--transition);
-            display: block;
+            transition: color var(--transition), padding var(--transition);
+            display: inline-block;
         }
 
         .footer-section.links a:hover {
             color: var(--secondary-color);
-            padding-right: 10px;
+            padding-inline-start: 8px
         }
 
         .footer-contact .contact-item {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px
         }
 
         .footer-contact i {
-            margin-left: 10px;
             color: var(--secondary-color);
             width: 20px;
             text-align: center;
+            margin-inline-end: 8px
         }
 
         .newsletter-form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px
         }
 
         .newsletter-form input {
-            padding: 12px 15px;
-            border: none;
-            border-radius: 6px;
-            background-color: rgba(255, 255, 255, 0.9);
+            padding: 12px 14px;
+            border: 0;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .9);
         }
 
         .newsletter-form button {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
+            background: var(--secondary-color);
+            color: #fff;
+            border: 0;
+            border-radius: 8px;
             padding: 12px;
-            border-radius: 6px;
             cursor: pointer;
-            transition: var(--transition);
+            transition: background var(--transition), transform var(--transition);
         }
 
         .newsletter-form button:hover {
-            background-color: #e07f00;
+            background: #e07f00;
+            transform: translateY(-1px)
         }
 
         .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, .12);
+            margin-top: 16px;
+            padding-top: 16px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            gap: 16px;
             flex-wrap: wrap;
+            width: min(100% - 32px, 1400px);
+            margin-inline: auto;
         }
 
         .copyright {
-            font-size: 0.9rem;
+            font-size: .95rem;
+            opacity: .9
         }
 
         .social-icons a {
-            display: inline-block;
+            display: inline-grid;
+            place-items: center;
             width: 40px;
             height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, .12);
+            color: #fff;
             border-radius: 50%;
-            text-align: center;
-            line-height: 40px;
-            color: var(--white);
-            margin-right: 10px;
-            transition: var(--transition);
+            transition: transform var(--transition), background var(--transition);
         }
 
         .social-icons a:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-3px);
+            background: var(--secondary-color);
+            transform: translateY(-3px)
         }
 
-        /* أنماط معدلة للجوال */
-        @media (max-width: 992px) {
-            .header {
-                height: auto;
-                padding: 10px 0;
-            }
-
-            .header .container {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 10px;
-                padding: 0 10px;
-            }
-
-            .logo-container {
-                width: 100%;
-                justify-content: center;
-                margin-bottom: 5px;
-                order: 1;
-            }
-
-            .logo img {
-                height: 50px;
-            }
-
-            .org-name-line1 {
-                font-size: 1.2rem !important;
-            }
-
-            .org-name-line2 {
-                font-size: 0.9rem !important;
-            }
-
-            .buttons-container {
-                width: 100%;
-                order: 3;
-            }
-
-            .nav {
-                width: 100%;
-            }
-
-            .nav-list {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 5px;
-            }
-
-            .nav-list li {
-                margin: 0;
-            }
-
-            .nav-list a {
-                padding: 5px 8px;
-                font-size: 0.9rem;
-            }
-
-            .language-switcher {
-                margin-right: 0;
-            }
-
-            .login-btn a {
-                margin-right: 0;
-                padding: 5px 10px;
-            }
-
+        /* ======================
+   تجاوبية
+   ====================== */
+        /* Tablet */
+        @media (max-width:992px) {
             main {
-                margin-top: 150px;
-                padding: 10px 0;
+                padding-top: calc(var(--header-dyn, var(--header-h-tablet)) + var(--safe-top) + 8px)
             }
 
-            .form-container,
-            .contact-info-container {
-                padding: 20px !important;
-                margin: 10px !important;
+            .header {
+                padding: 10px 0
             }
 
-            .form-title {
-                font-size: 1.5rem;
-            }
-
-            .contact-items {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .contact-item {
-                font-size: 1rem;
-            }
-
-            .form-control {
-                padding: 10px;
-            }
-
-            textarea.form-control {
-                min-height: 150px;
+            .header .container {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px
             }
         }
 
-        @media (max-width: 576px) {
+        /* Mobile */
+        @media (max-width:768px) {
+            main {
+                padding-top: calc(var(--header-dyn, var(--header-h-mobile)) + var(--safe-top) + 8px)
+            }
+
             .header .container {
                 flex-direction: column;
-                align-items: center;
+                align-items: center
             }
 
             .logo-container {
                 flex-direction: column;
                 text-align: center;
-                margin-bottom: 10px;
-            }
-
-            .org-name {
-                margin-top: 5px;
+                margin-bottom: 8px
             }
 
             .nav-list {
                 flex-direction: column;
                 align-items: center;
+                width: 100%
             }
 
             .nav-list li {
                 width: 100%;
-                text-align: center;
+                text-align: center
             }
 
             .nav-list a {
-                display: block;
                 width: 100%;
-                padding: 8px 0;
-            }
-
-            .language-switcher {
-                width: 100%;
+                padding: 10px
             }
 
             .language-menu {
-                right: auto;
-                left: 0;
-                width: 100%;
+                inset-inline-end: auto;
+                inset-inline-start: 0;
+                width: 100%
             }
+        }
 
-            main {
-                margin-top: 180px;
-            }
-
-            .form-title {
-                font-size: 1.3rem;
-            }
-
-            .form-header-icon {
-                font-size: 2rem;
-            }
-
+        /* Small phones */
+        @media (max-width:576px) {
             .submit-btn {
                 padding: 10px;
-                font-size: 1rem;
+                font-size: 1rem
+            }
+        }
+
+        /* تقليل الحركة */
+        @media (prefers-reduced-motion:reduce) {
+            .header {
+                transition: none
+            }
+
+            .form-container:hover {
+                transform: none
+            }
+
+            .background-slideshow,
+            .background-slideshow img {
+                transition: none
             }
         }
     </style>
+
 </head>
 
 <body>
@@ -882,14 +841,14 @@
                         <span>{{ $contactInfo['address'] ?? 'دمشق، سوريا' }}</span>
                     </div>
                 </div>
-
+                {{--
                 <!-- عرض ساعات العمل -->
                 @if (isset($contactInfo['working_hours']))
                     <div class="working-hours">
                         <i class="fas fa-clock contact-icon"></i>
                         <span>ساعات العمل: {{ $contactInfo['working_hours'] }}</span>
                     </div>
-                @endif
+                @endif --}}
             </div>
     </main>
 
@@ -1018,7 +977,7 @@
                             }
                         } else {
                             alert(error.message ||
-                            'حدث خطأ أثناء إرسال الشكوى، يرجى المحاولة مرة أخرى');
+                                'حدث خطأ أثناء إرسال الشكوى، يرجى المحاولة مرة أخرى');
                         }
                     } finally {
                         submitBtn.innerHTML = originalBtnText;
@@ -1027,7 +986,6 @@
                 });
             }
 
-            // ترجمة المحتوى
             const translations = {
                 en: {
                     nav: {
@@ -1135,6 +1093,38 @@
             // تحميل اللغة المفضلة من localStorage إذا كانت موجودة
             const preferredLanguage = localStorage.getItem('preferredLanguage') || 'ar';
             changeLanguage(preferredLanguage);
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.remove('loading');
+            document.body.classList.add('loaded');
+
+            // Load non-critical JS dynamically
+            var script = document.createElement('script');
+            script.src = "{{ asset('js/article.js') }}";
+            script.defer = true;
+            document.body.appendChild(script);
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.getElementById('siteHeader') || document.querySelector('.header');
+
+            // تعويض ارتفاع الهيدر الحقيقي
+            function setHeaderPad() {
+                if (!header) return;
+                document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+            }
+            setHeaderPad();
+            addEventListener('resize', setHeaderPad);
+            addEventListener('load', setHeaderPad);
+
+            // أخفِ الهيدر عند أي نزول، وأظهره فقط عند أعلى الصفحة
+            function toggleHeader() {
+                if (window.scrollY > 0) header.classList.add('is-hidden');
+                else header.classList.remove('is-hidden');
+            }
+            toggleHeader();
+            document.addEventListener('scroll', toggleHeader, {
+                passive: true
+            });
         });
     </script>
 </body>

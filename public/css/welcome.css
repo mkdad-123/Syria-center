@@ -1,661 +1,630 @@
- :root {
-        --primary-color: #2E86AB;
-        --secondary-color: #F18F01;
-        --accent-color: #5BBA6F;
-        --dark-color: #000000;
-        --dark-color_1: #424040;
-        --light-color: #5ad27e;
-        --white: #fff;
-        --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        --transition: all 0.3s ease;
-    }
-
-    /* طبقة الخلفية البيضاء الشفافة */
-    body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(255, 255, 255, 0.85);
-        z-index: -1;
-        pointer-events: none;
-    }
-
-    /* خلفية متغيرة للصفحة */
-    .background-slideshow {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -2;
-        opacity: 0.7;
-    }
-
-    .background-slideshow img {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0;
-        transition: opacity 1s ease-in-out;
-    }
-
-    .background-slideshow img.active {
-        opacity: 1;
-    }
-
-    /* تعديل العناصر الرئيسية */
-    main, .header, .footer {
-        position: relative;
-        background-color: transparent;
-    }
-
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-        color: var(--dark-color);
-        line-height: 2;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial', sans-serif;
-        min-height: 100vh;
-    }
-
-        .container {
-            width: calc(100% - 60px);
-            /* 30px من كل جانب */
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0;
-        }
-
-        /* شريط التنقل - معدل */
-        .header {
-            background-color: var(--white);
-            box-shadow: var(--box-shadow);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            padding: 10px 0;
-        }
-
-        .header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 40px;
-            /* زيادة المسافة بين العناصر */
-            padding: 0 20px;
-            /* إضافة حشو داخلي */
-            /* إضافة فراغ بين العناصر */
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo img {
-            height: 70px;
-            width: auto;
-        }
-
-        .org-name {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-
-        .org-name-line1 {
-            font-size: 1.5rem;
-            white-space: nowrap;
-        }
-
-        .org-name-line2 {
-            font-size: 1.1rem;
-            color: var(--secondary-color);
-            white-space: nowrap;
-        }
-
-        .nav-list {
-            display: flex;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            gap: 20px;
-            /* فراغ متساوي بين عناصر القائمة */
-
-        }
-
-        .nav-list li {
-            margin-left: 15px;
-            margin: 0;
-            /* إزالة الهوامش الجانبية */
-
-        }
-
-        .nav-list a {
-            text-decoration: none;
-            color: var(--dark-color);
-            font-weight: 500;
-            padding: 8px 15px;
-            /* تعديل الحشو ليكون أكثر تناسقاً */
-            transition: var(--transition);
-            border-radius: 4px;
-            display: block;
-            white-space: nowrap;
-            text-align: center;
-        }
-
-        .nav-list a:hover {
-            color: var(--primary-color);
-            background-color: rgba(46, 134, 171, 0.1);
-        }
-
-        .login-btn a {
-            background-color: var(--secondary-color);
-            color: var(--white) !important;
-            padding: 8px 15px;
-            border-radius: 4px;
-            margin-right: 60px;
-            /* إبعاده عن العناصر الأخرى */
-        }
-
-        .login-btn a:hover {
-            background-color: #e07f00;
-        }
-
-        /* إضافة أنماط القائمة المنسدلة */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-            margin-right: 0;
-            /* إزالة أي هوامش إضافية */
-
-        }
-
-        .dropbtn {
-            padding: 8px 12px;
-            cursor: pointer;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: var(--white);
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            border-radius: 4px;
-            text-align: right;
-            right: 0;
-        }
-
-        .dropdown-content a {
-            color: var(--dark-color);
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            transition: var(--transition);
-        }
-
-        .dropdown-content a:hover {
-            background-color: rgba(46, 134, 171, 0.1);
-            color: var(--primary-color);
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        /* أنماط محول اللغة المعدلة */
-        .language-switcher {
-            position: relative;
-            margin-right: 0;
-            display: inline-flex;
-            /* بدلاً من flex لعدم التأثير على العناصر الأخرى */
-            align-items: center;
-        }
-
-        .language-btn {
-            background: none;
-            border: none;
-            color: var(--dark-color);
-            cursor: pointer;
-            padding: 8px 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-            border-radius: 4px;
-            transition: var(--transition);
-            text-decoration: none;
-            font-size: inherit;
-        }
-
-        .language-btn:hover {
-            color: var(--primary-color);
-            background-color: rgba(46, 134, 171, 0.1);
-        }
-
-        .language-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: var(--white);
-            min-width: 150px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            border-radius: 4px;
-            z-index: 1000;
-            /* تأكد من أن القائمة فوق كل العناصر */
-            list-style: none;
-            padding: 10px 0;
-            margin-top: 5px;
-        }
-
-        .language-switcher:hover .language-menu,
-        .language-menu:hover {
-            display: block;
-        }
-
-        .language-menu li a {
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--dark-color);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .language-menu li a:hover {
-            background-color: rgba(46, 134, 171, 0.1);
-            color: var(--primary-color);
-        }
-
-        /* تلوين كلمة شركاؤنا */
-        /* المحتوى الرئيسي */
-        main {
-            margin-top: 80px;
-            padding: 40px 0;
-        }
-
-        .section {
-            padding: 60px 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 40px;
-            color: var(--dark-color);
-            font-size: 2rem;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: var(--secondary-color);
-            margin: 15px auto;
-            border-radius: 2px;
-        }
-
-        /* أنماط الصورة الفنية */
-        .about-container {
-            display: flex;
-            align-items: center;
-            gap: 50px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .about-image {
-            flex: 1;
-            min-width: 300px;
-            perspective: 1000px;
-        }
-
-        .about-image-card {
-            position: relative;
-            width: 100%;
-            padding-top: 75%;
-            transform-style: preserve-3d;
-            transition: var(--transition);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .about-image-card:hover {
-            transform: translateY(-10px) rotateX(5deg);
-            box-shadow: 0 25px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .about-image-card img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 15px;
-            transition: var(--transition);
-        }
-
-        .about-image-card:hover img {
-            transform: scale(1.05);
-        }
-
-        .about-image-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent 40%);
-            border-radius: 15px;
-        }
-
-        .about-content {
-            flex: 1;
-            min-width: 300px;
-            text-align: right;
-            padding: 20px;
-            font-weight: bold;
-
-        }
-
-        /* أنماط زر قراءة المزيد */
-        .read-more-btn-container {
-            text-align: left;
-            /* محاذاة الزر لليسار */
-            margin-top: 20px;
-            /* مسافة من الأعلى */
-        }
-
-        .read-more-btn {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px 25px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: var(--transition);
-            border: 2px solid var(--primary-color);
-        }
-
-        .read-more-btn:hover {
-            background-color: transparent;
-            color: var(--primary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* قسم الرسالة والرؤية */
-        .mission-section {
-            background-color: var(--primary-color);
-            color: var(--white);
-        }
-
-        .mission-vision {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-
-        .mission,
-        .vision {
-            flex: 1;
-            min-width: 300px;
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 8px;
-            transition: var(--transition);
-            font-weight: bold;
-
-        }
-
-        .mission:hover,
-        .vision:hover {
-            transform: translateY(-5px);
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .mission h3,
-        .vision h3 {
-            margin-bottom: 20px;
-            color: var(--secondary-color);
-            font-size: 1.5rem;
-        }
-
-        /* قسم الفئة المستهدفة */
-        .target-icon {
-            text-align: center;
-            margin: 20px 0;
-            color: #2c3e50;
-            font-size: 50px;
-        }
-
-        .target-icon i:hover {
-            transform: scale(1.1);
-            transition: 0.3s;
-        }
-
-        .target-content {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-            font-size: 1.1rem;
-            font-weight: bold;
-
-        }
-
-        /* قسم ما نقدمه */
-        .services-section {
-            background-color: var(--accent-color);
-            color: var(--white);
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .service-card {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 8px;
-            text-align: center;
-            transition: var(--transition);
-        }
-
-        .service-card:hover {
-            transform: translateY(-10px);
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .service-card i {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: var(--secondary-color);
-        }
-
-        .service-card h3 {
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
-        /* قسم فريقنا المحسن */
-        .team-section {
-    background-color: rgba(255, 255, 255, 0.3);
-    padding: 60px 0;
+/* ======================
+   أساسيات و متغيرات
+   ====================== */
+:root {
+    --primary-color: #2E86AB;
+    --secondary-color: #F18F01;
+    --accent-color: #5BBA6F;
+    --dark-color: #000;
+    --dark-color-1: #424040;
+    --white: #fff;
+    --box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+    --transition: .3s ease;
+
+    /* أحجام مرنة للصور الدائرية */
+    --avatar-team: clamp(110px, 14vw, 170px);
+    --avatar-partner: clamp(110px, 14vw, 170px);
+
+    /* ارتفاع مرن للسلايدر */
+    --carousel-h: clamp(360px, 48vh, 520px);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box
+}
+
+html,
+body {
+    height: 100%
+}
+
+body {
+    min-height: 100svh;
+    color: var(--dark-color);
+    line-height: 2;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    /* حتى يلتصق الفوتر بالأسفل */
+    flex-direction: column;
+}
+
+/* طبقة تفتيح موحّدة فوق الخلفية */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, .85);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* خلفية متبدّلة */
+.background-slideshow {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    opacity: .7
+}
+
+.background-slideshow img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease-in-out
+}
+
+.background-slideshow img.active {
+    opacity: 1
+}
+
+/* حاوية عامة */
+.container {
+    width: calc(100% - 60px);
+    max-width: 1400px;
+    margin: 0 auto
+}
+
+/* ======================
+   الهيدر و التنقّل (ديناميكي)
+   ====================== */
+.header {
+    position: sticky;
+    /* يبقى أعلى الصفحة ويأخذ مكانه الطبيعي */
+    top: 0;
+    background: var(--white);
+    box-shadow: var(--box-shadow);
+    z-index: 1000;
+    padding: 10px 0;
+
+    /* للظهور/الاختفاء السلس */
+    transform: translateY(0);
+    transition: transform .28s ease, background-color .2s ease, box-shadow .2s ease;
+}
+
+.header.is-hidden {
+    transform: translateY(calc(-100% - 2px));
+    /* يخفي الشريط عند النزول */
+}
+
+.header.is-scrolled {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .12);
+    /* ظِل أقوى بعد التمرير */
+}
+
+.header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 0 20px;
+    flex-wrap: nowrap;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px
+}
+
+.logo img {
+    height: 70px;
+    width: auto
+}
+
+/* اسم المركز — يسمح باللف على الشاشات الصغيرة ويظهر بالكامل */
+.org-name {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    color: var(--primary-color);
+    font-weight: 700;
+    min-width: 0;
+}
+
+.org-name-line1,
+.org-name-line2 {
+    white-space: normal;
+    /* كان nowrap → الآن التفاف طبيعي */
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.org-name-line1 {
+    font-size: clamp(1.1rem, 1.2vw + 1rem, 1.5rem)
+}
+
+.org-name-line2 {
+    font-size: clamp(.9rem, .6vw + .85rem, 1.1rem);
+    color: var(--secondary-color)
+}
+
+/* قائمة الروابط */
+.nav-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.nav-list>li:not(.login-btn) {
+    flex: 0 1 auto
+}
+
+.nav-list>li.login-btn {
+    margin-inline-start: auto;
+    flex-shrink: 0
+}
+
+.nav-list>li.login-btn a {
+    white-space: nowrap
+}
+
+.nav-list a {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    color: var(--dark-color);
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.nav-list a:hover {
+    color: var(--primary-color);
+    background: rgba(46, 134, 171, .1)
+}
+
+.login-btn a {
+    background: var(--secondary-color);
+    color: #fff !important;
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: var(--transition);
+    margin: 0 !important;
+}
+
+.login-btn a:hover {
+    background: #e07f00
+}
+
+/* Dropdown */
+.dropdown {
     position: relative;
-}
-        .team-carousel {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-            height: 500px;
-            perspective: 1000px;
-        }
-
-        .team-slide {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        .team-member {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            padding: 20px;
-            text-align: center;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .team-member.active {
-            opacity: 1;
-            transform: scale(1);
-            z-index: 10;
-        }
-
-        .team-member img {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 20px;
-            border: 5px solid var(--secondary-color);
-            transition: all 0.5s ease;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .team-member:hover img {
-            transform: scale(1.05);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .team-member h3 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            font-size: 1.8rem;
-            transition: all 0.3s ease;
-        }
-
-        .team-member p {
-            color: var(--dark-color);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .team-member p:last-of-type {
-            margin-top: 15px;
-            font-style: italic;
-            color: #666;
-        }
-
-        /* قسم الشركاء المحسن */
-        .partners-section {
-    background-color: var(--primary-color);
-    color: var(--white);
-    padding: 60px 0 0; /* إزالة الحشو السفلي */
-    margin-bottom: 0; /* إزالة أي هوامش */
+    display: inline-block
 }
 
-        .partners-carousel {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-            height: 500px;
-            perspective: 1000px;
-        }
+.dropbtn {
+    padding: 8px 12px;
+    cursor: pointer
+}
 
-        .partners-slide {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    min-width: 200px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, .2);
+    text-align: right;
+    z-index: 10;
+}
 
-        .partner {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 110%;
-            padding: 24px;
-            text-align: center;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+.dropdown-content a {
+    display: block;
+    padding: 12px 16px;
+    color: var(--dark-color);
+    text-decoration: none;
+    transition: var(--transition)
+}
 
-        .partner.active {
-            opacity: 1;
-            transform: scale(1);
-            z-index: 10;
-        }
+.dropdown-content a:hover {
+    background: rgba(46, 134, 171, .1);
+    color: var(--primary-color)
+}
 
-        .partner img {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 20px;
-            border: 5px solid var(--secondary-color);
-            transition: all 0.5s ease;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
+.dropdown:hover .dropdown-content {
+    display: block
+}
 
-        .partner:hover img {
-            transform: scale(1.05);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
+/* محوّل اللغة */
+.language-switcher {
+    position: relative;
+    display: inline-flex;
+    align-items: center
+}
 
-        .partner h3 {
-            color: var(--white);
-            margin-bottom: 10px;
-            font-size: 1.8rem;
-            transition: all 0.3s ease;
-        }
-/* إضافة هذه الأنماط في قسم CSS */
+.language-btn {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    color: var(--dark-color);
+    padding: 8px 15px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+
+.language-btn:hover {
+    color: var(--primary-color);
+    background: rgba(46, 134, 171, .1)
+}
+
+.language-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    min-width: 150px;
+    background: #fff;
+    border-radius: 4px;
+    z-index: 1000;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, .2);
+    padding: 10px 0;
+    list-style: none;
+    margin-top: 5px;
+}
+
+.language-switcher:hover .language-menu {
+    display: block
+}
+
+.language-menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    color: var(--dark-color);
+    text-decoration: none;
+    transition: var(--transition)
+}
+
+.language-menu a:hover {
+    background: rgba(46, 134, 171, .1);
+    color: var(--primary-color)
+}
+
+/* منع القصّ */
+.nav,
+.buttons-container,
+.header .container,
+.nav-list {
+    overflow: visible
+}
+
+/* ======================
+   الهيكل و العناوين
+   ====================== */
+main {
+    /* لا نحتاج إزاحات إضافية لأن الهيدر sticky */
+    margin-top: 0 !important;
+    padding: 40px 0 0 !important;
+    flex: 1 0 auto;
+}
+
+.section {
+    padding: 60px 0
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--dark-color);
+    font-size: clamp(1.3rem, 2.6vw, 2rem);
+    position: relative
+}
+
+.section-title::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: var(--secondary-color);
+    margin: 15px auto;
+    border-radius: 2px
+}
+
+/* ======================
+   قسم "من نحن"
+   ====================== */
+.about-container {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    flex-wrap: wrap;
+    justify-content: center
+}
+
+.about-image {
+    flex: 1;
+    min-width: 300px;
+    perspective: 1000px
+}
+
+.about-image-card {
+    position: relative;
+    width: 100%;
+    padding-top: 75%;
+    border-radius: 15px;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transition: var(--transition);
+    box-shadow: 0 20px 30px rgba(0, 0, 0, .15);
+}
+
+.about-image-card:hover {
+    transform: translateY(-10px) rotateX(5deg);
+    box-shadow: 0 25px 40px rgba(0, 0, 0, .2)
+}
+
+.about-image-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+    transition: var(--transition)
+}
+
+.about-image-card:hover img {
+    transform: scale(1.05)
+}
+
+.about-image-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 15px;
+    background: linear-gradient(to top, rgba(0, 0, 0, .3), transparent 40%)
+}
+
+.about-content {
+    flex: 1;
+    min-width: 300px;
+    text-align: right;
+    padding: 20px;
+    font-weight: 700
+}
+
+.read-more-btn-container {
+    text-align: left;
+    margin-top: 20px
+}
+
+.read-more-btn {
+    display: inline-block;
+    background: var(--primary-color);
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 4px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: var(--transition);
+    border: 2px solid var(--primary-color)
+}
+
+.read-more-btn:hover {
+    background: transparent;
+    color: var(--primary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .1)
+}
+
+/* ======================
+   الرسالة والرؤية
+   ====================== */
+.mission-section {
+    background: var(--primary-color);
+    color: #fff
+}
+
+.mission-vision {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px
+}
+
+.mission,
+.vision {
+    flex: 1;
+    min-width: 300px;
+    padding: 30px;
+    border-radius: 8px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, .1);
+    transition: var(--transition)
+}
+
+.mission:hover,
+.vision:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, .2)
+}
+
+.mission h3,
+.vision h3 {
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+    font-size: 1.5rem
+}
+
+.icon-wrapper {
+    margin: 15px 0;
+    font-size: 4rem;
+    color: #040404
+}
+
+/* ======================
+   الفئة المستهدفة
+   ====================== */
+.target-icon {
+    text-align: center;
+    margin: 20px 0;
+    color: #2c3e50;
+    font-size: 50px
+}
+
+.target-icon i {
+    transition: .3s
+}
+
+.target-icon i:hover {
+    transform: scale(1.1)
+}
+
+.target-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    font-weight: 700
+}
+
+/* ======================
+   الخدمات
+   ====================== */
+.services-section {
+    background: var(--accent-color);
+    color: #fff
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px
+}
+
+.service-card {
+    background: rgba(255, 255, 255, .1);
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    transition: var(--transition)
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, .2)
+}
+
+.service-card i {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: var(--secondary-color)
+}
+
+.service-card h3 {
+    margin-bottom: 15px;
+    font-size: 1.3rem
+}
+
+/* ======================
+   فريقنا (سلايدر) — أحجام مرِنة
+   ====================== */
+.team-section {
+    background: rgba(255, 255, 255, .3);
+    padding: 60px 0;
+    position: relative
+}
+
+.team-carousel {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    height: var(--carousel-h);
+    perspective: 1000px
+}
+
+.team-slide {
+    position: relative;
+    width: 100%;
+    height: 100%
+}
+
+.team-member {
+    position: absolute;
+    inset: 0;
+    padding: 20px;
+    text-align: center;
+    opacity: 0;
+    transform: scale(.88);
+    transition: all .8s cubic-bezier(.68, -.55, .265, 1.55);
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.team-member.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 10
+}
+
+.team-member img {
+    width: var(--avatar-team);
+    height: var(--avatar-team);
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 16px;
+    border: 4px solid var(--secondary-color);
+    transition: .5s;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .2)
+}
+
+.team-member:hover img {
+    transform: scale(1.04);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, .3)
+}
+
+.team-member h3 {
+    color: var(--primary-color);
+    margin-bottom: 8px;
+    font-size: clamp(1.05rem, 2.2vw, 1.5rem)
+}
+
+.team-member p {
+    color: var(--dark-color);
+    font-size: clamp(.95rem, 1.8vw, 1.1rem);
+    max-width: 620px;
+    margin: 0 auto
+}
+
+/* وضعية عنصر واحد */
 .team-carousel.single-member,
 .partners-carousel.single-partner {
     height: auto !important;
-    perspective: none !important;
+    perspective: none !important
 }
 
 .team-carousel.single-member .team-member,
@@ -663,154 +632,179 @@
     position: relative !important;
     opacity: 1 !important;
     transform: none !important;
-    display: block !important;
+    display: block !important
 }
 
-.team-carousel.single-member .carousel-btn,
-.partners-carousel.single-partner .carousel-btn,
-.team-carousel.single-member .carousel-indicators,
-.partners-carousel.single-partner .carousel-indicators {
-    display: none !important;
+/* ======================
+   الشركاء (سلايدر) — أحجام مرِنة
+   ====================== */
+.partners-section {
+    background: var(--primary-color);
+    color: #fff;
+    padding: 60px 0 0 !important;
+    margin-bottom: 0 !important
 }
-        .partner p {
-            color: var(--white);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
 
-        .partner p:last-of-type {
-            margin-top: 15px;
-            font-style: italic;
-            color: rgba(255, 255, 255, 0.8);
-        }
+.partners-carousel {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    height: var(--carousel-h);
+    perspective: 1000px
+}
 
-        /* أزرار ومؤشرات الشرائح المشتركة */
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: none;
-            padding: 15px;
-            cursor: pointer;
-            z-index: 20;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
+.partners-slide {
+    position: relative;
+    width: 100%;
+    height: 100%
+}
 
-        .carousel-btn:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-50%) scale(1.1);
-        }
+.partner {
+    position: absolute;
+    inset: 0;
+    padding: 24px;
+    text-align: center;
+    opacity: 0;
+    transform: scale(.88);
+    transition: all .8s cubic-bezier(.68, -.55, .265, 1.55);
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
-        #prevBtn {
-            right: 20px;
-        }
+.partner.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 10
+}
 
-        #nextBtn {
-            left: 20px;
-        }
+.partner img {
+    width: var(--avatar-partner);
+    height: var(--avatar-partner);
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 16px;
+    border: 4px solid var(--secondary-color);
+    transition: .5s;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .2)
+}
 
-        #partnersPrevBtn {
-            right: 20px;
-        }
+.partner:hover img {
+    transform: scale(1.04);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, .3)
+}
 
-        #partnersNextBtn {
-            left: 20px;
-        }
+.partner h3 {
+    color: #fff;
+    margin-bottom: 8px;
+    font-size: clamp(1.05rem, 2.2vw, 1.5rem)
+}
 
-        .carousel-indicators {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            z-index: 20;
-        }
+.partner p {
+    color: #fff;
+    font-size: clamp(.95rem, 1.8vw, 1.1rem);
+    max-width: 620px;
+    margin: 0 auto
+}
 
-        .carousel-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+.partner p:last-of-type {
+    margin-top: 12px;
+    color: rgba(255, 255, 255, .85)
+}
 
-        .carousel-indicator.active {
-            background-color: var(--secondary-color);
-            transform: scale(1.2);
-        }
+/* أزرار ومؤشرات السلايدر */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 0;
+    cursor: pointer;
+    background: rgba(0, 0, 0, .7);
+    color: #fff;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    transition: .3s;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .2)
+}
 
-        .btn {
-            display: inline-block;
-            background-color: var(--secondary-color);
-            color: var(--white);
-            padding: 12px 30px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-        }
+.carousel-btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-50%) scale(1.06)
+}
 
-        .btn:hover {
-            background-color: #e07f00;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
+#prevBtn,
+#partnersPrevBtn {
+    right: 20px
+}
 
-        .mission-vision {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-        }
+#nextBtn,
+#partnersNextBtn {
+    left: 20px
+}
 
-        .mission,
-        .vision {
-            text-align: center;
-            padding: 20px;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            width: 45%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
+.carousel-indicators {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0 !important;
+    display: flex;
+    gap: 10px;
+    z-index: 20;
+    margin: 0;
+    padding: 0
+}
 
-        .mission h3,
-        .vision h3 {
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
+.carousel-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .5);
+    cursor: pointer;
+    transition: .3s
+}
 
-        .icon-wrapper {
-            margin: 15px 0;
-            font-size: 4rem;
-            color: #040404;
-        }
+.carousel-indicator.active {
+    background: var(--secondary-color);
+    transform: scale(1.2)
+}
 
-        .mission p,
-        .vision p {
-            line-height: 1.6;
-            color: #020202;
-        }
+/* زر عام */
+.btn {
+    display: inline-block;
+    background: var(--secondary-color);
+    color: #fff;
+    padding: 12px 30px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition)
+}
 
-    /* أنماط الفوتر المعدلة */
-  /* أنماط الفوتر المعدلة */
+.btn:hover {
+    background: #e07f00;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .2)
+}
+
+/* ======================
+   الفوتر
+   ====================== */
 .footer {
-    background-color: var(--dark-color_1);
-    color: var(--white);
+    position: relative;
+    z-index: 1;
+    background: var(--dark-color-1);
+    color: #fff;
     padding: 50px 0 0;
-    font-size: 1.05rem;
     margin-top: 0;
+    flex-shrink: 0;
 }
 
 .footer-content {
@@ -818,64 +812,54 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 40px;
     margin-bottom: 40px;
-    padding: 0 20px;
+    padding: 0 20px
 }
 
 .footer-logo {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-start
 }
 
 .footer-logo img {
     height: 80px;
     width: auto;
-    margin-bottom: 20px;
+    margin-bottom: 20px
 }
 
 .footer-logo p {
     font-size: 1.1rem;
     line-height: 1.6;
-    margin-bottom: 15px;
+    margin-bottom: 15px
 }
 
 .footer-links h4,
 .footer-contact h4 {
     font-size: 1.3rem;
     margin-bottom: 20px;
-    color: var(--secondary-color);
-    padding-bottom: 0; /* إزالة الحشو السفلي */
-    position: relative;
-}
-
-/* إزالة الخط البرتقالي تحت العناوين */
-.footer-links h4::after,
-.footer-contact h4::after {
-    content: none; /* إزالة الخط البرتقالي */
+    color: var(--secondary-color)
 }
 
 .footer-links ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+    list-style: none
 }
 
 .footer-links li {
-    margin-bottom: 15px;
+    margin-bottom: 15px
 }
 
 .footer-links a {
-    color: var(--white);
+    color: #fff;
     text-decoration: none;
     transition: var(--transition);
     font-size: 1.05rem;
     display: inline-block;
-    padding: 5px 0;
+    padding: 5px 0
 }
 
 .footer-links a:hover {
     color: var(--secondary-color);
-    padding-right: 8px;
+    padding-right: 8px
 }
 
 .footer-contact p {
@@ -883,36 +867,36 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 1.05rem;
+    font-size: 1.05rem
 }
 
 .footer-contact i {
     color: var(--secondary-color);
     font-size: 1.2rem;
     min-width: 25px;
-    text-align: center;
+    text-align: center
 }
 
 .footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, .15);
     padding: 25px 0;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 20px
 }
 
 .footer-bottom p {
     margin: 0;
     font-size: 1rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, .8)
 }
 
 .social-icons {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 15px
 }
 
 .social-icons a {
@@ -920,284 +904,136 @@
     height: 40px;
     line-height: 40px;
     font-size: 1.1rem;
-    background-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, .15);
     border-radius: 50%;
-    color: var(--white);
-    transition: all 0.3s ease;
+    color: #fff;
+    transition: all .3s ease;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center
 }
 
 .social-icons a:hover {
-    background-color: var(--secondary-color);
-    transform: translateY(-3px);
+    background: var(--secondary-color);
+    transform: translateY(-3px)
 }
 
-/* تحسينات للشاشات الصغيرة */
-@media (max-width: 768px) {
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 30px;
-        text-align: center;
+/* ======================
+   تجاوبية
+   ====================== */
+@media (max-width:1200px) {
+    .nav-list {
+        flex-wrap: wrap;
+        gap: 12px 16px
     }
 
-    .footer-logo {
-        align-items: center;
-    }
-
-    .footer-links,
-    .footer-contact {
-        text-align: center;
-    }
-
-    .footer-contact p {
-        justify-content: center;
-    }
-
-    .footer-links a:hover {
-        padding-right: 0;
-        padding-left: 8px;
-    }
-}
-    /* قسم معلومات الاتصال المعدل */
-    .contact-info-container {
-        background-color: rgba(0, 0, 0, 0.2);
-        padding: 25px;
-        border-radius: 8px;
-        margin-top: 30px;
-    }
-
-    .contact-info-title {
-        text-align: center;
-        margin-bottom: 25px;
-        font-size: 1.4rem;
-    }
-
-    .contact-item {
-        margin-bottom: 18px;
+    .nav-list>li.login-btn {
+        order: 99;
+        width: 100%;
+        margin-inline-start: 0;
         display: flex;
-        align-items: center;
-        gap: 15px;
-        font-size: 1.1rem;
+        justify-content: flex-end
     }
 
-    .contact-icon {
-        font-size: 1.3rem;
+    [dir="rtl"] .nav-list>li.login-btn {
+        justify-content: flex-start
+    }
+}
+
+@media (max-width:992px) {
+    .header .container {
+        flex-direction: column;
+        padding: 10px 0
     }
 
-    /* تحسينات للشاشات الصغيرة */
-    @media (max-width: 768px) {
-        .footer-content {
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-
-        .footer-logo {
-            align-items: center;
-            text-align: center;
-        }
-
-        .footer-links,
-        .footer-contact {
-            text-align: center;
-        }
-
-        .footer-links h4::after,
-        .footer-contact h4::after {
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .footer-contact p {
-            justify-content: center;
-        }
-
-        .contact-info-container {
-            padding: 20px;
-        }
+    .logo-container {
+        margin-bottom: 15px
     }
 
+    .nav-list {
+        flex-wrap: wrap;
+        justify-content: center
+    }
 
-        .social-icons a {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            text-align: center;
-            line-height: 40px;
-            color: var(--white);
-            margin-right: 10px;
-            transition: var(--transition);
-        }
+    .mission,
+    .vision {
+        width: 100%
+    }
+}
 
-        .social-icons a:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-3px);
-        }
+@media (max-width:768px) {
+    .mission-vision {
+        flex-direction: column
+    }
 
-        /* التجاوب مع الشاشات الصغيرة */
-        @media (max-width: 992px) {
-            .header .container {
-                flex-direction: column;
-                padding: 10px 0;
-            }
+    .team-carousel,
+    .partners-carousel {
+        height: clamp(320px, 46vh, 440px)
+    }
 
-            .logo-container {
-                margin-bottom: 15px;
-            }
+    .dropdown-content {
+        position: static;
+        width: 100%
+    }
 
-            .nav-list {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
+    .dropdown:hover .dropdown-content {
+        display: none
+    }
 
-            .nav-list li {
-                margin: 5px;
-            }
+    .dropdown.active .dropdown-content {
+        display: block
+    }
 
-            .mission,
-            .vision {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .mission-vision {
-                flex-direction: column;
-            }
-
-            .footer-content {
-                flex-direction: column;
-            }
-
-            .user-welcome {
-                display: flex;
-                align-items: center;
-                padding: 0 15px;
-                color: var(--primary-color);
-                font-weight: 500;
-            }
-
-            .team-carousel,
-            .partners-carousel {
-                height: 350px;
-            }
-
-            .team-member img,
-            .partner img {
-                width: 150px;
-                height: 150px;
-            }
-
-            /* تعديلات القائمة المنسدلة للهواتف */
-            .dropdown-content {
-                position: static;
-                width: 100%;
-            }
-
-            .dropdown:hover .dropdown-content {
-                display: none;
-            }
-
-            .dropdown.active .dropdown-content {
-                display: block;
-            }
-        }
-        @media (max-width: 768px) {
-    /* تعديلات الهيدر للجوال */
     .header .container {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-between;
         padding: 10px 15px;
-        gap: 10px;
-    }
-
-    .logo-container {
-        flex-basis: auto;
-        order: 1;
+        gap: 10px
     }
 
     .nav-list {
-        display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-        order: 3;
         width: 100%;
+        order: 3;
         margin-top: 15px;
-        gap: 8px;
-    }
-
-    .nav-list li {
-        margin: 0;
-    }
-
-    .nav-list a {
-        padding: 6px 12px;
-        font-size: 0.9rem;
+        gap: 8px
     }
 
     .login-btn {
-        order: 2;
-        margin-right: 0;
+        order: 2
     }
 
-    .login-btn a {
-        margin-right: 0;
-        padding: 6px 12px;
-        font-size: 0.9rem;
-    }
-
-    /* تعديلات القوائم المنسدلة للجوال */
-    .dropdown-content {
-        position: absolute;
-        width: 200px;
-        right: 0;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    }
-
-    /* إظهار القوائم المنسدلة عند النقر */
-    .dropdown.active .dropdown-content {
-        display: block;
-    }
-
-    /* تعديلات محول اللغة للجوال */
-    .language-switcher {
-        position: relative;
-    }
-
-    .language-menu {
-        position: absolute;
-        width: 150px;
-        right: 0;
-        top: 100%;
-    }
-
-    /* إخفاء العناصر غير الضرورية */
+    /* === تعديل مطلوب: إظهار السطر الثاني للاسم على الشاشات الصغيرة === */
     .org-name-line2 {
-        display: none;
+        display: block
     }
 
-    /* تعديلات حجم الخط والشعار للشاشات الصغيرة جداً */
-    @media (max-width: 480px) {
-        .logo img {
-            height: 50px;
-        }
+    /* كان مخفياً — الآن يظهر */
+}
 
-        .org-name-line1 {
-            font-size: 1.1rem;
-        }
+@media (max-width:480px) {
+    .logo img {
+        height: 50px
+    }
 
-        .nav-list {
-            gap: 5px;
-        }
+    .org-name-line1 {
+        font-size: 1.1rem
+    }
 
-        .nav-list a {
-            padding: 5px 8px;
-            font-size: 0.8rem;
-        }
+    .nav-list {
+        gap: 5px
+    }
+
+    .nav-list a {
+        padding: 5px 8px;
+        font-size: .8rem
+    }
+
+    :root {
+        --avatar-team: clamp(95px, 22vw, 150px);
+        --avatar-partner: clamp(95px, 22vw, 150px);
     }
 }

@@ -34,7 +34,8 @@ use App\Services\Pages\{
     ServicesPageService,
     ServiceDetailsPageService,
     ArticlePageService,
-    ContactPageService
+    ContactPageService,
+    VolunteerPageService
 };
 
 class AppServiceProvider extends ServiceProvider
@@ -56,6 +57,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ServiceDetailsPageService::class, fn($app) => new ServiceDetailsPageService($app->make(SettingReader::class)));
         $this->app->singleton(ArticlePageService::class, fn($app) => new ArticlePageService($app->make(SettingReader::class)));
         $this->app->singleton(ContactPageService::class, fn($app) => new ContactPageService($app->make(SettingReader::class)));
+        $this->app->singleton(VolunteerPageService::class,fn($app) =>new VolunteerPageService($app->make(\App\Services\Support\SettingReader::class)));
     }
     /**
      * Bootstrap any application services.

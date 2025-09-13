@@ -3,15 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
     <title>{{ __('main.site_name') }} - {{ __('titles.events') }}</title>
 
     <!-- Preload critical resources -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="{{ asset('css/events.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <link rel="stylesheet" href="{{ asset('css/events.css') }}">
+        <link rel="preload" href="{{ asset('css/events.css') }}" as="style"
+            onload="this.onload=null;this.rel='stylesheet'">
     </noscript>
 
     <!-- Preload background images -->
@@ -21,21 +24,89 @@
 
     <!-- Preload logo -->
     <link rel="preload" href="{{ asset('logo.png') }}" as="image">
+    <link rel="stylesheet" href="{{ asset('css/events.css') }}">
+
+    <style>
+        :root {
+            --header-h: 78px;
+            --header-h-tablet: 112px;
+            --header-h-mobile: 160px;
+            --safe-top: env(safe-area-inset-top, 0px);
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+            transition: transform .35s ease, opacity .25s ease;
+            will-change: transform;
+        }
+
+        .header.is-hidden {
+            transform: translateY(calc(-100% - var(--safe-top)));
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* تعويض مساحة الهيدر */
+        main {
+            padding-top: var(--header-dyn, calc(var(--header-h) + var(--safe-top) + 8px))
+        }
+
+        :where(section, .section, [id]) {
+            scroll-margin-top: calc(var(--header-dyn, var(--header-h)) + 16px)
+        }
+
+        @media (max-width:992px) {
+            main {
+                padding-top: calc(var(--header-dyn, var(--header-h-tablet)) + var(--safe-top) + 8px)
+            }
+
+            :where(section, .section, [id]) {
+                scroll-margin-top: calc(var(--header-dyn, var(--header-h-tablet)) + 16px)
+            }
+        }
+
+        @media (max-width:768px) {
+            main {
+                padding-top: calc(var(--header-dyn, var(--header-h-mobile)) + var(--safe-top) + 8px)
+            }
+
+            :where(section, .section, [id]) {
+                scroll-margin-top: calc(var(--header-dyn, var(--header-h-mobile)) + 16px)
+            }
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            .header {
+                transition: none
+            }
+        }
+    </style>
+
 </head>
 
 <body>
     <!-- خلفية متغيرة للصفحة -->
     <div class="background-slideshow">
-        <img src="{{ asset('/ima1.webp') }}" class="active" alt="خلفية 1" loading="lazy" width="1920" height="1080" decoding="async">
-        <img src="{{ asset('/ima2.webp') }}" alt="خلفية 2" loading="lazy" width="1920" height="1080" decoding="async">
-        <img src="{{ asset('/ima3.webp') }}" alt="خلفية 3" loading="lazy" width="1920" height="1080" decoding="async">
+        <img src="{{ asset('/ima1.webp') }}" class="active" alt="خلفية 1" loading="lazy" width="1920" height="1080"
+            decoding="async">
+        <img src="{{ asset('/ima2.webp') }}" alt="خلفية 2" loading="lazy" width="1920" height="1080"
+            decoding="async">
+        <img src="{{ asset('/ima3.webp') }}" alt="خلفية 3" loading="lazy" width="1920" height="1080"
+            decoding="async">
     </div>
 
-    <header class="header">
+    <header id="siteHeader" class="header">
         <div class="container">
             <div class="logo-container">
                 <div class="logo">
-                    <img src="{{ asset('logo.png') }}" alt="{{ __('main.site_name') }}" width="50" height="50" loading="eager">
+                    <img src="{{ asset('logo.png') }}" alt="{{ __('main.site_name') }}" width="50" height="50"
+                        loading="eager">
                 </div>
                 <div class="org-name">
                     <span class="org-name-line1">{{ __('main.site_name') }}</span>
@@ -56,8 +127,10 @@
                                 <i class="fas fa-chevron-down"></i>
                             </button>
                             <ul class="language-menu">
-                                <li><a href="#" data-lang="ar" aria-label="Switch to Arabic"><i class="fas fa-language"></i> العربية</a></li>
-                                <li><a href="#" data-lang="en" aria-label="Switch to English"><i class="fas fa-language"></i> English</a></li>
+                                <li><a href="#" data-lang="ar" aria-label="Switch to Arabic"><i
+                                            class="fas fa-language"></i> العربية</a></li>
+                                <li><a href="#" data-lang="en" aria-label="Switch to English"><i
+                                            class="fas fa-language"></i> English</a></li>
                             </ul>
                         </li>
                         <li class="login-btn">
@@ -82,48 +155,59 @@
             <div class="container">
                 <h1 class="section-title">{{ __('main.menu.news') }}</h1>
                 <div class="events-container">
-                    @foreach($events as $event)
-                    <div class="event-card">
-                        <div class="event-image-container">
-                            @if($event['cover_image'])
-                                <img src="{{ asset('storage/' . $event['cover_image']) }}" alt="{{ $event['title'] }}" class="event-image" loading="lazy" width="400" height="300" decoding="async">
-                            @else
-                                <img src="{{ asset('default-event.jpg') }}" alt="{{ __('events.default_image_alt') }}" class="event-image" loading="lazy" width="400" height="300" decoding="async">
-                            @endif
-                        </div>
-                        <div class="event-content">
-                            <span class="event-type {{ $event['type'] }}" style="margin-bottom: 15px; display: inline-block;">
-                                @if($event['type'] == 'festival') {{ __('main.events.festival') }}
-                                @elseif($event['type'] == 'volunteering') {{ __('main.events.volunteering') }}
-                                @elseif($event['type'] == 'workshop') {{ __('main.events.workshop') }}
+                    @foreach ($events as $event)
+                        <div class="event-card">
+                            <div class="event-image-container">
+                                @if ($event['cover_image'])
+                                    <img src="{{ asset('storage/' . $event['cover_image']) }}"
+                                        alt="{{ $event['title'] }}" class="event-image" loading="lazy" width="400"
+                                        height="300" decoding="async">
+                                @else
+                                    <img src="{{ asset('default-event.jpg') }}"
+                                        alt="{{ __('events.default_image_alt') }}" class="event-image"
+                                        loading="lazy" width="400" height="300" decoding="async">
                                 @endif
-                            </span>
-
-                            <h3 class="event-title">{{ $event['title'] ?? 'No title available' }}</h3>
-
-                            <div class="event-meta">
-                                <div class="event-meta-item">
-                                    <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                                    <span>{{ __('main.menu.start_date') }}: {{ $event['start_date']->format('Y-m-d') }}</span>
-                                </div>
-
-                                <div class="event-meta-item">
-                                    <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                                    <span>{{ __('main.menu.end_date') }}: {{ $event['end_date']->format('Y-m-d') }}</span>
-                                </div>
-
-                                <div class="event-meta-item">
-                                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-                                    <span>{{ $event['location'] }}</span>
-                                </div>
                             </div>
+                            <div class="event-content">
+                                <span class="event-type {{ $event['type'] }}"
+                                    style="margin-bottom: 15px; display: inline-block;">
+                                    @if ($event['type'] == 'festival')
+                                        {{ __('main.events.festival') }}
+                                    @elseif($event['type'] == 'volunteering')
+                                        {{ __('main.events.volunteering') }}
+                                    @elseif($event['type'] == 'workshop')
+                                        {{ __('main.events.workshop') }}
+                                    @endif
+                                </span>
 
-                            <p class="event-description">
-                                {!! Str::limit(strip_tags($event['description']), 100) !!}
-                            </p>
-                            <button class="read-more-btn" onclick="openEventModal({{ $event['id'] }})" aria-label="Read more about {{ $event['title'] }}">{{ __('main.menu.read_more') }}</button>
+                                <h3 class="event-title">{{ $event['title'] ?? 'No title available' }}</h3>
+
+                                <div class="event-meta">
+                                    <div class="event-meta-item">
+                                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                                        <span>{{ __('main.menu.start_date') }}:
+                                            {{ $event['start_date']->format('Y-m-d') }}</span>
+                                    </div>
+
+                                    <div class="event-meta-item">
+                                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                                        <span>{{ __('main.menu.end_date') }}:
+                                            {{ $event['end_date']->format('Y-m-d') }}</span>
+                                    </div>
+
+                                    <div class="event-meta-item">
+                                        <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                                        <span>{{ $event['location'] }}</span>
+                                    </div>
+                                </div>
+
+                                <p class="event-description">
+                                    {!! Str::limit(strip_tags($event['description']), 100) !!}
+                                </p>
+                                <button class="read-more-btn" onclick="openEventModal({{ $event['id'] }})"
+                                    aria-label="Read more about {{ $event['title'] }}">{{ __('main.menu.read_more') }}</button>
+                            </div>
                         </div>
-                    </div>
                     @endforeach
                 </div>
             </div>
@@ -131,65 +215,69 @@
     </main>
 
     <!-- نافذة التفاصيل العائمة -->
-    @foreach($events as $event)
-    <div id="eventModal{{ $event['id'] }}" class="event-modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeEventModal({{ $event['id'] }})" aria-label="Close modal">&times;</span>
+    @foreach ($events as $event)
+        <div id="eventModal{{ $event['id'] }}" class="event-modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeEventModal({{ $event['id'] }})"
+                    aria-label="Close modal">&times;</span>
 
-            <span class="event-type {{ $event['type'] }}" style="margin-bottom: 15px; display: inline-block;">
-                @if($event['type'] == 'festival') {{ __('main.events.festival') }}
-                @elseif($event['type'] == 'volunteering') {{ __('main.events.volunteering') }}
-                @elseif($event['type'] == 'workshop') {{ __('main.events.workshop') }}
-                @endif
-            </span>
+                <span class="event-type {{ $event['type'] }}" style="margin-bottom: 15px; display: inline-block;">
+                    @if ($event['type'] == 'festival')
+                        {{ __('main.events.festival') }}
+                    @elseif($event['type'] == 'volunteering')
+                        {{ __('main.events.volunteering') }}
+                    @elseif($event['type'] == 'workshop')
+                        {{ __('main.events.workshop') }}
+                    @endif
+                </span>
 
-            <h2 class="modal-title">{{ $event['title'] }}</h2>
+                <h2 class="modal-title">{{ $event['title'] }}</h2>
 
-            <div class="modal-meta">
-                <div class="modal-meta-item">
-                    <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                    <div>
-                        <strong>{{ __('main.menu.start_date') }}:</strong>
-                        <p>{{ $event['start_date']->format('Y-m-d H:i') }}</p>
+                <div class="modal-meta">
+                    <div class="modal-meta-item">
+                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                        <div>
+                            <strong>{{ __('main.menu.start_date') }}:</strong>
+                            <p>{{ $event['start_date']->format('Y-m-d H:i') }}</p>
+                        </div>
                     </div>
+
+                    <div class="modal-meta-item">
+                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                        <div>
+                            <strong>{{ __('main.menu.end_date') }}:</strong>
+                            <p>{{ $event['end_date']->format('Y-m-d H:i') }}</p>
+                        </div>
+                    </div>
+
+                    <div class="modal-meta-item">
+                        <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                        <div>
+                            <strong>{{ __('main.events.location') }}:</strong>
+                            <p>{{ $event['location'] }}</p>
+                        </div>
+                    </div>
+
+                    @if ($event['max_participants'])
+                        <div class="modal-meta-item">
+                            <i class="fas fa-users" aria-hidden="true"></i>
+                            <div>
+                                <strong>{{ __('main.events.max_participants') }}:</strong>
+                                <p>{{ $event['max_participants'] }}</p>
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
-                <div class="modal-meta-item">
-                    <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                    <div>
-                        <strong>{{ __('main.menu.end_date') }}:</strong>
-                        <p>{{ $event['end_date']->format('Y-m-d H:i') }}</p>
+                @if ($event['description'])
+                    <div class="modal-description">
+                        <h3>{{ __('main.events.description') }}:</h3>
+                        <p class="event-description">
+                            {!! strip_tags($event['description']) !!}</p>
                     </div>
-                </div>
-
-                <div class="modal-meta-item">
-                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-                    <div>
-                        <strong>{{ __('main.events.location') }}:</strong>
-                        <p>{{ $event['location'] }}</p>
-                    </div>
-                </div>
-
-                @if($event['max_participants'])
-                <div class="modal-meta-item">
-                    <i class="fas fa-users" aria-hidden="true"></i>
-                    <div>
-                        <strong>{{ __('main.events.max_participants') }}:</strong>
-                        <p>{{ $event['max_participants'] }}</p>
-                    </div>
-                </div>
                 @endif
             </div>
-
-            @if($event['description'])
-            <div class="modal-description">
-                <h3>{{ __('main.events.description') }}:</h3>
-                <p class="event-description">
-                    {!! strip_tags($event['description']) !!}</p>
-                </div>
-            @endif
         </div>
-    </div>
     @endforeach
 
     <!-- تذييل الصفحة -->
@@ -198,9 +286,11 @@
             <div class="footer-content">
                 <!-- قسم الشعار والمعلومات -->
                 <div class="footer-logo">
-                    <img src="\logo.png" alt="{{ __('main.site_name') }}" width="50" height="50" loading="lazy">
+                    <img src="{{ asset('logo.png') }}"  alt="{{ __('main.site_name') }}" width="50" height="50"
+                        loading="lazy">
                     <p>{{ __('main.site_name') }}<br>
-                    <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span></p>
+                        <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span>
+                    </p>
                 </div>
 
                 <!-- قسم الروابط السريعة -->
@@ -220,19 +310,24 @@
                 <p>{{ __('main.footer.copyright') }} &copy; {{ date('Y') }}</p>
                 <div class="social-icons">
                     @if (isset($socialMedia['facebook']))
-                        <a href="{{ $socialMedia['facebook'] }}" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="{{ $socialMedia['facebook'] }}" target="_blank" aria-label="Facebook"><i
+                                class="fab fa-facebook-f"></i></a>
                     @endif
                     @if (isset($socialMedia['twitter']))
-                        <a href="{{ $socialMedia['twitter'] }}" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="{{ $socialMedia['twitter'] }}" target="_blank" aria-label="Twitter"><i
+                                class="fab fa-twitter"></i></a>
                     @endif
                     @if (isset($socialMedia['linkedin']))
-                        <a href="{{ $socialMedia['linkedin'] }}" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="{{ $socialMedia['linkedin'] }}" target="_blank" aria-label="LinkedIn"><i
+                                class="fab fa-linkedin-in"></i></a>
                     @endif
                     @if (isset($socialMedia['instagram']))
-                        <a href="{{ $socialMedia['instagram'] }}" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="{{ $socialMedia['instagram'] }}" target="_blank" aria-label="Instagram"><i
+                                class="fab fa-instagram"></i></a>
                     @endif
                     @if (isset($socialMedia['youtube']))
-                        <a href="{{ $socialMedia['youtube'] }}" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="{{ $socialMedia['youtube'] }}" target="_blank" aria-label="YouTube"><i
+                                class="fab fa-youtube"></i></a>
                     @endif
                 </div>
             </div>
@@ -242,5 +337,31 @@
     <!-- تحميل JavaScript بطريقة غير معيقة -->
     <link rel="preload" href="{{ asset('js/events.js') }}" as="script">
     <script src="{{ asset('js/events.js') }}" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.getElementById('siteHeader') || document.querySelector('.header');
+
+            // تعويض ارتفاع الهيدر الحقيقي
+            function setHeaderPad() {
+                if (!header) return;
+                document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+            }
+            setHeaderPad();
+            addEventListener('resize', setHeaderPad);
+            addEventListener('load', setHeaderPad);
+
+            // أخفِ الهيدر عند أي نزول، وأظهره فقط عند أعلى الصفحة
+            function toggleHeader() {
+                if (window.scrollY > 0) header.classList.add('is-hidden');
+                else header.classList.remove('is-hidden');
+            }
+            toggleHeader();
+            document.addEventListener('scroll', toggleHeader, {
+                passive: true
+            });
+        });
+    </script>
+
 </body>
+
 </html>

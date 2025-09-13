@@ -1,780 +1,590 @@
 <!DOCTYPE html>
-<html lang="{{ $locale }}" dir="{{ $locale == 'ar' ? 'rtl' : 'ltr' }}">
+<html lang="{{ $locale }}" dir="{{ $locale === 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="Content-Language" content="{{ $locale }}">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('main.site_name') }} - {{ __('volunteer.page_title') }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ __('main.site_name') }} - {{ __('main.menu.team') }}</title>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
     <style>
-        /* أنماط عامة */
         :root {
-            --primary-color: #2E86AB;
-            --primary-light: #5dade2;
-            --secondary-color: #F18F01;
-            --secondary-light: #f5b041;
-            --accent-color: #5BBA6F;
-            --dark-color: #333333;
-            --dark-color-1: #555555;
-            --light-color: #f8f9fa;
-            --white: #ffffff;
-            --gray: #e0e0e0;
-            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-            --border-radius: 8px;
+            --primary: #2E86AB;
+            --primary-2: #5dade2;
+            --secondary: #F18F01;
+            --secondary-2: #f5b041;
+            --accent: #5BBA6F;
+            --dark: #333;
+            --dark-2: #555;
+            --light: #f8f9fa;
+            --white: #fff;
+            --shadow: 0 5px 15px rgba(0, 0, 0, .1);
+            --radius: 12px;
+            --transition: .25s ease;
         }
 
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Tajawal', 'Segoe UI', sans-serif;
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            margin: 0
         }
 
         body {
-            background-color: var(--light-color);
-            color: var(--dark-color);
-            line-height: 1.8;
+            font-family: 'Tajawal', 'Segoe UI', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.8
         }
 
         .container {
-            width: 90%;
+            width: 92%;
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
+            margin-inline: auto;
+            padding-inline: 10px
         }
 
-        /* شريط التنقل */
+        /* Header */
         .header {
-            background-color: var(--white);
-            box-shadow: var(--box-shadow);
             position: fixed;
-            width: 100%;
             top: 0;
-            z-index: 1000;
-            padding: 15px 0;
+            inset-inline: 0;
+            background: var(--white);
+            box-shadow: var(--shadow);
+            z-index: 1000
         }
 
-        .header .container {
+        .header .row {
             display: flex;
+            gap: 18px;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            gap: 20px;
+            padding: 14px 0
         }
 
-        .logo-container {
+        .logo-wrap {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px
         }
 
-        .logo img {
-            height: 60px;
-            width: auto;
+        .logo-wrap img {
+            height: 56px;
+            width: auto
         }
 
-        .org-name {
+        .brand {
             display: flex;
             flex-direction: column;
             line-height: 1.2;
-            color: var(--primary-color);
-            font-weight: bold;
+            color: var(--primary);
+            font-weight: 700;
+            white-space: nowrap
         }
 
-        .org-name-line1 {
-            font-size: 1.4rem;
-            white-space: nowrap;
+        .brand .sub {
+            color: var(--secondary);
+            font-size: .95rem;
+            font-weight: 700
         }
 
-        .org-name-line2 {
-            font-size: 1rem;
-            color: var(--secondary-color);
-            white-space: nowrap;
-        }
-
-        .nav-list {
+        .nav ul {
             display: flex;
+            gap: 12px;
             list-style: none;
             margin: 0;
             padding: 0;
-            gap: 15px;
-            align-items: center;
+            align-items: center
         }
 
-        .nav-list li {
-            margin: 0;
-        }
-
-        .nav-list a {
-            text-decoration: none;
-            color: var(--dark-color);
-            font-weight: 500;
-            padding: 8px 12px;
-            transition: var(--transition);
-            border-radius: var(--border-radius);
+        .nav a {
             display: block;
-            white-space: nowrap;
-            text-align: center;
-            font-size: 0.95rem;
-        }
-
-        .nav-list a:hover {
-            color: var(--primary-color);
-            background-color: rgba(46, 134, 171, 0.1);
-        }
-
-        .login-btn a {
-            background-color: var(--secondary-color);
-            color: var(--white) !important;
-            padding: 8px 20px;
-            border-radius: var(--border-radius);
-            text-decoration: none !important;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .login-btn a:hover {
-            background-color: var(--secondary-light);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(241, 143, 1, 0.3);
-        }
-
-        .language-switcher {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            list-style: none !important;
-        }
-
-        .language-btn {
-            background: none;
-            border: none;
-            color: var(--dark-color);
-            cursor: pointer;
+            text-decoration: none;
+            color: var(--dark);
             padding: 8px 12px;
+            border-radius: 10px;
+            font-weight: 600
+        }
+
+        .nav a:hover {
+            background: rgba(46, 134, 171, .08);
+            color: var(--primary)
+        }
+
+        /* Auth button */
+        .btn-auth {
+            background: var(--secondary);
+            color: var(--white) !important;
+            border-radius: 999px;
+            padding: 8px 18px
+        }
+
+        .btn-auth:hover {
+            background: var(--secondary-2);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(241, 143, 1, .28)
+        }
+
+        /* Language switcher */
+        .lang {
+            position: relative
+        }
+
+        .lang .trigger {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-weight: 500;
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-            text-decoration: none;
-            font-size: 0.95rem;
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+            padding: 8px 10px;
+            border-radius: 10px;
+            font-weight: 600
         }
 
-        .language-btn:hover {
-            color: var(--primary-color);
-            background-color: rgba(46, 134, 171, 0.1);
+        .lang .trigger:hover {
+            background: rgba(46, 134, 171, .08);
+            color: var(--primary)
         }
 
-        .language-menu {
-            display: none;
+        .lang .menu {
             position: absolute;
             top: 100%;
-            right: 0;
-            background-color: var(--white);
-            min-width: 140px;
-            box-shadow: var(--box-shadow);
-            border-radius: var(--border-radius);
-            z-index: 100;
-            list-style: none;
-            padding: 10px 0;
-            margin-top: 5px;
+            inset-inline-end: 0;
+            background: var(--white);
+            min-width: 160px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 8px 6px;
+            display: none
         }
 
-        .language-switcher:hover .language-menu {
-            display: block;
+        .lang.open .menu {
+            display: block
         }
 
-        .language-menu li a {
-            padding: 8px 15px;
+        .lang .menu a {
             display: flex;
-            align-items: center;
             gap: 10px;
-            color: var(--dark-color);
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 10px;
             text-decoration: none;
-            transition: var(--transition);
-            font-size: 0.9rem;
+            color: var(--dark)
         }
 
-        .language-menu li a:hover {
-            background-color: rgba(46, 134, 171, 0.1);
-            color: var(--primary-color);
+        .lang .menu a:hover {
+            background: rgba(46, 134, 171, .08);
+            color: var(--primary)
         }
 
-        /* المحتوى الرئيسي */
+        /* Main */
         main {
-            margin-top: 90px;
-            padding: 40px 0;
-            min-height: calc(100vh - 160px);
+            padding-top: 96px;
+            padding-bottom: 40px;
+            min-height: calc(100vh - 160px)
         }
 
         .section-title {
-            color: var(--primary-color);
-            font-size: 1.8rem;
-            margin: 30px 0 25px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--secondary-color);
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 26px 0 18px;
             position: relative;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--secondary)
         }
 
         .section-title::after {
             content: '';
             position: absolute;
             bottom: -2px;
-            right: 0;
-            width: 100px;
+            inset-inline: 0;
+            width: 120px;
             height: 2px;
-            background: var(--secondary-color);
+            background: var(--secondary)
         }
 
-        /* أنماط بطاقة المتطوع */
-        .volunteer-header {
+        /* Card: header */
+        .v-header {
             display: flex;
             flex-wrap: wrap;
-            gap: 30px;
-            margin-bottom: 30px;
+            gap: 28px;
             align-items: center;
-            background-color: var(--white);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
+            background: var(--white);
+            padding: 26px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 22px
         }
 
-        .volunteer-image {
-            flex: 0 0 180px;
+        .v-photo {
+            flex: 0 0 180px
         }
 
-        .volunteer-image img {
+        .v-photo img {
             width: 180px;
             height: 180px;
             border-radius: 50%;
             object-fit: cover;
-            border: 5px solid var(--secondary-color);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 5px solid var(--secondary);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .08)
         }
 
-        .volunteer-info {
+        .v-info {
             flex: 1;
-            min-width: 250px;
+            min-width: 260px
         }
 
-        .volunteer-name {
-            color: var(--primary-color);
-            font-size: 1.8rem;
-            margin-bottom: 10px;
+        .v-name {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0 0 8px
+        }
+
+        .v-profession {
+            font-size: 1.05rem;
+            color: var(--secondary);
             font-weight: 700;
+            margin: 0 0 14px
         }
 
-        .volunteer-profession {
-            font-size: 1.2rem;
-            color: var(--secondary-color);
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .volunteer-meta {
+        .chips {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 10px
         }
 
-        .meta-item {
+        .chip {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: var(--dark-color-1);
-            background-color: var(--light-color);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
+            background: var(--light);
+            color: var(--dark-2);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: .92rem
         }
 
-        .meta-item i {
-            color: var(--primary-color);
-            font-size: 0.9rem;
-        }
-
-        /* تفاصيل المتطوع */
-        .volunteer-details {
+        /* Grid details */
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px
         }
 
-        .detail-card {
-            background-color: var(--white);
+        .card {
+            background: var(--white);
+            padding: 18px 18px;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            border-inline-start: 4px solid var(--primary)
+        }
+
+        .card h3 {
+            margin: 0 0 10px;
+            font-size: 1.1rem;
+            color: var(--primary)
+        }
+
+        .card p {
+            margin: 0;
+            color: var(--dark-2)
+        }
+
+        /* Skills */
+        .skills {
+            background: var(--white);
             padding: 20px;
-            border-radius: var(--border-radius);
-            border-right: 4px solid var(--primary-color);
-            box-shadow: var(--box-shadow);
-            transition: var(--transition);
-        }
-
-        .detail-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .detail-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .detail-card p {
-            color: var(--dark-color-1);
-            font-size: 0.95rem;
-        }
-
-        /* المهارات */
-        .skills-container {
-            background-color: var(--white);
-            padding: 25px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            margin-bottom: 30px;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            margin-top: 10px
         }
 
         .skills-list {
             display: flex;
-            flex-wrap: wrap;
             gap: 10px;
+            flex-wrap: wrap
         }
 
-        .skill-tag {
-            background-color: var(--primary-color);
+        .tag {
+            background: var(--primary);
             color: var(--white);
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            transition: var(--transition);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: .85rem
         }
 
-        .skill-tag:hover {
-            background-color: var(--primary-light);
-            transform: translateY(-2px);
+        .tag:hover {
+            background: var(--primary-2)
         }
 
-        /* الملاحظات */
-        .notes-container {
-            background-color: var(--white);
-            padding: 25px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
+        /* Notes / CV */
+        .notes {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            margin-top: 10px
         }
 
-        .notes-container p {
-            color: var(--dark-color-1);
-            line-height: 1.8;
+        .cv {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            margin-top: 10px
         }
 
-        /* الأزرار */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background-color: var(--secondary-color);
-            color: var(--white);
-            padding: 10px 25px;
-            border-radius: var(--border-radius);
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-            border: none;
-            cursor: pointer;
-            margin-top: 15px;
-            box-shadow: 0 4px 8px rgba(241, 143, 1, 0.3);
-        }
-
-        .btn:hover {
-            background-color: var(--secondary-light);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(241, 143, 1, 0.4);
-        }
-
-        .btn i {
-            font-size: 0.9rem;
-        }
-
-        /* تذييل الصفحة */
+        /* Footer */
         .footer {
-            background-color: var(--dark-color);
-            color: var(--white);
-            padding: 30px 0;
+            background: #222;
+            color: #f1f1f1;
             text-align: center;
-            font-size: 0.9rem;
+            padding: 26px 0;
+            margin-top: 36px;
+            font-size: .95rem
         }
 
-        .footer p {
-            margin: 0;
-        }
-
-        /* التجاوب مع الشاشات الصغيرة */
-        @media (max-width: 992px) {
-            .header .container {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .nav-list {
-                order: 3;
-                width: 100%;
-                justify-content: center;
-                margin-top: 15px;
-            }
-        }
-
+        /* Responsive tweaks */
         @media (max-width: 768px) {
-            .volunteer-header {
+            .v-header {
                 flex-direction: column;
-                text-align: center;
-                padding: 20px;
+                text-align: center
             }
 
-            .volunteer-meta {
-                justify-content: center;
+            .chips {
+                justify-content: center
             }
 
-            .volunteer-image {
-                margin-bottom: 20px;
+            .v-photo {
+                margin-bottom: 8px
             }
-
-            .btn {
-                width: 100%;
-            }
-
-            .section-title {
-                font-size: 1.5rem;
-            }
-
-            .volunteer-name {
-                font-size: 1.6rem;
-            }
-
-            .volunteer-profession {
-                font-size: 1.1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .volunteer-image {
-                flex: 0 0 150px;
-            }
-
-            .volunteer-image img {
-                width: 150px;
-                height: 150px;
-            }
-
-            .volunteer-meta {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .meta-item {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .nav-list {
-                gap: 8px;
-            }
-
-            .nav-list a {
-                padding: 6px 10px;
-                font-size: 0.85rem;
-            }
-
-            .login-btn a {
-                padding: 6px 15px;
-            }
-        }
-
-        /* تأثيرات إضافية */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 
 <body>
-    <!-- شريط التنقل العلوي -->
+    @php
+        /**
+         * دالة ترجمة مرنة: تحاول عدة مفاتيح وتعيد أول نتيجة موجودة.
+         * مثال: t(['main.titles.volunteer.profession', 'main.volunteer.profession'])
+         */
+        $t = function (array $keys) {
+            foreach ($keys as $k) {
+                $v = __($k);
+                if ($v !== $k) {
+                    return $v;
+                }
+            }
+            // fallback: أعِد آخر مفتاح كي لا تظهر نصوص فارغة
+            return end($keys);
+        };
+
+        // خرائط ترجمة لقيم الحقول (مثل availability / gender)
+        $genderKey = strtolower((string) ($volunteer['gender'] ?? ''));
+        $availKey = strtolower((string) ($volunteer['availability'] ?? ''));
+
+        $genderLabel =
+            $genderKey === 'male'
+                ? $t(['main.titles.volunteer.male', 'main.volunteer.male'])
+                : ($genderKey === 'female'
+                    ? $t(['main.titles.volunteer.female', 'main.volunteer.female'])
+                    : $volunteer['gender'] ?? '');
+
+        $availabilityLabel = match ($availKey) {
+            'full_time' => $t(['main.titles.volunteer.full_time', 'main.volunteer.full_time']),
+            'part_time' => $t(['main.titles.volunteer.part_time', 'main.volunteer.part_time']),
+            'weekends' => $t(['main.titles.volunteer.weekends', 'main.volunteer.weekends']),
+            default => $volunteer['availability'] ?? null,
+        };
+    @endphp
+
     <header class="header">
         <div class="container">
-            <div class="logo-container">
-                <div class="logo">
+            <div class="row">
+                <div class="logo-wrap">
                     <img src="/logo.png" alt="{{ __('main.site_name') }}">
+                    <div class="brand">
+                        <span>{{ __('main.site_name') }}</span>
+                        <span class="sub">{{ __('main.site_subname') }}</span>
+                    </div>
                 </div>
-                <div class="org-name">
-                    <span class="org-name-line1">{{ __('main.site_name') }}</span>
-                    <span class="org-name-line2">{{ __('main.site_subname') }}</span>
-                </div>
-            </div>
-            <nav class="nav">
-                <ul class="nav-list">
-                    <li><a href="{{ route('home', ['lang' => $locale]) }}">{{ __('main.menu.home') }}</a></li>
 
-                    <li class="language-switcher">
-                        <button class="language-btn">
-                            <i class="fas fa-globe"></i>
-                            <span class="current-lang">{{ $locale == 'ar' ? 'العربية' : 'English' }}</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <ul class="language-menu">
-                            <li><a href="{{ route('volunteers', ['vol' => $volunteer['id'], 'lang' => 'ar']) }}">
-                                <i class="fas fa-language"></i> العربية
-                            </a></li>
-                            <li><a href="{{ route('volunteers', ['vol' => $volunteer['id'], 'lang' => 'en']) }}">
-                                <i class="fas fa-language"></i> English
-                            </a></li>
-                        </ul>
-                    </li>
+                <nav class="nav">
+                    <ul>
+                        <li><a href="{{ route('home', ['lang' => $locale]) }}">{{ __('main.menu.home') }}</a></li>
+                        <li><a href="{{ route('sections', ['lang' => $locale]) }}">{{ __('main.menu.services') }}</a>
+                        </li>
+                        <li><a href="{{ route('events', ['lang' => $locale]) }}">{{ __('main.menu.news') }}</a></li>
+                        <li><a href="{{ route('compliants', ['lang' => $locale]) }}">{{ __('main.menu.contact') }}</a>
+                        </li>
 
-                    @if (Auth::guard('custom')->check())
-                        <li class="login-btn">
-                            <a href="{{ route('logout') }}"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <i class="fas fa-sign-out-alt"></i> {{ __('main.buttons.logout') }}
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                style="display: none;">
-                                @csrf
-                            </form>
+                        <li class="lang" id="langSwitcher">
+                            <button class="trigger"><i class="fas fa-globe"></i>
+                                <span>{{ $locale === 'ar' ? 'العربية' : 'English' }}</span>
+                                <i class="fas fa-chevron-down" style="font-size:.85em;"></i>
+                            </button>
+                            <div class="menu">
+                                <a href="{{ route('volunteers', ['vol' => $volunteer['id'], 'lang' => 'ar']) }}"><i
+                                        class="fas fa-language"></i> العربية</a>
+                                <a href="{{ route('volunteers', ['vol' => $volunteer['id'], 'lang' => 'en']) }}"><i
+                                        class="fas fa-language"></i> English</a>
+                            </div>
                         </li>
-                    @else
-                        <li class="login-btn">
-                            <a href="{{ route('login', ['lang' => $locale]) }}">
-                                <i class="fas fa-sign-in-alt"></i> {{ __('main.buttons.login') }}
-                            </a>
-                        </li>
-                    @endif
+
+                        @auth('custom')
+                            <li>
+                                <a class="btn-auth" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt"></i> {{ __('main.buttons.logout') }}
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none">
+                                    @csrf</form>
+                            </li>
+                        @else
+                            <li><a class="btn-auth" href="{{ route('login', ['lang' => $locale]) }}">
+                                    <i class="fas fa-sign-in-alt"></i> {{ __('main.buttons.login') }}</a>
+                            </li>
+                        @endauth
+                    </ul>
                 </nav>
             </div>
         </div>
     </header>
 
-    <!-- المحتوى الرئيسي -->
     <main>
-        <div class="container fade-in">
-            <div class="volunteer-section">
-                <!-- بطاقة المعلومات الأساسية -->
-                <div class="volunteer-header">
-                    <div class="volunteer-image">
-                        <img src="{{ $volunteer['profile_photo'] ? asset('storage/' . $volunteer['profile_photo']) : asset('images/default-avatar.png') }}"
-                             alt="{{ $volunteer['name'] }}"
-                             onerror="this.src='{{ asset('images/default-avatar.png') }}'">
-                    </div>
-                    <div class="volunteer-info">
-                        <h1 class="volunteer-name">{{ $volunteer['name'] ?? __('volunteer.default_name') }}</h1>
-                        <p class="volunteer-profession">{{ $volunteer['profession'] ?? __('volunteer.default_profession') }}</p>
+        <div class="container">
+            <!-- بطاقة رأس المتطوع -->
+            <section class="v-header">
+                <div class="v-photo">
+                    <img src="{{ $volunteer['profile_photo'] ? asset('storage/' . $volunteer['profile_photo']) : asset('images/default-avatar.png') }}"
+                        alt="{{ $volunteer['name'] ?? '' }}"
+                        onerror="this.src='{{ asset('images/default-avatar.png') }}'">
+                </div>
 
-                        <div class="volunteer-meta">
-                            @if($volunteer['email'])
-                            <div class="meta-item">
-                                <i class="fas fa-envelope"></i>
-                                <span>{{ $volunteer['email'] }}</span>
+                <div class="v-info">
+                    <h1 class="v-name">{{ $volunteer['name'] ?? '' }}</h1>
+
+                    @if (!empty($volunteer['profession']))
+                        <p class="v-profession">
+                            {{ $t(['main.titles.volunteer.profession', 'main.volunteer.profession']) }}:
+                            <span>{{ $volunteer['profession'] }}</span>
+                        </p>
+                    @endif
+
+                    <div class="chips">
+                        @if (!empty($volunteer['email']))
+                            <div class="chip"><i class="fas fa-envelope"></i><span>{{ $volunteer['email'] }}</span>
                             </div>
-                            @endif
-
-                            @if($volunteer['phone'])
-                            <div class="meta-item">
-                                <i class="fas fa-phone"></i>
-                                <span>{{ $volunteer['phone'] }}</span>
+                        @endif
+                        @if (!empty($volunteer['phone']))
+                            <div class="chip"><i class="fas fa-phone"></i><span>{{ $volunteer['phone'] }}</span>
                             </div>
-                            @endif
-
-                            @if($volunteer['gender'])
-                            <div class="meta-item">
-                                <i class="fas fa-{{ $volunteer['gender'] == 'male' ? 'male' : 'female' }}"></i>
-                                <span>
-                                    @if($volunteer['gender'] == 'male')
-                                        {{ __('main.volunteer.male') }}
-                                    @else
-                                        {{ __('main.volunteer.female') }}
-                                    @endif
-                                </span>
+                        @endif
+                        @if (!empty($genderLabel))
+                            <div class="chip">
+                                <i
+                                    class="fas fa-{{ $genderKey === 'male' ? 'male' : ($genderKey === 'female' ? 'female' : 'user') }}"></i>
+                                <span>{{ $genderLabel }}</span>
                             </div>
-                            @endif
-
-                            @if($volunteer['birth_date'])
-                            <div class="meta-item">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span>{{ $volunteer['birth_date'] }}</span>
-                            </div>
-                            @endif
-
-                            @if($volunteer['join_date'])
-                            <div class="meta-item">
+                        @endif
+                        @if (!empty($volunteer['birth_date']))
+                            <div class="chip"><i
+                                    class="fas fa-calendar-alt"></i><span>{{ $volunteer['birth_date'] }}</span></div>
+                        @endif
+                        @if (!empty($volunteer['join_date']))
+                            <div class="chip">
                                 <i class="fas fa-calendar-check"></i>
-                                <span>{{ __('main.volunteer.join_date') }}: {{ $volunteer['join_date'] }}</span>
+                                <span>{{ $t(['main.titles.volunteer.join_date', 'main.volunteer.join_date']) }}:
+                                    {{ $volunteer['join_date'] }}</span>
                             </div>
-                            @endif
-                        </div>
-                            @if($volunteer['skills'])
-                <h2 class="section-title">{{ __('main.volunteer.skills') }}</h2>
-                <div class="meta-item">
-                    <div class="skills-list">
-                        @if(is_array($volunteer['skills']))
-                            @foreach($volunteer['skills'] as $skill)
-                                @if(trim($skill))
-                                    <span class="skill-tag">{{ trim($skill) }}</span>
-                                @endif
-                            @endforeach
-                        @else
-                            @foreach(explode(',', $volunteer['skills']) as $skill)
-                                @if(trim($skill))
-                                    <span class="skill-tag">{{ trim($skill) }}</span>
-                                @endif
-                            @endforeach
                         @endif
                     </div>
                 </div>
+            </section>
 
-                            @endif
-                    </div>
-                </div>
-
-                <!-- المعلومات الشخصية -->
-                <h2 class="section-title">{{ __('main.volunteer.personal_info') }}</h2>
-                <div class="volunteer-details">
-                    @if($volunteer['national_id'])
-                    <div class="detail-card">
-                        <h3>{{ __('main.volunteer.national_id') }}</h3>
+            <!-- معلومات شخصية -->
+            <h2 class="section-title">{{ $t(['main.titles.volunteer.personal_info', 'main.volunteer.personal_info']) }}
+            </h2>
+            <section class="grid">
+                @if (!empty($volunteer['national_id']))
+                    <div class="card">
+                        <h3>{{ $t(['main.titles.volunteer.national_id', 'main.volunteer.national_id']) }}</h3>
                         <p>{{ $volunteer['national_id'] }}</p>
                     </div>
-                    @endif
-
-                    @if($volunteer['availability'])
-                    <div class="detail-card">
-                        <h3>{{ __('main.volunteer.availability') }}</h3>
-                        <p>{{ $volunteer['availability'] }}</p>
-                    </div>
-                    @endif
-
-                </div>
-
-                <!-- المهارات -->
-                @if($volunteer['CV'])
-                <div class="skills-container">
-                    <h2 class="section-title">CV</h2>
-                    <h3>{!!$volunteer['CV']!!}</h3>
-                    </div>
-                </div>
                 @endif
 
-                <!-- الملاحظات -->
-                @if($volunteer['notes'])
-                <h2 class="section-title">{{ __('volunteer.notes') }}</h2>
-                <div class="notes-container">
+                @if (!empty($availabilityLabel))
+                    <div class="card">
+                        <h3>{{ $t(['main.titles.volunteer.availability', 'main.volunteer.availability']) }}</h3>
+                        <p>{{ $availabilityLabel }}</p>
+                    </div>
+                @endif
+            </section>
+
+            <!-- المهارات -->
+            @if (!empty($volunteer['skills']))
+                <h2 class="section-title">{{ $t(['main.titles.volunteer.skills', 'main.volunteer.skills']) }}</h2>
+                <section class="skills">
+                    <div class="skills-list">
+                        @php
+                            $skills = is_array($volunteer['skills'])
+                                ? $volunteer['skills']
+                                : preg_split('/,|،/u', (string) $volunteer['skills']);
+                        @endphp
+                        @foreach ($skills as $skill)
+                            @if (trim((string) $skill) !== '')
+                                <span class="tag">{{ trim((string) $skill) }}</span>
+                            @endif
+                        @endforeach
+                    </div>
+                </section>
+            @endif
+
+            <!-- السيرة الذاتية -->
+            @if (!empty($volunteer['CV']))
+                <h2 class="section-title">{{ $t(['main.titles.volunteer.cv', 'main.volunteer.cv']) }}</h2>
+                <section class="cv">{!! $volunteer['CV'] !!}</section>
+            @endif
+
+            <!-- الملاحظات -->
+            @if (!empty($volunteer['notes']))
+                <h2 class="section-title">{{ $t(['main.titles.volunteer.notes', 'main.volunteer.notes']) }}</h2>
+                <section class="notes">
                     <p>{{ $volunteer['notes'] }}</p>
-                </div>
-                @endif
-            </div>
+                </section>
+            @endif
         </div>
     </main>
 
-    <!-- تذييل الصفحة -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; {{ date('Y') }} {{ __('main.site_name') }}. {{ __('main.footer.copyright') }}</p>
+            <p>&copy; {{ date('Y') }} {{ __('main.site_name') }} — {{ __('main.footer.copyright') }}</p>
         </div>
     </footer>
 
     <script>
-        // وظيفة لتعيين الكوكي
-        function setLanguageCookie(lang) {
-            // الكوكي سيكون ساري المفعول لمدة 30 يومًا
-            document.cookie = `preferred_language=${lang};path=/;max-age=${30 * 24 * 60 * 60}`;
-        }
-
-        // وظيفة لقراءة الكوكي
-        function getLanguageCookie() {
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                const [name, value] = cookie.trim().split('=');
-                if (name === 'preferred_language') {
-                    return value;
-                }
-            }
-            return null;
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // 1. التحقق من تفضيل اللغة عند تحميل الصفحة
-            const preferredLang = getLanguageCookie();
-            const currentLang = '{{ $locale }}';
-
-            if (preferredLang && preferredLang !== currentLang) {
-                const url = new URL(window.location.href);
-                url.searchParams.set('lang', preferredLang);
-                window.location.href = url.toString();
-                return; // الخروج لتجنب تنفيذ باقي الكود أثناء إعادة التوجيه
-            }
-
-            // 2. إعداد معالج تغيير اللغة
-            const languageSwitcher = document.querySelector('.language-switcher');
-            if (languageSwitcher) {
-                const languageBtn = languageSwitcher.querySelector('.language-btn');
-                const languageMenu = languageSwitcher.querySelector('.language-menu');
-
-                // معالج النقر على زر اللغة
-                languageBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const isOpen = languageMenu.style.display === 'block';
-                    languageMenu.style.display = isOpen ? 'none' : 'block';
-                });
-
-                // إغلاق القائمة عند النقر خارجها
-                document.addEventListener('click', function(e) {
-                    if (!languageSwitcher.contains(e.target)) {
-                        languageMenu.style.display = 'none';
-                    }
-                });
-
-                // منع إغلاق القائمة عند النقر داخلها
-                languageMenu.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
-
-                // معالج اختيار اللغة
-                document.querySelectorAll('.language-menu a').forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const lang = this.getAttribute('data-lang');
-
-                        // حفظ اللغة المختارة في الكوكي
-                        setLanguageCookie(lang);
-
-                        // إعادة تحميل الصفحة باللغة الجديدة
-                        const url = new URL(window.location.href);
-                        url.searchParams.set('lang', lang);
-                        window.location.href = url.toString();
-                    });
-                });
-            }
-
-            // 3. إضافة تأثيرات الحركة (ابقيه كما هو)
-            const animateElements = document.querySelectorAll('.volunteer-header, .detail-card, .skills-container, .notes-container');
-            animateElements.forEach((el, index) => {
-                setTimeout(() => {
-                    el.classList.add('fade-in');
-                }, index * 100);
+        // فتح/إغلاق قائمة اللغة
+        const switcher = document.getElementById('langSwitcher');
+        if (switcher) {
+            const trigger = switcher.querySelector('.trigger');
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                switcher.classList.toggle('open');
             });
-        });
+            document.addEventListener('click', (e) => {
+                if (!switcher.contains(e.target)) switcher.classList.remove('open');
+            });
+        }
     </script>
 </body>
+
 </html>

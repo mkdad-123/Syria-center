@@ -7,7 +7,9 @@
     <title>تسجيل الدخول - المركز السوري للتنمية المستدامة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* أنماط عامة */
+        /* ======================
+     متغيّرات عامّة
+     ====================== */
         :root {
             --primary-color: #2E86AB;
             --secondary-color: #F18F01;
@@ -15,15 +17,17 @@
             --dark-color: #333;
             --light-color: #f8f9fa;
             --white: #fff;
-            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+            --transition: .3s ease;
+            --header-bg: rgba(255, 255, 255, .9);
+            --header-border: rgba(0, 0, 0, .06);
         }
 
+        /* الأساسيات */
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            box-sizing: border-box
         }
 
         body {
@@ -32,36 +36,32 @@
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* خلفية متحركة */
+        /* خلفية ناعمة + فقاعات */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(46, 134, 171, 0.1) 0%, rgba(241, 143, 1, 0.1) 100%);
+            inset: 0;
+            background: linear-gradient(135deg, rgba(46, 134, 171, .1) 0%, rgba(241, 143, 1, .1) 100%);
             z-index: -2;
         }
 
         .bg-animation {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             z-index: -1;
-            opacity: 0.3;
+            opacity: .3;
             overflow: hidden;
+            pointer-events: none
         }
 
         .bg-animation div {
             position: absolute;
             border-radius: 50%;
-            background: rgba(46, 134, 171, 0.1);
-            animation: float 15s infinite linear;
+            background: rgba(46, 134, 171, .1);
+            animation: float 15s linear infinite
         }
 
         .bg-animation div:nth-child(1) {
@@ -69,7 +69,7 @@
             height: 300px;
             top: 10%;
             left: 10%;
-            animation-delay: 0s;
+            animation-delay: 0s
         }
 
         .bg-animation div:nth-child(2) {
@@ -78,7 +78,7 @@
             top: 50%;
             left: 30%;
             animation-delay: 3s;
-            animation-duration: 12s;
+            animation-duration: 12s
         }
 
         .bg-animation div:nth-child(3) {
@@ -86,7 +86,7 @@
             height: 250px;
             top: 30%;
             left: 70%;
-            animation-delay: 5s;
+            animation-delay: 5s
         }
 
         .bg-animation div:nth-child(4) {
@@ -95,117 +95,127 @@
             top: 70%;
             left: 80%;
             animation-delay: 7s;
-            animation-duration: 18s;
+            animation-duration: 18s
         }
 
         @keyframes float {
             0% {
                 transform: translateY(0) rotate(0deg);
-                opacity: 1;
+                opacity: 1
             }
+
             100% {
                 transform: translateY(-1000px) rotate(720deg);
-                opacity: 0;
+                opacity: 0
             }
         }
 
         .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
+            width: min(1200px, 92%);
+            margin-inline: auto
         }
 
-        /* شريط التنقل - معدل ليكون الشعار في المنتصف */
+        /* ======================
+     الهيدر (ثابت sticky)
+     ====================== */
         .header {
-            background-color: var(--white);
-            box-shadow: var(--box-shadow);
-            position: fixed;
-            width: 100%;
+            position: sticky;
+            /* يبقى بالأعلى بدون تغطية المحتوى */
             top: 0;
             z-index: 1000;
-            padding: 10px 0;
-            text-align: center;
+            background: var(--header-bg);
+            backdrop-filter: saturate(140%) blur(6px);
+            -webkit-backdrop-filter: saturate(140%) blur(6px);
+            border-bottom: 1px solid var(--header-border);
+            padding: 8px env(safe-area-inset-right) 8px env(safe-area-inset-left);
         }
 
         .header .container {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            gap: 16px;
         }
 
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
+            min-width: 0
         }
 
         .logo img {
-            height: 50px;
-            width: auto;
+            height: 52px;
+            width: auto
         }
 
         .org-name {
-            font-size: 1.2rem;
-            font-weight: bold;
+            font-size: 1.15rem;
+            font-weight: 700;
             color: var(--primary-color);
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        /* زر الترجمة */
+        /* محوّل اللغة */
         .language-switcher {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap
         }
 
         .language-btn {
             background: none;
-            border: none;
+            border: 0;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: .95rem;
             color: var(--dark-color);
+            padding: 8px 10px;
+            border-radius: 6px;
             transition: var(--transition);
-            padding: 5px 10px;
-            border-radius: 4px;
         }
 
         .language-btn:hover {
-            background-color: rgba(0, 0, 0, 0.05);
+            background: rgba(0, 0, 0, .05)
         }
 
         .language-btn.active {
             color: var(--primary-color);
-            font-weight: bold;
+            font-weight: 700
         }
 
-        /* تصميم نموذج تسجيل الدخول */
+        /* ======================
+     صفحة تسجيل الدخول
+     ====================== */
         .login-page {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 80px 0;
+            min-height: calc(100vh - 70px);
+            /* مساحة محترمة أسفل الهيدر */
+            padding: 40px 0;
         }
 
         .login-container {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 10px;
-            box-shadow: var(--box-shadow);
             width: 100%;
-            max-width: 500px;
-            padding: 40px;
+            max-width: 520px;
+            margin: 20px;
+            background: rgba(255, 255, 255, .95);
+            border-radius: 12px;
+            box-shadow: var(--box-shadow);
+            padding: 36px;
             position: relative;
             overflow: hidden;
             border-top: 5px solid var(--primary-color);
-            margin: 20px;
         }
 
         .login-title {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
             color: var(--primary-color);
-            font-size: 1.8rem;
+            font-size: 1.75rem;
             position: relative;
         }
 
@@ -215,218 +225,242 @@
             width: 60px;
             height: 3px;
             background: var(--secondary-color);
-            margin: 15px auto;
+            margin: 14px auto 0;
             border-radius: 2px;
         }
 
         .form-group {
-            margin-bottom: 25px;
-            position: relative;
+            margin-bottom: 18px
         }
 
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--dark-color);
+            font-weight: 600
         }
 
         .input-container {
-            position: relative;
+            position: relative
         }
 
         .form-control {
             width: 100%;
-            padding: 12px 15px 12px 40px;
+            padding: 12px 14px 12px 42px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
             font-size: 1rem;
             transition: var(--transition);
-            background-color: #f9f9f9;
+            background: #f9f9f9;
             text-align: right;
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(46, 134, 171, 0.2);
+            box-shadow: 0 0 0 3px rgba(46, 134, 171, .2)
         }
 
         .input-icon {
             position: absolute;
-            left: 15px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            color: #777;
-            z-index: 2;
+            color: #777
         }
 
         .btn {
             display: inline-block;
-            background-color: var(--secondary-color);
-            color: var(--white);
-            padding: 12px 30px;
-            border: none;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-            cursor: pointer;
             width: 100%;
-            font-size: 1rem;
+            background: var(--secondary-color);
+            color: #fff;
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
         .btn:hover {
-            background-color: #e07f00;
+            background: #e07f00;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-block {
-            display: block;
-            width: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .1)
         }
 
         .login-footer {
-            margin-top: 20px;
-            text-align: center;
+            margin-top: 18px;
+            text-align: center
         }
 
         .login-footer a {
             color: var(--primary-color);
             text-decoration: none;
-            transition: var(--transition);
-            display: inline-block;
-            margin: 0 10px;
-            font-weight: 500;
+            font-weight: 600;
+            margin: 0 8px;
+            transition: var(--transition)
         }
 
         .login-footer a:hover {
             color: var(--secondary-color);
-            text-decoration: underline;
+            text-decoration: underline
         }
 
         .divider {
             display: flex;
             align-items: center;
-            margin: 20px 0;
-            color: #777;
+            margin: 18px 0;
+            color: #777
         }
 
         .divider::before,
         .divider::after {
             content: '';
             flex: 1;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #ddd
         }
 
         .divider-text {
-            padding: 0 15px;
-            font-size: 0.9rem;
+            padding: 0 12px;
+            font-size: .9rem
         }
 
-        /* تذييل الصفحة */
-        .footer {
-            background-color: var(--dark-color);
-            color: var(--white);
-            padding: 20px 0;
-            text-align: center;
-            position: relative;
-        }
-
-        .footer p {
-            margin-bottom: 10px;
-        }
-
-        .social-icons a {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            text-align: center;
-            line-height: 40px;
-            color: var(--white);
-            margin: 0 5px;
-            transition: var(--transition);
-        }
-
-        .social-icons a:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-3px);
-        }
-
-        /* رسائل الخطأ */
+        /* رسائل */
         .error-message {
             color: #dc3545;
-            font-size: 0.85rem;
-            margin-top: 5px;
-            text-align: right;
+            font-size: .85rem;
+            margin-top: 6px;
+            text-align: right
         }
 
         .has-error .form-control {
-            border-color: #dc3545;
+            border-color: #dc3545
         }
 
-        /* رسائل النجاح */
         .alert-success {
-            background-color: #d4edda;
+            background: #d4edda;
             color: #155724;
-            padding: 10px 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            border: 1px solid #c3e6cb;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            border: 1px solid #c3e6cb
         }
 
-        /* التجاوب مع الشاشات الصغيرة */
-        @media (max-width: 768px) {
-            .login-container {
-                padding: 30px 20px;
-                margin: 20px 10px;
-            }
+        /* ======================
+     الفوتر
+     ====================== */
+        .footer {
+            background: #222;
+            color: #fff;
+            text-align: center;
+            padding: 18px 0;
+            border-top: 1px solid rgba(255, 255, 255, .06);
+        }
 
-            .login-title {
-                font-size: 1.5rem;
-            }
+        .footer p {
+            margin-bottom: 10px
+        }
 
-            .login-footer {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            }
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .1);
+            color: #fff;
+            margin: 0 5px;
+            transition: var(--transition)
+        }
 
-            .login-footer a {
-                margin: 5px 0;
-            }
+        .social-icons a:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px)
+        }
 
-            .logo-container {
-                flex-direction: column;
-                gap: 5px;
+        /* ======================
+     تجاوب
+     ====================== */
+        @media (max-width: 992px) {
+            .logo img {
+                height: 48px
             }
 
             .org-name {
-                font-size: 1rem;
+                font-size: 1.05rem
             }
 
-            .form-control {
-                padding: 12px 15px 12px 35px;
+            .header .container {
+                gap: 12px
             }
 
-            .input-icon {
-                left: 10px;
-                font-size: 0.9rem;
+            .login-container {
+                padding: 30px
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 0
             }
 
             .header .container {
                 flex-direction: column;
-                gap: 10px;
+                align-items: center;
+                gap: 10px
+            }
+
+            .logo-container {
+                gap: 6px
+            }
+
+            .logo img {
+                height: 46px
+            }
+
+            .org-name {
+                font-size: 1rem
             }
 
             .language-switcher {
-                margin-top: 10px;
+                justify-content: center
+            }
+
+            .login-page {
+                min-height: calc(100vh - 64px);
+                padding: 30px 0
+            }
+
+            .login-container {
+                padding: 24px 18px;
+                margin: 16px 10px
+            }
+
+            .form-control {
+                padding: 12px 14px 12px 38px
+            }
+
+            .input-icon {
+                left: 10px;
+                font-size: .95rem
+            }
+        }
+
+        @media (max-width: 420px) {
+            .logo img {
+                height: 42px
+            }
+
+            .org-name {
+                font-size: .95rem
+            }
+
+            .btn {
+                padding: 11px 14px
             }
         }
     </style>
+
 </head>
 
 <body>
@@ -486,7 +520,8 @@
                     <label for="name" data-translate="username_label">اسم المستخدم</label>
                     <div class="input-container">
                         <i class="fas fa-user input-icon"></i>
-                        <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" required autofocus>
+                        <input type="text" id="name" name="name" class="form-control"
+                            value="{{ old('name') }}" required autofocus>
                     </div>
                     @if ($errors->has('name'))
                         <span class="error-message">{{ $errors->first('name') }}</span>
@@ -627,4 +662,5 @@
         });
     </script>
 </body>
+
 </html>

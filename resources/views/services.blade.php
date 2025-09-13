@@ -3,22 +3,90 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('main.site_name') }} - {{ __('titles.services') }}</title>
 
     <!-- تحسين: Precload للخطوط والموارد المهمة -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    </noscript>
 
     <!-- تحسين: CSS غير متزامن -->
-    <link rel="preload" href="{{ asset('css/services.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="{{ asset('css/services.css') }}"></noscript>
+    <link rel="preload" href="{{ asset('css/services.css') }}" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="stylesheet" href="{{ asset('css/services.css') }}">
 
     <!-- تحسين: Preload للصور -->
     <link rel="preload" href="{{ asset('/ima1.webp') }}" as="image">
     <link rel="preload" href="{{ asset('/ima2.webp') }}" as="image">
     <link rel="preload" href="{{ asset('/ima3.webp') }}" as="image">
     <link rel="preload" href="{{ asset('/logo.png') }}" as="image">
+    <style>
+        :root {
+            --header-h: 78px;
+            --header-h-tablet: 112px;
+            --header-h-mobile: 160px;
+            --safe-top: env(safe-area-inset-top, 0px);
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+            transition: transform .35s ease, opacity .25s ease;
+            will-change: transform;
+        }
+
+        .header.is-hidden {
+            transform: translateY(calc(-100% - var(--safe-top)));
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* تعويض مساحة الهيدر */
+        main {
+            padding-top: var(--header-dyn, calc(var(--header-h) + var(--safe-top) + 8px))
+        }
+
+        :where(section, .section, [id]) {
+            scroll-margin-top: calc(var(--header-dyn, var(--header-h)) + 16px)
+        }
+
+        @media (max-width:992px) {
+            main {
+                padding-top: calc(var(--header-dyn, var(--header-h-tablet)) + var(--safe-top) + 8px)
+            }
+
+            :where(section, .section, [id]) {
+                scroll-margin-top: calc(var(--header-dyn, var(--header-h-tablet)) + 16px)
+            }
+        }
+
+        @media (max-width:768px) {
+            main {
+                padding-top: calc(var(--header-dyn, var(--header-h-mobile)) + var(--safe-top) + 8px)
+            }
+
+            :where(section, .section, [id]) {
+                scroll-margin-top: calc(var(--header-dyn, var(--header-h-mobile)) + 16px)
+            }
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            .header {
+                transition: none
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -33,7 +101,8 @@
         <div class="container">
             <div class="logo-container">
                 <div class="logo">
-                    <img src="{{ asset('/logo.png') }}" alt="{{ __('main.site_name') }}" loading="lazy" width="50" height="50">
+                    <img src="{{ asset('/logo.png') }}" alt="{{ __('main.site_name') }}" loading="lazy" width="50"
+                        height="50">
                 </div>
                 <div class="org-name">
                     <span class="org-name-line1">{{ __('main.site_name') }}</span>
@@ -101,10 +170,11 @@
             <div class="footer-content">
                 <!-- قسم الشعار والمعلومات -->
                 <div class="footer-logo">
-                    <img src="\logo.png" alt="{{ __('main.site_name') }}" loading="lazy" width="50" height="50">
-                    <p>{{ __('main.site_name') }}<br>
-                        <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span>
-                    </p>
+                    <img src="{{ asset('logo.png') }}" alt="{{ __('main.site_name') }}" loading="lazy" width="50"
+                        height="50">
+                        <p>{{ __('main.site_name') }}<br>
+                            <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span>
+                        </p>
                 </div>
 
                 <!-- قسم الروابط السريعة -->
@@ -124,19 +194,24 @@
                 <p>{{ __('main.footer.copyright') }} &copy; {{ date('Y') }}</p>
                 <div class="social-icons">
                     @if (isset($socialMedia['facebook']))
-                        <a href="{{ $socialMedia['facebook'] }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+                        <a href="{{ $socialMedia['facebook'] }}" target="_blank" rel="noopener noreferrer"><i
+                                class="fab fa-facebook-f"></i></a>
                     @endif
                     @if (isset($socialMedia['twitter']))
-                        <a href="{{ $socialMedia['twitter'] }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
+                        <a href="{{ $socialMedia['twitter'] }}" target="_blank" rel="noopener noreferrer"><i
+                                class="fab fa-twitter"></i></a>
                     @endif
                     @if (isset($socialMedia['linkedin']))
-                        <a href="{{ $socialMedia['linkedin'] }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="{{ $socialMedia['linkedin'] }}" target="_blank" rel="noopener noreferrer"><i
+                                class="fab fa-linkedin-in"></i></a>
                     @endif
                     @if (isset($socialMedia['instagram']))
-                        <a href="{{ $socialMedia['instagram'] }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                        <a href="{{ $socialMedia['instagram'] }}" target="_blank" rel="noopener noreferrer"><i
+                                class="fab fa-instagram"></i></a>
                     @endif
                     @if (isset($socialMedia['youtube']))
-                        <a href="{{ $socialMedia['youtube'] }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+                        <a href="{{ $socialMedia['youtube'] }}" target="_blank" rel="noopener noreferrer"><i
+                                class="fab fa-youtube"></i></a>
                     @endif
                 </div>
             </div>
@@ -148,18 +223,45 @@
 
     <!-- تحسين: تضمين JS الصغير مباشرة في الصفحة لتجنب طلب HTTP إضافي -->
     <script>
-    // كود بسيط لتحميل CSS بشكل غير متزامن
-    function loadCSS(href) {
-        var link = document.createElement('link');
-        link.href = href;
-        link.rel = 'stylesheet';
-        document.head.appendChild(link);
-    }
+        // كود بسيط لتحميل CSS بشكل غير متزامن
+        function loadCSS(href) {
+            var link = document.createElement('link');
+            link.href = href;
+            link.rel = 'stylesheet';
+            document.head.appendChild(link);
+        }
 
-    // تحميل الخط إذا لم يتم تحميله بالفعل
-    if(!document.querySelector('link[href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"]')) {
-        loadCSS('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
-    }
+        // تحميل الخط إذا لم يتم تحميله بالفعل
+        if (!document.querySelector(
+                'link[href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"]')) {
+            loadCSS('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+        }
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.getElementById('siteHeader') || document.querySelector('.header');
+
+            // تعويض ارتفاع الهيدر الحقيقي
+            function setHeaderPad() {
+                if (!header) return;
+                document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+            }
+            setHeaderPad();
+            addEventListener('resize', setHeaderPad);
+            addEventListener('load', setHeaderPad);
+
+            // أخفِ الهيدر عند أي نزول، وأظهره فقط عند أعلى الصفحة
+            function toggleHeader() {
+                if (window.scrollY > 0) header.classList.add('is-hidden');
+                else header.classList.remove('is-hidden');
+            }
+            toggleHeader();
+            document.addEventListener('scroll', toggleHeader, {
+                passive: true
+            });
+        });
+    </script>
+
 </body>
+
 </html>

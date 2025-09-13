@@ -5,11 +5,72 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="Content-Language" content="{{ $locale }}">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('main.site_name') }} - {{ __('main.site_subname') }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>    <title>{{ __('main.site_name') }} - {{ __('main.site_subname') }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="{{ asset('css/welcome.css') }}" rel="stylesheet">
+<style>
 
+        :root {
+            --header-h: 78px;
+            --header-h-tablet: 112px;
+            --header-h-mobile: 160px;
+            --safe-top: env(safe-area-inset-top, 0px);
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+            transition: transform .35s ease, opacity .25s ease;
+            will-change: transform;
+        }
+
+        .header.is-hidden {
+            transform: translateY(calc(-100% - var(--safe-top)));
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* تعويض مساحة الهيدر */
+        main {
+            padding-top: var(--header-dyn, calc(var(--header-h) + var(--safe-top) + 8px))
+        }
+
+        :where(section, .section, [id]) {
+            scroll-margin-top: calc(var(--header-dyn, var(--header-h)) + 16px)
+        }
+
+        @media (max-width:992px) {
+            main {
+                padding-top: calc(var(--header-dyn, var(--header-h-tablet)) + var(--safe-top) + 8px)
+            }
+
+            :where(section, .section, [id]) {
+                scroll-margin-top: calc(var(--header-dyn, var(--header-h-tablet)) + 16px)
+            }
+        }
+
+        @media (max-width:768px) {
+            main {
+                padding-top: calc(var(--header-dyn, var(--header-h-mobile)) + var(--safe-top) + 8px)
+            }
+
+            :where(section, .section, [id]) {
+                scroll-margin-top: calc(var(--header-dyn, var(--header-h-mobile)) + 16px)
+            }
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            .header {
+                transition: none
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -61,25 +122,19 @@
                                 <li><a href="#" data-lang="en"><i class="fas fa-language"></i> English</a></li>
                             </ul>
                         </li>
-                        {{-- زر الدخول/الخروج حسب حالة المصادقة على حارس custom --}}
-                        @auth('custom')
-                            <li class="login-btn">
+                        <li class="login-btn">
+                            @auth('custom')
                                 <a href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     {{ __('main.buttons.logout') }}
                                 </a>
-
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
-                                    @csrf
-                                </form>
-                            </li>
-                        @else
-                            <li class="login-btn">
-                                <a href="{{ route('login') }}">
-                                    {{ __('main.buttons.login') }}
-                                </a>
-                            </li>
-                        @endauth
+                                    @csrf</form>
+                            @else
+                                <a href="{{ route('login') }}">{{ __('main.buttons.login') }}</a>
+                            @endauth
+                        </li>
+
 
                     </ul>
                 </nav>
@@ -329,7 +384,7 @@
             <div class="footer-content">
                 <!-- قسم الشعار والمعلومات -->
                 <div class="footer-logo">
-                    <img src="\logo.png" alt="{{ __('main.site_name') }}">
+                    <img src="{{ asset('/logo.png') }}" alt="{{ __('main.site_name') }}">
                     <p>{{ __('main.site_name') }}<br>
                         <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span>
                     </p>
@@ -390,7 +445,30 @@
         </div>
     </footer>
     <script src="{{ asset('js\welcome.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.getElementById('siteHeader') || document.querySelector('.header');
 
+            // تعويض ارتفاع الهيدر الحقيقي
+            function setHeaderPad() {
+                if (!header) return;
+                document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+            }
+            setHeaderPad();
+            addEventListener('resize', setHeaderPad);
+            addEventListener('load', setHeaderPad);
+
+            // أخفِ الهيدر عند أي نزول، وأظهره فقط عند أعلى الصفحة
+            function toggleHeader() {
+                if (window.scrollY > 0) header.classList.add('is-hidden');
+                else header.classList.remove('is-hidden');
+            }
+            toggleHeader();
+            document.addEventListener('scroll', toggleHeader, {
+                passive: true
+            });
+        });
+    </script>
 </body>
 
 </html>
