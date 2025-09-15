@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ $locale }}" dir="{{ $locale == 'ar' ? 'rtl' : 'ltr' }}">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale()==='ar' ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta charset="UTF-8">
@@ -26,67 +26,6 @@
     <link rel="preload" href="{{ asset('logo.png') }}" as="image">
     <link rel="stylesheet" href="{{ asset('css/events.css') }}">
 
-    <style>
-        :root {
-            --header-h: 78px;
-            --header-h-tablet: 112px;
-            --header-h-mobile: 160px;
-            --safe-top: env(safe-area-inset-top, 0px);
-        }
-
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 9999;
-            background: #fff;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
-            transition: transform .35s ease, opacity .25s ease;
-            will-change: transform;
-        }
-
-        .header.is-hidden {
-            transform: translateY(calc(-100% - var(--safe-top)));
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* تعويض مساحة الهيدر */
-        main {
-            padding-top: var(--header-dyn, calc(var(--header-h) + var(--safe-top) + 8px))
-        }
-
-        :where(section, .section, [id]) {
-            scroll-margin-top: calc(var(--header-dyn, var(--header-h)) + 16px)
-        }
-
-        @media (max-width:992px) {
-            main {
-                padding-top: calc(var(--header-dyn, var(--header-h-tablet)) + var(--safe-top) + 8px)
-            }
-
-            :where(section, .section, [id]) {
-                scroll-margin-top: calc(var(--header-dyn, var(--header-h-tablet)) + 16px)
-            }
-        }
-
-        @media (max-width:768px) {
-            main {
-                padding-top: calc(var(--header-dyn, var(--header-h-mobile)) + var(--safe-top) + 8px)
-            }
-
-            :where(section, .section, [id]) {
-                scroll-margin-top: calc(var(--header-dyn, var(--header-h-mobile)) + 16px)
-            }
-        }
-
-        @media (prefers-reduced-motion:reduce) {
-            .header {
-                transition: none
-            }
-        }
-    </style>
 
 </head>
 
@@ -337,30 +276,7 @@
     <!-- تحميل JavaScript بطريقة غير معيقة -->
     <link rel="preload" href="{{ asset('js/events.js') }}" as="script">
     <script src="{{ asset('js/events.js') }}" defer></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const header = document.getElementById('siteHeader') || document.querySelector('.header');
 
-            // تعويض ارتفاع الهيدر الحقيقي
-            function setHeaderPad() {
-                if (!header) return;
-                document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
-            }
-            setHeaderPad();
-            addEventListener('resize', setHeaderPad);
-            addEventListener('load', setHeaderPad);
-
-            // أخفِ الهيدر عند أي نزول، وأظهره فقط عند أعلى الصفحة
-            function toggleHeader() {
-                if (window.scrollY > 0) header.classList.add('is-hidden');
-                else header.classList.remove('is-hidden');
-            }
-            toggleHeader();
-            document.addEventListener('scroll', toggleHeader, {
-                passive: true
-            });
-        });
-    </script>
 
 </body>
 

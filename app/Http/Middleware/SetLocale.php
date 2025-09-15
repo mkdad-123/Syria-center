@@ -5,18 +5,32 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\View;
+
+use Carbon\Carbon;
 
 class SetLocale
 {
-    public function handle($request, Closure $next)
+     public function handle($request, Closure $next)
     {
-        if (Session::has('locale')) {
-            App::setLocale(Session::get('locale'));
-        } else {
-            // تحديد اللغة بناءً على لغة المتصفح
-            $browserLang = substr($request->server('HTTP_ACCEPT_LANGUAGE'), 0, 2);
-            App::setLocale(in_array($browserLang, ['ar', 'en']) ? $browserLang : 'ar');
+        $allowed = ['ar','en'];
+
+        // المصدر الوحيد: ?lang= ثم كوكي lang ثم افتراضي ar
+        $locale = $request->query('lang') ?? Cookie::get('lang') ?? 'ar';
+        if (!in_array($locale, $allowed, true)) {
+            $locale = 'ar';
         }
+
+        // لو وصل ?lang= حدّث الكوكي (سنة)
+        if ($request->has('lang') && Cookie::get('lang') !== $locale) {
+            Cookie::queue(Cookie::make('lang', $locale, 60*24*365, '/', null, false, false, false, 'Lax'));
+        }
+
+        app()->setLocale($locale);
+        Carbon::setLocale($locale);
+        View::share('locale', $locale);
+        View::share('dir', $locale === 'ar' ? 'rtl' : 'ltr');
 
         return $next($request);
     }

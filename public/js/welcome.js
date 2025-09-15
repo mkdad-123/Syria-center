@@ -1,7 +1,7 @@
-
+﻿
 // وظيفة لتعيين الكوكي
 function setLanguageCookie(lang) {
-    document.cookie = `preferred_language=${lang};path=/;max-age=${30 * 24 * 60 * 60}`;
+    document.cookie = `lang=${lang};path=/;max-age=${30 * 24 * 60 * 60}`;
 }
 
 // وظيفة لقراءة الكوكي
@@ -9,7 +9,7 @@ function getLanguageCookie() {
     const cookies = document.cookie.split(';');
     for (let cookie of cookies) {
         const [name, value] = cookie.trim().split('=');
-        if (name === 'preferred_language') {
+        if (name === 'lang') {
             return value;
         }
     }
@@ -135,7 +135,7 @@ function initCarousel(carouselId, prevBtnId, nextBtnId) {
 }
 
 // تهيئة جميع الوظائف عند تحميل الصفحة
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // التحقق من لغة الكوكي
     const preferredLang = getLanguageCookie();
     const currentLang = document.documentElement.lang;
@@ -168,25 +168,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const languageBtn = languageSwitcher.querySelector('.language-btn');
         const languageMenu = languageSwitcher.querySelector('.language-menu');
 
-        languageBtn.addEventListener('click', function(e) {
+        languageBtn.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             const isOpen = languageMenu.style.display === 'block';
             languageMenu.style.display = isOpen ? 'none' : 'block';
         });
 
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (!languageSwitcher.contains(e.target)) {
                 languageMenu.style.display = 'none';
             }
         });
 
-        languageMenu.addEventListener('click', function(e) {
+        languageMenu.addEventListener('click', function (e) {
             e.stopPropagation();
         });
 
         document.querySelectorAll('.language-menu a').forEach(link => {
-            link.addEventListener('click', function(e) {
+            link.addEventListener('click', function (e) {
                 e.preventDefault();
                 const lang = this.getAttribute('data-lang');
                 setLanguageCookie(lang);
@@ -202,14 +202,14 @@ document.addEventListener('DOMContentLoaded', function() {
     dropdowns.forEach(dropdown => {
         if (window.innerWidth <= 768) {
             const dropbtn = dropdown.querySelector('.dropbtn');
-            dropbtn.addEventListener('click', function(e) {
+            dropbtn.addEventListener('click', function (e) {
                 e.stopPropagation();
                 dropdown.classList.toggle('active');
             });
         }
     });
 
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
         if (!event.target.matches('.dropbtn') && !event.target.matches('.dropbtn *')) {
             dropdowns.forEach(dropdown => {
                 dropdown.classList.remove('active');
@@ -218,4 +218,25 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
+}); document.addEventListener('DOMContentLoaded', function () {
+    const header = document.getElementById('siteHeader') || document.querySelector('.header');
+
+    // تعويض ارتفاع الهيدر الحقيقي
+    function setHeaderPad() {
+        if (!header) return;
+        document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+    }
+    setHeaderPad();
+    addEventListener('resize', setHeaderPad);
+    addEventListener('load', setHeaderPad);
+
+    // أخفِ الهيدر عند أي نزول، وأظهره فقط عند أعلى الصفحة
+    function toggleHeader() {
+        if (window.scrollY > 0) header.classList.add('is-hidden');
+        else header.classList.remove('is-hidden');
+    }
+    toggleHeader();
+    document.addEventListener('scroll', toggleHeader, {
+        passive: true
+    });
 });

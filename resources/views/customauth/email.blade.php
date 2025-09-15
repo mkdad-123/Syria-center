@@ -1,129 +1,106 @@
-<!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<!doctype html>
+<html lang="ar" dir="rtl">
+
 <head>
-    <meta charset="UTF-8">
-    <title>إعادة تعيين كلمة المرور</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
-        
-        body {
-            font-family: 'Tajawal', Arial, sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
-            line-height: 1.8;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .container {
-            max-width: 600px;
-            margin: 30px auto;
-            padding: 30px;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 20px;
-        }
-        
-        .logo {
-            max-width: 150px;
-            margin-bottom: 20px;
-        }
-        
-        h2 {
-            color: #2c3e50;
-            font-size: 24px;
-            margin-top: 0;
-        }
-        
-        p {
-            margin-bottom: 20px;
-            font-size: 16px;
-            color: #555;
-        }
-        
-        .code-container {
-            text-align: center;
-            margin: 30px 0;
-        }
-        
-        .code {
-            font-size: 28px;
-            font-weight: bold;
-            padding: 15px 30px;
-            background: linear-gradient(135deg, #3498db, #2c3e50);
-            color: white;
-            border-radius: 8px;
-            display: inline-block;
-            letter-spacing: 3px;
-            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
-        }
-        
-        .footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            text-align: center;
-            font-size: 14px;
-            color: #7f8c8d;
-        }
-        
-        .button {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #3498db;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            margin-top: 20px;
-        }
-        
-        .note {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 6px;
-            border-right: 4px solid #e74c3c;
-            font-size: 14px;
-        }
-    </style>
+    <meta charset="utf-8">
+    <title>إعادة تعيين كلمة المرور — المركز السوري للتنمية المستدامة والتمكين المجتمعي</title>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <!-- يمكنك إضافة شعارك هنا -->
-            <!-- <img src="https://example.com/logo.png" alt="شعار التطبيق" class="logo"> -->
-            <h2>إعادة تعيين كلمة المرور</h2>
-        </div>
-        
-        <p>مرحباً عزيزنا المستخدم،</p>
-        
-        <p>لقد تلقيت هذا البريد الإلكتروني لأنك طلبت إعادة تعيين كلمة المرور لحسابك في موقع المركز السوري للتنمية المستدامة والتمكين المجتمعي </p>
-        
-        <div class="code-container">
-            <div class="code">{{ $code }}</div>
-        </div>
-        
-        <p>يرجى استخدام الرمز أعلاه لإعادة تعيين كلمة المرور الخاصة بك.</p>
-        
-        <div class="note">
-            <strong>ملاحظة مهمة:</strong> هذا الرمز ساري المفعول لمدة 30 دقيقة فقط. لا تشارك هذا الرمز مع أي شخص آخر.
-        </div>
-        
-        <p>إذا لم تطلب إعادة تعيين كلمة المرور، يرجى تجاهل هذا البريد أو الاتصال بفريق الدعم لدينا.</p>
-        
-        <p>نشكرك على ثقتك بنا!</p>
-        
-        <div class="footer">
-            <p>مع أطيب التحيات،<br>فريق التطبيق</p>
-            <p>© 2023 اسم التطبيق. جميع الحقوق محفوظة.</p>
-        </div>
-    </div>
+
+<body
+    style="margin:0;padding:0;background:#f6f7f9;font-family:Tahoma,Segoe UI,Arial,sans-serif;color:#333;line-height:1.8;">
+
+    <!-- الغلاف -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f6f7f9;padding:24px 0;">
+        <tr>
+            <td align="center">
+
+                <!-- البطاقة -->
+                <table role="presentation" width="640" cellpadding="0" cellspacing="0"
+                    style="max-width:640px;width:94%;background:#ffffff;border:1px solid #e9eef3;border-radius:14px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.06);">
+
+                    <!-- الهيدر (متناسق مع التفعيل) -->
+                    <tr>
+                        <td align="center"
+                            style="padding:22px 20px;background:linear-gradient(135deg, rgba(46,134,171,.08), rgba(241,143,1,.08));border-bottom:1px solid #e9eef3;">
+                            <img src="https://your-domain.com/logo.png"
+                                alt="المركز السوري للتنمية المستدامة والتمكين المجتمعي"
+                                style="max-height:56px;display:block;margin:0 auto 10px;">
+                            <div style="font-weight:700;color:#2E86AB;font-size:16px;">
+                                المركز السوري للتنمية المستدامة والتمكين المجتمعي
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- المحتوى -->
+                    <tr>
+                        <td style="padding:26px 22px 10px;">
+                            <h1 style="margin:0 0 10px;font-size:20px;color:#2E86AB;">إعادة تعيين كلمة المرور</h1>
+
+                            <p style="margin:8px 0 0;color:#333;">مرحبًا عزيزنا المستخدم،</p>
+                            <p style="margin:8px 0 0;color:#333;">
+                                تلقّيت هذا البريد لأنك طلبت إعادة تعيين كلمة المرور لحسابك على موقع
+                                <strong>المركز السوري للتنمية المستدامة والتمكين المجتمعي</strong>.
+                            </p>
+
+                            <!-- كود التأكيد (ألوان العلامة) -->
+                            <div style="text-align:center;margin:22px 0;">
+                                <span
+                                    style="
+                  display:inline-block;
+                  font-size:28px;font-weight:bold;letter-spacing:3px;
+                  padding:14px 24px;border-radius:10px;
+                  background:linear-gradient(135deg,#2E86AB,#F18F01);
+                  color:#fff;box-shadow:0 4px 12px rgba(46,134,171,.2);
+                ">
+                                    {{ $code }}
+                                </span>
+                            </div>
+
+                            <p style="margin:8px 0 0;color:#333;">يرجى استخدام الرمز أعلاه لإتمام عملية إعادة التعيين.
+                            </p>
+
+                            <!-- ملاحظة وتحذير (نفس أسلوب التنبيهات في التفعيل) -->
+                            <div
+                                style="margin:16px 0 0;padding:10px 12px;background:#fff7ed;border:1px solid #fbbf24;border-radius:10px;color:#92400e;font-size:14px;">
+                                <strong>ملاحظة مهمة:</strong> هذا الرمز صالح لمدة 30 دقيقة فقط. لا تشارك هذا الرمز مع أي
+                                شخص.
+                            </div>
+
+                            <p style="margin:10px 0 0;color:#555;">
+                                إذا لم تطلب إعادة تعيين كلمة المرور، يمكنك تجاهل هذا البريد.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- فاصل زخرفي (accent) -->
+                    <tr>
+                        <td style="padding:0 22px 0;">
+                            <div style="height:4px;width:64px;background:#5BBA6F;border-radius:2px;margin:16px 0 8px;">
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- فوتر -->
+                    <tr>
+                        <td
+                            style="padding:10px 22px 22px;background:#f9fafb;border-top:1px solid #e9eef3;color:#6b7280;font-size:12px;">
+                            <div style="margin-bottom:6px;">
+                                © {{ now()->year }} المركز السوري للتنمية المستدامة والتمكين المجتمعي — جميع الحقوق
+                                محفوظة.
+                            </div>
+                            <div>
+                                هذه الرسالة أُرسلت تلقائيًا. لا ترد على هذا البريد.
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+                <!-- /البطاقة -->
+
+            </td>
+        </tr>
+    </table>
+
 </body>
+
 </html>

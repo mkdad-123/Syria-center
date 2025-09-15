@@ -1,18 +1,18 @@
-// تأكد من أن الكود ينفذ بعد تحميل الصفحة
-document.addEventListener('DOMContentLoaded', function() {
+﻿// تأكد من أن الكود ينفذ بعد تحميل الصفحة
+document.addEventListener('DOMContentLoaded', function () {
     // وظيفة لتعيين الكوكي
     function setLanguageCookie(lang) {
-        document.cookie = `preferred_language=${lang};path=/;max-age=${30 * 24 * 60 * 60};SameSite=Lax`;
+        document.cookie = `lang=${lang};path=/;max-age=${30 * 24 * 60 * 60};SameSite=Lax`;
     }
 
     // وظيفة لقراءة الكوكي
     function getLanguageCookie() {
-        return document.cookie.split('; ').find(row => row.startsWith('preferred_language='))?.split('=')[1];
+        return document.cookie.split('; ').find(row => row.startsWith('lang='))?.split('=')[1];
     }
 
     // تبديل اللغة عند النقر على الروابط
     document.querySelectorAll('[data-lang]').forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             const lang = this.getAttribute('data-lang');
             setLanguageCookie(lang);
@@ -41,4 +41,39 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     setInterval(changeBackground, 5000);
+});
+// كود بسيط لتحميل CSS بشكل غير متزامن
+function loadCSS(href) {
+    var link = document.createElement('link');
+    link.href = href;
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+}
+
+// تحميل الخط إذا لم يتم تحميله بالفعل
+if (!document.querySelector(
+    'link[href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"]')) {
+    loadCSS('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+}
+document.addEventListener('DOMContentLoaded', function () {
+    const header = document.getElementById('siteHeader') || document.querySelector('.header');
+
+    // تعويض ارتفاع الهيدر الحقيقي
+    function setHeaderPad() {
+        if (!header) return;
+        document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+    }
+    setHeaderPad();
+    addEventListener('resize', setHeaderPad);
+    addEventListener('load', setHeaderPad);
+
+    // أخفِ الهيدر عند أي نزول، وأظهره فقط عند أعلى الصفحة
+    function toggleHeader() {
+        if (window.scrollY > 0) header.classList.add('is-hidden');
+        else header.classList.remove('is-hidden');
+    }
+    toggleHeader();
+    document.addEventListener('scroll', toggleHeader, {
+        passive: true
+    });
 });

@@ -516,15 +516,15 @@
             <form id="loginForm" method="POST" action="{{ route('login.submit') }}">
                 @csrf
 
-                <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                    <label for="name" data-translate="username_label">اسم المستخدم</label>
+                <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+                    <label for="email" data-translate="username_label">البريد الالكتروني</label>
                     <div class="input-container">
                         <i class="fas fa-user input-icon"></i>
-                        <input type="text" id="name" name="name" class="form-control"
-                            value="{{ old('name') }}" required autofocus>
+                        <input type="text" id="email" name="email" class="form-control"
+                            value="{{ old('email') }}" required autofocus>
                     </div>
-                    @if ($errors->has('name'))
-                        <span class="error-message">{{ $errors->first('name') }}</span>
+                    @if ($errors->has('email'))
+                        <span class="error-message">{{ $errors->first('email') }}</span>
                     @endif
                 </div>
 
@@ -583,7 +583,7 @@
             ar: {
                 org_name: "المركز السوري للتنمية المستدامة والتمكين المجتمعي",
                 login_title: "تسجيل الدخول",
-                username_label: "اسم المستخدم",
+                username_label: "البريد الالكتروني",
                 password_label: "كلمة المرور",
                 remember_me: "تذكرني",
                 login_button: "تسجيل الدخول",
@@ -596,7 +596,7 @@
             en: {
                 org_name: "Syrian Center for Sustainable Development and Community Empowerment ",
                 login_title: "Login",
-                username_label: "Username",
+                username_label: "Eamil",
                 password_label: "Password",
                 remember_me: "Remember Me",
                 login_button: "Login",

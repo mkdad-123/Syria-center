@@ -1,6 +1,42 @@
-/* ======================
-   أساسيات و متغيرات
-   ====================== */
+/* حركة إخفاء/إظهار الهيدر */
+.header {
+    transition: transform .35s ease, opacity .25s ease;
+    will-change: transform;
+}
+
+/* إخفاء الهيدر عند النزول */
+.header.is-hidden {
+    transform: translateY(calc(-100% - var(--safe-top)));
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* تعويض ديناميكي لارتفاع الهيدر (يبقى المحتوى ثابت بدون قفزة) */
+main {
+    padding-top: var(--header-dyn, calc(var(--header-h) + var(--safe-top) + 8px));
+}
+
+/* الروابط #id ما تتغطى بالهيدر عندما تكون بالأعلى */
+:where(section, .section, [id]) {
+    scroll-margin-top: calc(var(--header-dyn, var(--header-h)) + 16px);
+}
+
+#siteHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .header {
+        transition: none
+    }
+}
+
 :root {
     --primary-color: #2E86AB;
     --secondary-color: #F18F01;

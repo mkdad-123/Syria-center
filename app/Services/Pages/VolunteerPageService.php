@@ -5,17 +5,42 @@ namespace App\Services\Pages;
 use App\Models\Volunteer;
 use App\Services\Contracts\PageSectionService;
 use App\Services\Support\SettingReader;
+use App\Services\Cache\CacheService;
+use App\Services\Cache\CacheKeyService;
 
 class VolunteerPageService implements PageSectionService
 {
-    public function __construct(private SettingReader $reader) {}
+    private CacheService $cache;
+    private CacheKeyService $keys;
+
+    public function __construct(
+        private SettingReader $reader,
+        ?CacheService $cache = null,
+        ?CacheKeyService $keys = null
+    ) {
+        // fallback لو ما تم حقنهم
+        $this->cache = $cache ?? app(CacheService::class);
+        $this->keys  = $keys  ?? app(CacheKeyService::class);
+    }
 
     public function render(string $locale, array $params = []): string
     {
-        app()->setLocale($locale);
+        // لا نضبط اللغة هنا — SetLocale middleware مسؤول عنها
+        $locale = $locale ?: app()->getLocale();
+        $id     = (int)($params['volunteer_id'] ?? 0);
+        $force  = (bool)($params['refresh'] ?? false);
 
-        $id = (int)($params['volunteer_id'] ?? 0);
-        $v  = Volunteer::findOrFail($id);
+        abort_if($id <= 0, 404);
+
+        // مفتاح كاش يعتمد المتطوّع + اللغة ويتكسّر تلقائيًا عند تعديل سجلّه
+        $key = $this->keys->volunteer($id, $locale);
+
+        $v = $this->cache->remember(
+            $key,
+            now()->addHours(24),
+            fn () => Volunteer::findOrFail($id),
+            $force
+        );
 
         $volunteer = [
             'id'            => $v->id,
@@ -36,10 +61,10 @@ class VolunteerPageService implements PageSectionService
         ];
 
         return view('volunteer', [
-            'volunteer'  => $volunteer,
-            'locale'     => $locale,
-            'socialMedia'=> $this->reader->social(),
-            'contactInfo'=> $this->reader->contact(),
+            'volunteer'   => $volunteer,
+            'locale'      => $locale,
+            'socialMedia' => $this->reader->social(),
+            'contactInfo' => $this->reader->contact(),
         ])->render();
     }
 }

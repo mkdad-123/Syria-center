@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\Notifications\VerifyEmail;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
@@ -57,13 +58,20 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ServiceDetailsPageService::class, fn($app) => new ServiceDetailsPageService($app->make(SettingReader::class)));
         $this->app->singleton(ArticlePageService::class, fn($app) => new ArticlePageService($app->make(SettingReader::class)));
         $this->app->singleton(ContactPageService::class, fn($app) => new ContactPageService($app->make(SettingReader::class)));
-        $this->app->singleton(VolunteerPageService::class,fn($app) =>new VolunteerPageService($app->make(\App\Services\Support\SettingReader::class)));
+        $this->app->singleton(VolunteerPageService::class, fn($app) => new VolunteerPageService($app->make(\App\Services\Support\SettingReader::class)));
     }
     /**
      * Bootstrap any application services.
      */
     public function boot(): void
     {
+        VerifyEmail::createUrlUsing(function ($notifiable) {
+            return URL::temporarySignedRoute(
+                'verification.verify.public',
+                now()->addMinutes(config('auth.verification.expire', 60)),
+                ['id' => $notifiable->getKey(), 'hash' => sha1($notifiable->getEmailForVerification())]
+            );
+        });
         Service::observe(ServiceDetailsObserver::class);
         Article::observe(ArticleObserver::class);
         Section::observe(SectionObserver::class);

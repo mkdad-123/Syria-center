@@ -1,5 +1,5 @@
-document.querySelectorAll('.language-menu a').forEach(item => {
-    item.addEventListener('click', function(e) {
+﻿document.querySelectorAll('.language-menu a').forEach(item => {
+    item.addEventListener('click', function (e) {
         e.preventDefault();
         const lang = this.getAttribute('data-lang');
         // إرسال طلب لتغيير اللغة
@@ -16,20 +16,20 @@ document.querySelectorAll('.language-menu a').forEach(item => {
     });
 });
 // تأكد من أن الكود ينفذ بعد تحميل الصفحة
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // وظيفة لتعيين الكوكي
     function setLanguageCookie(lang) {
-        document.cookie = `preferred_language=${lang};path=/;max-age=${30 * 24 * 60 * 60};SameSite=Lax`;
+        document.cookie = `lang=${lang};path=/;max-age=${30 * 24 * 60 * 60};SameSite=Lax`;
     }
 
     // وظيفة لقراءة الكوكي
     function getLanguageCookie() {
-        return document.cookie.split('; ').find(row => row.startsWith('preferred_language='))?.split('=')[1];
+        return document.cookie.split('; ').find(row => row.startsWith('lang='))?.split('=')[1];
     }
 
     // تبديل اللغة عند النقر على الروابط
     document.querySelectorAll('[data-lang]').forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             const lang = this.getAttribute('data-lang');
             setLanguageCookie(lang);
@@ -58,4 +58,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     setInterval(changeBackground, 5000);
+});
+document.addEventListener('DOMContentLoaded', function () {
+    const header = document.getElementById('siteHeader') || document.querySelector('.header');
+
+    // تعويض ارتفاع الهيدر الحقيقي
+    function setHeaderPad() {
+        if (!header) return;
+        document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+    }
+    setHeaderPad();
+    addEventListener('resize', setHeaderPad);
+    addEventListener('load', setHeaderPad);
+
+    // أخفِ الهيدر عند أي نزول، وأظهره فقط عند أعلى الصفحة
+    function toggleHeader() {
+        if (window.scrollY > 0) header.classList.add('is-hidden');
+        else header.classList.remove('is-hidden');
+    }
+    toggleHeader();
+    document.addEventListener('scroll', toggleHeader, {
+        passive: true
+    });
 });

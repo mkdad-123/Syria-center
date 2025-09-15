@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ $locale }}" dir="{{ $locale === 'ar' ? 'rtl' : 'ltr' }}">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -10,7 +10,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-
     <style>
         :root {
             --primary: #2E86AB;
@@ -24,9 +23,10 @@
             --white: #fff;
             --shadow: 0 5px 15px rgba(0, 0, 0, .1);
             --radius: 12px;
-            --transition: .25s ease;
+            --transition: .25s ease
         }
 
+        /* Reset مختصر */
         * {
             box-sizing: border-box
         }
@@ -43,6 +43,7 @@
             line-height: 1.8
         }
 
+        /* حاوية عامة */
         .container {
             width: 92%;
             max-width: 1200px;
@@ -50,7 +51,7 @@
             padding-inline: 10px
         }
 
-        /* Header */
+        /* ================= Header ================= */
         .header {
             position: fixed;
             top: 0;
@@ -68,10 +69,12 @@
             padding: 14px 0
         }
 
+        /* الشعار + الاسم */
         .logo-wrap {
             display: flex;
             align-items: center;
-            gap: 12px
+            gap: 12px;
+            min-width: 0
         }
 
         .logo-wrap img {
@@ -79,19 +82,31 @@
             width: auto
         }
 
+        /* اسم المركز: يُظهر السطرين بالكامل ويلتف على الشاشات الصغيرة */
         .brand {
             display: flex;
             flex-direction: column;
             line-height: 1.2;
             color: var(--primary);
             font-weight: 700;
-            white-space: nowrap
+            min-width: 0;
+            white-space: normal;
+            /* كان nowrap */
+            overflow-wrap: anywhere;
+            word-break: break-word
         }
 
         .brand .sub {
             color: var(--secondary);
             font-size: .95rem;
             font-weight: 700
+        }
+
+        /* ================= Nav ================= */
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 12px
         }
 
         .nav ul {
@@ -117,7 +132,7 @@
             color: var(--primary)
         }
 
-        /* Auth button */
+        /* زر الدخول */
         .btn-auth {
             background: var(--secondary);
             color: var(--white) !important;
@@ -131,7 +146,7 @@
             box-shadow: 0 6px 14px rgba(241, 143, 1, .28)
         }
 
-        /* Language switcher */
+        /* محول اللغة */
         .lang {
             position: relative
         }
@@ -184,7 +199,30 @@
             color: var(--primary)
         }
 
-        /* Main */
+        /* زر القائمة للهاتف */
+        .nav-toggle {
+            display: none;
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 10px
+        }
+
+        .nav-toggle:focus-visible {
+            outline: 2px solid var(--primary)
+        }
+
+        .nav-toggle .bar {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--dark);
+            margin: 5px 0;
+            transition: var(--transition)
+        }
+
+        /* ================= Main ================= */
         main {
             padding-top: 96px;
             padding-bottom: 40px;
@@ -192,7 +230,7 @@
         }
 
         .section-title {
-            font-size: 1.6rem;
+            font-size: clamp(1.3rem, 1.2rem + 0.6vw, 1.6rem);
             font-weight: 800;
             color: var(--primary);
             margin: 26px 0 18px;
@@ -211,7 +249,7 @@
             background: var(--secondary)
         }
 
-        /* Card: header */
+        /* بطاقة الهيدر */
         .v-header {
             display: flex;
             flex-wrap: wrap;
@@ -225,12 +263,12 @@
         }
 
         .v-photo {
-            flex: 0 0 180px
+            flex: 0 0 clamp(140px, 19vw, 180px)
         }
 
         .v-photo img {
-            width: 180px;
-            height: 180px;
+            width: clamp(140px, 19vw, 180px);
+            height: clamp(140px, 19vw, 180px);
             border-radius: 50%;
             object-fit: cover;
             border: 5px solid var(--secondary);
@@ -243,7 +281,7 @@
         }
 
         .v-name {
-            font-size: 1.9rem;
+            font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem);
             font-weight: 800;
             color: var(--primary);
             margin: 0 0 8px
@@ -273,7 +311,7 @@
             font-size: .92rem
         }
 
-        /* Grid details */
+        /* Grid التفاصيل */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -282,7 +320,7 @@
 
         .card {
             background: var(--white);
-            padding: 18px 18px;
+            padding: 18px;
             border-radius: 14px;
             box-shadow: var(--shadow);
             border-inline-start: 4px solid var(--primary)
@@ -299,8 +337,10 @@
             color: var(--dark-2)
         }
 
-        /* Skills */
-        .skills {
+        /* مهارات / ملاحظات / CV */
+        .skills,
+        .notes,
+        .cv {
             background: var(--white);
             padding: 20px;
             border-radius: 14px;
@@ -326,23 +366,6 @@
             background: var(--primary-2)
         }
 
-        /* Notes / CV */
-        .notes {
-            background: var(--white);
-            padding: 20px;
-            border-radius: 14px;
-            box-shadow: var(--shadow);
-            margin-top: 10px
-        }
-
-        .cv {
-            background: var(--white);
-            padding: 20px;
-            border-radius: 14px;
-            box-shadow: var(--shadow);
-            margin-top: 10px
-        }
-
         /* Footer */
         .footer {
             background: #222;
@@ -353,8 +376,91 @@
             font-size: .95rem
         }
 
-        /* Responsive tweaks */
+        /* ================= Responsive ================= */
+
+        /* لوحات متوسطة ↓ */
+        @media (max-width: 992px) {
+
+            /* إظهار زر الهامبرغر وإخفاء القائمة الأفقية */
+            .nav-toggle {
+                display: inline-block
+            }
+
+            .nav {
+                gap: 8px
+            }
+
+            .nav ul {
+                position: static;
+                flex-direction: column;
+                gap: 8px;
+                background: var(--white);
+                border-radius: 12px;
+                box-shadow: var(--shadow);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height .35s ease, padding .25s ease;
+                padding-block: 0;
+                margin-inline-start: auto
+            }
+
+            .nav.is-open ul {
+                max-height: 420px;
+                padding-block: 8px
+            }
+
+            .nav a {
+                padding: 10px 14px;
+                border-radius: 10px
+            }
+
+            /* تصغير الشعار والمساحة الرأسية */
+            .logo-wrap img {
+                height: 52px
+            }
+
+            .header .row {
+                padding: 12px 0
+            }
+
+            /* اسم المركز: السماح بسطور متعددة */
+            .brand {
+                align-items: flex-start
+            }
+
+            .brand .sub {
+                font-size: .9rem
+            }
+        }
+
+        /* موبايل ↓ */
         @media (max-width: 768px) {
+            main {
+                padding-top: 88px
+            }
+
+            /* أقل لأن الهيدر أصغر */
+            .header .row {
+                flex-wrap: wrap;
+                row-gap: 8px
+            }
+
+            .logo-wrap {
+                flex: 1 1 100%
+            }
+
+            .logo-wrap img {
+                height: 48px
+            }
+
+            .brand {
+                font-size: 1rem
+            }
+
+            .brand .sub {
+                display: block
+            }
+
             .v-header {
                 flex-direction: column;
                 text-align: center
@@ -368,7 +474,46 @@
                 margin-bottom: 8px
             }
         }
+
+        /* شاشات ضيّقة جدًا ↓ */
+        @media (max-width: 480px) {
+            .container {
+                width: 94%
+            }
+
+            .logo-wrap img {
+                height: 44px
+            }
+
+            .nav a {
+                padding: 9px 12px
+            }
+
+            .v-info {
+                min-width: unset
+            }
+
+            .section-title::after {
+                width: 96px
+            }
+        }
+
+        /* تحسين سهولة الحركة لمن يفضل تقليل التحريك */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                scroll-behavior: auto
+            }
+
+            .nav ul {
+                transition: none
+            }
+
+            .nav-toggle .bar {
+                transition: none
+            }
+        }
     </style>
+
 </head>
 
 <body>
@@ -418,6 +563,13 @@
                     </div>
                 </div>
 
+                <!-- زر الهامبرغر هنا -->
+                <button class="nav-toggle" aria-label="فتح/إغلاق القائمة" aria-expanded="false">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+
                 <nav class="nav">
                     <ul>
                         <li><a href="{{ route('home', ['lang' => $locale]) }}">{{ __('main.menu.home') }}</a></li>
@@ -459,6 +611,7 @@
             </div>
         </div>
     </header>
+
 
     <main>
         <div class="container">
@@ -584,6 +737,24 @@
                 if (!switcher.contains(e.target)) switcher.classList.remove('open');
             });
         }
+        (function() {
+            const nav = document.querySelector('.nav');
+            const toggle = document.querySelector('.nav-toggle');
+            if (!nav || !toggle) return;
+
+            toggle.addEventListener('click', () => {
+                const open = nav.classList.toggle('is-open');
+                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+
+            // إغلاق عند الضغط خارج القائمة
+            document.addEventListener('click', (e) => {
+                if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+                    nav.classList.remove('is-open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        })();
     </script>
 </body>
 

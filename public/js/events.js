@@ -1,18 +1,18 @@
-document.addEventListener('DOMContentLoaded', function() {
+﻿document.addEventListener('DOMContentLoaded', function () {
     // تحسين: تخزين العناصر المكررة في متغيرات
     const docEl = document.documentElement;
     const bodyEl = document.body;
 
     // وظيفة لتعيين الكوكي
     function setLanguageCookie(lang) {
-        document.cookie = `preferred_language=${lang};path=/;max-age=${30 * 24 * 60 * 60};SameSite=Lax`;
+        document.cookie = `lang=${lang};path=/;max-age=${30 * 24 * 60 * 60};SameSite=Lax`;
     }
 
     // وظيفة لقراءة الكوكي
     function getLanguageCookie() {
         const cookies = document.cookie.split('; ');
         for (let i = 0; i < cookies.length; i++) {
-            if (cookies[i].startsWith('preferred_language=')) {
+            if (cookies[i].startsWith('lang=')) {
                 return cookies[i].split('=')[1];
             }
         }
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // إصلاح: تبديل اللغة - استخدام الحدث بشكل صحيح
     document.querySelectorAll('[data-lang]').forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             const lang = this.getAttribute('data-lang');
             setLanguageCookie(lang);
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // إصلاح: وظائف النافذة العائمة
-    window.openEventModal = function(eventId) {
+    window.openEventModal = function (eventId) {
         const modal = document.getElementById('eventModal' + eventId);
         if (modal) {
             modal.style.display = 'block';
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    window.closeEventModal = function(eventId) {
+    window.closeEventModal = function (eventId) {
         const modal = document.getElementById('eventModal' + eventId);
         if (modal) {
             modal.style.display = 'none';
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // إصلاح: إغلاق النافذة عند النقر خارجها
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (e.target.classList.contains('event-modal')) {
             const modalId = e.target.id.replace('eventModal', '');
             window.closeEventModal(modalId);
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // إصلاح: إغلاق النافذة عند الضغط على Escape
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
             const openModal = document.querySelector('.event-modal[style*="display: block"]');
             if (openModal) {
@@ -104,10 +104,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // إصلاح: زر "عرض المزيد"
     document.querySelectorAll('.details-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
             const eventId = this.getAttribute('data-event-id') || this.href.split('/').pop();
             window.openEventModal(eventId);
         });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const header = document.getElementById('siteHeader') || document.querySelector('.header');
+
+    // تعويض ارتفاع الهيدر الحقيقي
+    function setHeaderPad() {
+        if (!header) return;
+        document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+    }
+    setHeaderPad();
+    addEventListener('resize', setHeaderPad);
+    addEventListener('load', setHeaderPad);
+
+    // أخفِ الهيدر عند أي نزول، وأظهره فقط عند أعلى الصفحة
+    function toggleHeader() {
+        if (window.scrollY > 0) header.classList.add('is-hidden');
+        else header.classList.remove('is-hidden');
+    }
+    toggleHeader();
+    document.addEventListener('scroll', toggleHeader, {
+        passive: true
     });
 });
