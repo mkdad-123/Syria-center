@@ -6,6 +6,7 @@ use App\Enums\GenderEnum;
 use App\Enums\VolunteerAvailabilityEnum;
 use App\Filament\Resources\VolunteerResource\Pages;
 use App\Models\Volunteer;
+use App\Services\Dashboard\DashboardCountsService;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
@@ -44,7 +45,7 @@ class VolunteerResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return Volunteer::where('is_active', true)->count();
+        return DashboardCountsService::get('volunteers_active');
     }
 
     public static function form(Form $form): Form

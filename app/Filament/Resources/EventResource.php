@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\EventType;
 use App\Filament\Resources\EventResource\Pages;
 use App\Models\Event;
+use App\Services\Dashboard\DashboardCountsService;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
@@ -292,6 +293,6 @@ class EventResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return Event::query()->where('start_date', '>=', now())->count();
+        return DashboardCountsService::get('events');
     }
 }

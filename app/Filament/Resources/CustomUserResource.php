@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CustomUserResource\Pages;
 use App\Models\CustomUser;
+use App\Services\Dashboard\DashboardCountsService;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -124,7 +125,7 @@ class CustomUserResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return CustomUser::count();
+        return DashboardCountsService::get('users');
     }
 
     public static function getEloquentQuery():\Illuminate\Database\Eloquent\Builder
