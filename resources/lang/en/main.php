@@ -19,14 +19,22 @@ return [
         'volunteer' => [
             'male' => 'Male',
             'female' => 'Female',
-            'join_date' => 'join date',
-            'personal_info' => 'personal information ',
-            'availability' => 'availability' ,
-            'national_id' => 'national Id' ,
-            'skills' => 'skills ' ,
+            'join_date' => 'Goin Date',
+            'personal_info' => 'Personal Information ',
+            'availability' => 'Availability' ,
+            'national_id' => 'National Id' ,
+            'skills' => 'Skills ' ,
+            'cv' => 'CV',
+            'gender' => 'Gender' ,
+            'profession' => 'Profession',
+            'notes' => 'Notes',
+            'full_time' => 'Full Time' ,
+            'part_time' => 'Part Time',
+            'weekends' => 'Weekends'
+
 
         ],
-   
+
     'titles' => [
         'about' => 'About Us',
         'mission' => 'Our Mission',

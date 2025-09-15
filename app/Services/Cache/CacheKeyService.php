@@ -35,7 +35,7 @@ class CacheKeyService
 
     public function events(string $locale): string
     {
-        $last = $this->toCarbon(Event::where('is_published','1')->max('updated_at'));
+        $last = $this->toCarbon(Event::where('is_published', '1')->max('updated_at'));
         $key  = "events_page_{$locale}";
         return $last ? "{$key}_{$last->timestamp}" : $key;
     }
@@ -49,7 +49,7 @@ class CacheKeyService
 
     public function servicesList(int $sectionId, string $locale): string
     {
-        $last = $this->toCarbon(Service::where('section_id',$sectionId)->max('updated_at'));
+        $last = $this->toCarbon(Service::where('section_id', $sectionId)->max('updated_at'));
         $key  = "services_page_{$sectionId}_{$locale}";
         return $last ? "{$key}_{$last->timestamp}" : $key;
     }
@@ -57,8 +57,8 @@ class CacheKeyService
     public function serviceDetails(int $serviceId, string $locale): string
     {
         $last = $this->toCarbon(max(
-            Service::where('id',$serviceId)->value('updated_at'),
-            Article::where('service_id',$serviceId)->max('updated_at')
+            Service::where('id', $serviceId)->value('updated_at'),
+            Article::where('service_id', $serviceId)->max('updated_at')
         ));
         $key = "service_details_{$serviceId}_{$locale}";
         return $last ? "{$key}_{$last->timestamp}" : $key;
@@ -66,14 +66,25 @@ class CacheKeyService
 
     public function article(int $articleId): string
     {
-        $last = $this->toCarbon(Article::where('id',$articleId)->value('updated_at'));
+        $last = $this->toCarbon(Article::where('id', $articleId)->value('updated_at'));
         $key  = "article_{$articleId}";
         return $last ? "{$key}_{$last->timestamp}" : $key;
     }
 
     public function contact(): string
     {
-        $last = $this->toCarbon(Setting::whereIn('section',['about us'])->max('updated_at'));
+        $last = $this->toCarbon(Setting::whereIn('section', ['about us'])->max('updated_at'));
         return $last ? "contact_info_{$last->timestamp}" : "contact_info";
+    }
+    public function volunteer(int $volunteerId, string $locale): string
+    {
+        $lastModified = Volunteer::where('id', $volunteerId)->value('updated_at');
+        $key = "volunteer_{$volunteerId}_{$locale}";
+
+        if ($lastModified) {
+            $ts = Carbon::parse($lastModified)->timestamp;
+            return "{$key}_{$ts}";
+        }
+        return $key;
     }
 }

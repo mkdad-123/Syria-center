@@ -1,715 +1,828 @@
- /* أنماط عامة */
- :root {
-     --primary-color: #2E86AB;
-     --secondary-color: #F18F01;
-     --accent-color: #5BBA6F;
-     --dark-color: #000000;
-     --dark-color_1: #424040;
-     --light-color: #5ad27e;
-     --white: #fff;
-     --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-     --transition: all 0.3s ease;
- }
-
- /* أنماط الخلفية المتغيرة */
- .background-slideshow {
-     position: fixed;
-     top: 0;
-     left: 0;
-     width: 100%;
-     height: 100%;
-     z-index: -1;
-     opacity: 0.7;
-     transition: opacity 1s ease-in-out;
- }
-
- .background-slideshow img {
-     position: absolute;
-     width: 100%;
-     height: 100%;
-     object-fit: cover;
-     opacity: 0;
-     transition: opacity 1s ease-in-out;
- }
-
- .background-slideshow img.active {
-     opacity: 1;
- }
-
- /* تأكد من أن المحتوى يظهر فوق الخلفية */
- main,
- .header,
- .footer {
-     position: relative;
-     background-color: rgba(255, 255, 255, 0.85);
- }
-
- * {
-     margin: 0;
-     padding: 0;
-     box-sizing: border-box;
-     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
- }
-
- body {
-     background-color: var(--light-color);
-     color: var(--dark-color);
-     line-height: 1.6;
- }
-
- .container {
-     width: calc(100% - 60px);
-     max-width: 1400px;
-     margin: 0 auto;
-     padding: 0;
- }
-
- /* شريط التنقل */
- .header {
-     height: 100px;
-     background-color: var(--white);
-     box-shadow: var(--box-shadow);
-     position: fixed;
-     width: 100%;
-     top: 0;
-     z-index: 1000;
-     padding: 10px 0;
- }
-
- .header .container {
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
-     gap: 40px;
-     padding: 0 20px;
- }
-
- .logo-container {
-     display: flex;
-     align-items: center;
-     gap: 15px;
- }
-
- .logo img {
-     height: 70px;
-     width: auto;
- }
-
- .org-name {
-     display: flex;
-     flex-direction: column;
-     line-height: 1.2;
-     color: var(--primary-color);
-     font-weight: bold;
- }
-
- .org-name-line1 {
-     font-size: 1.5rem;
-     white-space: nowrap;
- }
-
- .org-name-line2 {
-     font-size: 1.1rem;
-     color: var(--secondary-color);
-     white-space: nowrap;
- }
-
- .nav-list {
-     display: flex;
-     list-style: none;
-     margin: 0;
-     padding: 0;
-     gap: 20px;
- }
-
- .nav-list li {
-     margin: 0;
- }
-
- .nav-list a {
-     text-decoration: none;
-     color: var(--dark-color);
-     font-weight: 500;
-     padding: 8px 15px;
-     transition: var(--transition);
-     border-radius: 4px;
-     display: block;
-     white-space: nowrap;
-     text-align: center;
- }
-
- .nav-list a:hover {
-     color: var(--primary-color);
-     background-color: rgba(46, 134, 171, 0.1);
- }
-
- .login-btn a {
-     background-color: var(--secondary-color);
-     color: var(--white) !important;
-     padding: 8px 15px;
-     border-radius: 4px;
-     margin-right: 60px;
-     text-decoration: none !important;
- }
-
- .login-btn a:hover {
-     background-color: #e07f00;
- }
-
- .language-switcher {
-     position: relative;
-     margin-right: 0;
-     display: inline-flex;
-     align-items: center;
-     list-style: none !important;
- }
-
- .language-btn {
-     background: none;
-     border: none;
-     color: var(--dark-color);
-     cursor: pointer;
-     padding: 8px 15px;
-     display: flex;
-     align-items: center;
-     gap: 8px;
-     font-weight: 500;
-     border-radius: 4px;
-     transition: var(--transition);
-     text-decoration: none;
-     font-size: inherit;
- }
-
- .language-btn:hover {
-     color: var(--primary-color);
-     background-color: rgba(46, 134, 171, 0.1);
- }
-
- .language-menu {
-     display: none;
-     position: absolute;
-     top: 100%;
-     right: 0;
-     background-color: var(--white);
-     min-width: 150px;
-     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-     border-radius: 4px;
-     z-index: 100;
-     list-style: none;
-     padding: 10px 0;
-     margin-top: 5px;
- }
-
- .language-switcher:hover .language-menu {
-     display: block;
- }
-
- .language-menu li a {
-     padding: 10px 20px;
-     display: flex;
-     align-items: center;
-     gap: 10px;
-     color: var(--dark-color);
-     text-decoration: none;
-     transition: var(--transition);
- }
-
- .language-menu li a:hover {
-     background-color: rgba(46, 134, 171, 0.1);
-     color: var(--primary-color);
- }
-
- /* المحتوى الرئيسي */
- main {
-     margin-top: 100px;
-     padding: 40px 0;
- }
-
- .section {
-     padding: 60px 0;
- }
-
- .section-title {
-     text-align: center;
-     margin-bottom: 40px;
-     color: var(--dark-color);
-     font-size: 2rem;
-     position: relative;
- }
-
- .section-title::after {
-     content: '';
-     display: block;
-     width: 80px;
-     height: 4px;
-     background: var(--secondary-color);
-     margin: 15px auto;
-     border-radius: 2px;
- }
-
- /* أنماط الفعاليات */
- .events-container {
-     display: grid;
-     grid-template-columns: repeat(3, 1fr);
-     gap: 30px;
-     padding: 20px;
- }
-
- @media (max-width: 1200px) {
-     .events-container {
-         grid-template-columns: repeat(2, 1fr);
-     }
- }
-
- @media (max-width: 768px) {
-     .events-container {
-         grid-template-columns: 1fr;
-     }
- }
-
- .event-card {
-     background-color: rgba(255, 255, 255, 0.9);
-     border-radius: 10px;
-     overflow: hidden;
-     box-shadow: var(--box-shadow);
-     transition: var(--transition);
-     display: flex;
-     flex-direction: column;
-     height: 100%;
- }
-
- .event-card:hover {
-     transform: translateY(-10px);
-     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
- }
-
- .event-image-container {
-     height: 200px;
-     overflow: hidden;
- }
-
- .event-image {
-     width: 100%;
-     height: 100%;
-     object-fit: cover;
-     transition: transform 0.5s ease;
- }
-
- .event-card:hover .event-image {
-     transform: scale(1.05);
- }
-
- .event-content {
-     padding: 20px;
-     flex: 1;
-     display: flex;
-     flex-direction: column;
- }
-
- /* أنماط لأنواع الفعاليات */
- .event-type {
-     display: inline-block;
-     padding: 5px 12px;
-     border-radius: 15px;
-     font-size: 0.8rem;
-     font-weight: bold;
-     margin-bottom: 10px;
-     align-self: flex-start;
- }
-
- .event-type.festival {
-     background-color: #FFD700;
-     color: #8B4513;
- }
-
- .event-type.volunteering {
-     background-color: #32CD32;
-     color: #006400;
- }
-
- .event-type.workshop {
-     background-color: #1E90FF;
-     color: #000080;
- }
-
- .event-title {
-     color: var(--primary-color);
-     margin-bottom: 15px;
-     font-size: 1.3rem;
- }
-
- .event-meta {
-     display: flex;
-     flex-direction: column;
-     gap: 10px;
-     margin-bottom: 15px;
-     color: var(--dark-color_1);
- }
-
- .event-meta-item {
-     display: flex;
-     align-items: center;
-     gap: 8px;
-     font-size: 0.9rem;
- }
-
- .event-description {
-     margin-bottom: 20px;
-     line-height: 1.6;
-     color: var(--dark-color);
-     flex-grow: 1;
- }
-
- .read-more-btn {
-     background-color: var(--secondary-color);
-     color: var(--white);
-     border: none;
-     padding: 10px 20px;
-     border-radius: 4px;
-     cursor: pointer;
-     transition: var(--transition);
-     display: inline-block;
-     text-decoration: none;
-     text-align: center;
-     margin-top: auto;
-     width: fit-content;
- }
-
- .read-more-btn {
-     align-self: flex-start;
-     margin-top: 20px;
- }
-
- .event-modal {
-     display: none;
-     position: fixed;
-     top: 0;
-     left: 0;
-     width: 100%;
-     height: 100%;
-     background-color: rgba(0, 0, 0, 0.7);
-     z-index: 2000;
-     overflow-y: auto;
- }
-
- .modal-content {
-     background-color: var(--white);
-     margin: 50px auto;
-     padding: 30px;
-     border-radius: 10px;
-     width: 80%;
-     max-width: 800px;
-     position: relative;
-     box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
-     max-height: 90vh;
-     overflow-y: auto;
-     display: flex;
-     flex-direction: column;
- }
-
- .close-modal {
-     position: absolute;
-     top: 15px;
-     left: 15px;
-     font-size: 1.5rem;
-     color: var(--dark-color);
-     cursor: pointer;
-     transition: var(--transition);
-     z-index: 1;
- }
-
- .close-modal:hover {
-     color: var(--secondary-color);
- }
-
- .modal-image-container {
-     height: 300px;
-     overflow: hidden;
-     border-radius: 8px;
-     margin-bottom: 20px;
-     position: relative;
- }
-
- .modal-title,
- .modal-meta,
- .modal-description,
- .read-more-btn {
-     max-width: 100%;
-     word-wrap: break-word;
- }
-
- .modal-meta {
-     display: flex;
-     flex-direction: column;
-     gap: 15px;
-     margin-bottom: 20px;
- }
-
- .modal-meta-item {
-     background-color: rgba(46, 134, 171, 0.1);
-     padding: 10px;
-     border-radius: 5px;
-     display: flex;
-     align-items: center;
-     gap: 8px;
-     width: 100%;
- }
-
- .modal-description {
-     line-height: 1.8;
-     margin-bottom: 20px;
-     font-size: 1.1rem;
-     width: 100%;
- }
-
- /* أنماط الفوتر المعدلة */
- /* أنماط الفوتر المعدلة */
- .footer {
-     background-color: var(--dark-color_1);
-     color: var(--white);
-     padding: 50px 0 0;
-     font-size: 1.05rem;
-     margin-top: 0;
- }
-
- .footer-content {
-     display: grid;
-     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-     gap: 40px;
-     margin-bottom: 40px;
-     padding: 0 20px;
- }
-
- .footer-logo {
-     display: flex;
-     flex-direction: column;
-     align-items: flex-start;
- }
-
- .footer-logo img {
-     height: 80px;
-     width: auto;
-     margin-bottom: 20px;
- }
-
- .footer-logo p {
-     font-size: 1.1rem;
-     line-height: 1.6;
-     margin-bottom: 15px;
- }
-
- .footer-links h4,
- .footer-contact h4 {
-     font-size: 1.3rem;
-     margin-bottom: 20px;
-     color: var(--secondary-color);
-     padding-bottom: 0;
-     /* إزالة الحشو السفلي */
-     position: relative;
- }
-
- /* إزالة الخط البرتقالي تحت العناوين */
- .footer-links h4::after,
- .footer-contact h4::after {
-     content: none;
-     /* إزالة الخط البرتقالي */
- }
-
- .footer-links ul {
-     list-style: none;
-     padding: 0;
-     margin: 0;
- }
-
- .footer-links li {
-     margin-bottom: 15px;
- }
-
- .footer-links a {
-     color: var(--white);
-     text-decoration: none;
-     transition: var(--transition);
-     font-size: 1.05rem;
-     display: inline-block;
-     padding: 5px 0;
- }
-
- .footer-links a:hover {
-     color: var(--secondary-color);
-     padding-right: 8px;
- }
-
- .footer-contact p {
-     margin-bottom: 20px;
-     display: flex;
-     align-items: center;
-     gap: 12px;
-     font-size: 1.05rem;
- }
-
- .footer-contact i {
-     color: var(--secondary-color);
-     font-size: 1.2rem;
-     min-width: 25px;
-     text-align: center;
- }
-
- .footer-bottom {
-     border-top: 1px solid rgba(255, 255, 255, 0.15);
-     padding: 25px 0;
-     text-align: center;
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     gap: 20px;
- }
-
- .footer-bottom p {
-     margin: 0;
-     font-size: 1rem;
-     color: rgba(255, 255, 255, 0.8);
- }
-
- .social-icons {
-     display: flex;
-     justify-content: center;
-     gap: 15px;
- }
-
- .social-icons a {
-     width: 40px;
-     height: 40px;
-     line-height: 40px;
-     font-size: 1.1rem;
-     background-color: rgba(255, 255, 255, 0.15);
-     border-radius: 50%;
-     color: var(--white);
-     transition: all 0.3s ease;
-     display: flex;
-     align-items: center;
-     justify-content: center;
- }
-
- .social-icons a:hover {
-     background-color: var(--secondary-color);
-     transform: translateY(-3px);
- }
-
-/* تحسينات للشاشات الصغيرة */
-@media (max-width: 1200px) {
-    .sections-container {
-        grid-template-columns: repeat(3, 1fr);
+/* ======================
+   المتغيرات العامة (مطابقة لصفحة "من نحن")
+   ====================== */
+:root {
+    --primary-color: #2E86AB;
+    --secondary-color: #F18F01;
+    --accent-color: #5BBA6F;
+    --dark-color: #000;
+    --dark-color-1: #424040;
+    --light-color: #5ad27e;
+    --white: #fff;
+    --box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+    --transition: .3s ease;
+
+    /* ارتفاعات الهيدر الافتراضية */
+    --header-h: 78px;
+    /* Desktop */
+    --header-h-tablet: 112px;
+    /* Tablet  */
+    --header-h-mobile: 160px;
+    /* Mobile  */
+
+    /* دعم النوتش */
+    --safe-top: env(safe-area-inset-top, 0px);
+}
+
+/* ======================
+   تهيئة عامة + تثبيت الفوتر
+   ====================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box
+}
+
+html,
+body {
+    height: 100%
+}
+
+html {
+    scroll-behavior: smooth
+}
+
+body {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    background: var(--light-color);
+    color: var(--dark-color);
+    line-height: 1.6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+main {
+    flex: 1 0 auto
+}
+
+.footer {
+    flex-shrink: 0
+}
+
+/* حاوية عامة */
+.container {
+    width: calc(100% - 60px);
+    max-width: 1400px;
+    margin: 0 auto
+}
+
+/* ======================
+   خلفية متغيرة + طبقة شفافية
+   ====================== */
+.background-slideshow {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    opacity: .7;
+    transition: opacity 1s ease-in-out;
+}
+
+.background-slideshow img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.background-slideshow img.active {
+    opacity: 1
+}
+
+/* الطبقة البيضاء الشفافة فوق الصور (مثل باقي البليدات) */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, .85);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* ======================
+   الهيدر و التنقل (مطابق لصفحة "من نحن")
+   ====================== */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: var(--white);
+    box-shadow: var(--box-shadow);
+    padding: max(10px, var(--safe-top)) 0 10px;
+    /* حركة إخفاء/إظهار */
+    transition: transform .35s ease, opacity .25s ease;
+    will-change: transform;
+}
+
+.header.is-hidden {
+    transform: translateY(calc(-100% - var(--safe-top)));
+    opacity: 0;
+    pointer-events: none;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    padding: 0 20px;
+    flex-wrap: nowrap;
+    overflow: visible;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0
+}
+
+.logo img {
+    height: 56px;
+    width: auto
+}
+
+.org-name {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    color: var(--primary-color);
+    font-weight: 700;
+    min-width: 0;
+}
+
+.org-name-line1,
+.org-name-line2 {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word
+}
+
+.org-name-line1 {
+    font-size: clamp(1.05rem, 1vw + 1rem, 1.4rem)
+}
+
+.org-name-line2 {
+    font-size: clamp(.9rem, .6vw + .85rem, 1.05rem);
+    color: var(--secondary-color)
+}
+
+.nav-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-wrap: nowrap;
+    overflow: visible;
+}
+
+.nav-list>li:not(.login-btn) {
+    flex: 0 1 auto
+}
+
+.nav-list>li.login-btn {
+    margin-inline-start: auto;
+    flex-shrink: 0
+}
+
+.nav-list>li.login-btn a {
+    white-space: nowrap
+}
+
+.nav-list a {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    color: var(--dark-color);
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.nav-list a:hover {
+    color: var(--primary-color);
+    background: rgba(46, 134, 171, .1)
+}
+
+.login-btn a {
+    background: var(--secondary-color);
+    color: #fff !important;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: var(--transition);
+    margin: 0 !important;
+    border: none !important;
+    text-decoration: none !important;
+}
+
+.login-btn a:hover {
+    background: #e07f00
+}
+
+/* محوّل اللغة */
+.language-switcher {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    list-style: none !important
+}
+
+.language-btn {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    color: var(--dark-color);
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.language-btn:hover {
+    color: var(--primary-color);
+    background: rgba(46, 134, 171, .1)
+}
+
+.language-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    inset-inline-end: 0;
+    min-width: 150px;
+    background: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    z-index: 1000;
+    list-style: none;
+    padding: 10px 0;
+    margin-top: 6px;
+}
+
+.language-switcher:hover .language-menu {
+    display: block
+}
+
+.language-menu li a {
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--dark-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.language-menu li a:hover {
+    background: rgba(46, 134, 171, .1);
+    color: var(--primary-color)
+}
+
+/* دعم اللمس لفتح القوائم عند إضافة .active من JS */
+@media (hover:none) {
+    .language-switcher:hover .language-menu {
+        display: none
+    }
+
+    .language-switcher.active .language-menu {
+        display: block
     }
 }
 
-@media (max-width: 900px) {
-    .sections-container {
-        grid-template-columns: repeat(2, 1fr);
+/* ======================
+   تعويض مساحة الهيدر الثابت + هوامش الروابط
+   ====================== */
+main {
+    padding-top: var(--header-dyn, calc(var(--header-h) + var(--safe-top) + 8px))
+}
+
+:where(section, .section, [id]) {
+    scroll-margin-top: calc(var(--header-dyn, var(--header-h)) + 16px)
+}
+
+/* ======================
+   المحتوى الرئيسي
+   ====================== */
+.section {
+    padding: 60px 0
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--dark-color);
+    font-size: 2rem;
+    position: relative;
+}
+
+.section-title::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: var(--secondary-color);
+    margin: 15px auto;
+    border-radius: 2px;
+}
+
+/* شبكة الفعاليات — مرنة تلقائيًا */
+.events-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    padding: 20px;
+}
+
+.event-card {
+    background: rgba(255, 255, 255, .9);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.event-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, .15)
+}
+
+.event-image-container {
+    height: 200px;
+    overflow: hidden
+}
+
+.event-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .5s ease
+}
+
+.event-card:hover .event-image {
+    transform: scale(1.05)
+}
+
+.event-content {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column
+}
+
+.event-type {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: .8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    align-self: flex-start;
+}
+
+.event-type.festival {
+    background: #FFD700;
+    color: #8B4513
+}
+
+.event-type.volunteering {
+    background: #32CD32;
+    color: #006400
+}
+
+.event-type.workshop {
+    background: #1E90FF;
+    color: #000080
+}
+
+.event-title {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.3rem
+}
+
+.event-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+    color: var(--dark-color-1);
+}
+
+.event-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .9rem
+}
+
+.event-description {
+    margin-bottom: 20px;
+    line-height: 1.6;
+    color: var(--dark-color);
+    flex-grow: 1
+}
+
+.read-more-btn {
+    background: var(--secondary-color);
+    color: #fff;
+    border: 0;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    margin-top: auto;
+    width: fit-content;
+    align-self: flex-start;
+}
+
+.read-more-btn:hover {
+    background: #e07f00
+}
+
+/* مودال التفاصيل */
+.event-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .7);
+    z-index: 2000;
+    overflow-y: auto;
+}
+
+.modal-content {
+    background: #fff;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 800px;
+    position: relative;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, .3);
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 1.5rem;
+    color: var(--dark-color);
+    cursor: pointer;
+    transition: var(--transition);
+    z-index: 1;
+}
+
+.close-modal:hover {
+    color: var(--secondary-color)
+}
+
+.modal-image-container {
+    height: 300px;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    position: relative
+}
+
+.modal-title,
+.modal-meta,
+.modal-description,
+.read-more-btn {
+    max-width: 100%;
+    word-wrap: break-word
+}
+
+.modal-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px
+}
+
+.modal-meta-item {
+    background: rgba(46, 134, 171, .1);
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.modal-description {
+    line-height: 1.8;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    width: 100%
+}
+
+/* ======================
+   الفوتر (بدون أي فراغ أسفله)
+   ====================== */
+.footer {
+    background: var(--dark-color-1);
+    color: #fff;
+    padding: 50px 0 0;
+    font-size: 1.05rem;
+    margin-top: 0;
+    padding-bottom: max(25px, env(safe-area-inset-bottom));
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+    padding: 0 20px;
+}
+
+.footer-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start
+}
+
+.footer-logo img {
+    height: 80px;
+    width: auto;
+    margin-bottom: 20px
+}
+
+.footer-logo p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 15px
+}
+
+.footer-links h4,
+.footer-contact h4 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0
+}
+
+.footer-links li {
+    margin-bottom: 15px
+}
+
+.footer-links a {
+    color: #fff;
+    text-decoration: none;
+    transition: var(--transition);
+    font-size: 1.05rem;
+    display: inline-block;
+    padding: 5px 0;
+}
+
+.footer-links a:hover {
+    color: var(--secondary-color);
+    padding-right: 8px
+}
+
+.footer-contact p {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.05rem
+}
+
+.footer-contact i {
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    min-width: 25px;
+    text-align: center
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, .15);
+    padding: 25px 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-bottom p {
+    margin: 0;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, .8)
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px
+}
+
+.social-icons a {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 1.1rem;
+    background: rgba(255, 255, 255, .15);
+    border-radius: 50%;
+    color: #fff;
+    transition: all .3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-icons a:hover {
+    background: var(--secondary-color);
+    transform: translateY(-3px)
+}
+
+/* ======================
+   تجاوبية
+   ====================== */
+@media (max-width:1200px) {
+    .logo img {
+        height: 52px
+    }
+
+    .nav-list {
+        flex-wrap: wrap;
+        gap: 12px 16px
+    }
+
+    .nav-list>li.login-btn {
+        order: 99;
+        width: 100%;
+        margin-inline-start: 0;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    [dir="rtl"] .nav-list>li.login-btn {
+        justify-content: flex-start
     }
 }
-@media (max-width: 768px) {
-    .header {
-        height: auto;
-        padding: 10px 0;
+
+@media (max-width:992px) {
+
+    /* تعويض أعلى المحتوى للتايت */
+    main {
+        padding-top: calc(var(--header-dyn, var(--header-h-tablet)) + var(--safe-top) + 8px)
+    }
+
+    :where(section, .section, [id]) {
+        scroll-margin-top: calc(var(--header-dyn, var(--header-h-tablet)) + 16px)
     }
 
     .header .container {
-        flex-direction: column;
-        gap: 10px;
-        padding: 0 15px;
-    }
-
-    .buttons-container {
-        order: 1;
-        width: 100%;
+        flex-wrap: wrap;
+        row-gap: 8px
     }
 
     .nav-list {
         flex-wrap: wrap;
         justify-content: center;
-        gap: 5px;
-        width: 100%;
-        margin-top: 0;
+        width: 100%
     }
 
-    .nav-list li {
-        margin: 0;
+    .logo img {
+        height: 50px
+    }
+}
+
+@media (max-width:768px) {
+
+    /* تعويض أعلى المحتوى للموبايل */
+    main {
+        padding-top: calc(var(--header-dyn, var(--header-h-mobile)) + var(--safe-top) + 8px)
+    }
+
+    :where(section, .section, [id]) {
+        scroll-margin-top: calc(var(--header-dyn, var(--header-h-mobile)) + 16px)
     }
 
     .nav-list a {
         padding: 6px 10px;
-        font-size: 0.9rem;
-    }
-
-    .login-btn {
-        margin-right: 0;
-    }
-
-    .logo-container {
-        order: 2;
-        flex-direction: column;
-        align-items: center;
-        gap: 5px;
-        margin-top: 10px;
-        padding-top: 10px;
-        border-top: 1px solid rgba(0,0,0,0.1);
-        width: 100%;
+        font-size: .9rem
     }
 
     .logo img {
-        height: 50px;
+        height: 46px
     }
 
-    .org-name {
-        text-align: center;
+    .modal-content {
+        width: 90%;
+        padding: 24px
     }
 
-    .org-name-line1 {
-        font-size: 1.2rem;
-    }
-
-    .org-name-line2 {
-        font-size: 0.9rem;
-    }
-
-    main {
-        margin-top: 180px; /* زيادة الهوامش العلوية لاستيعاب الهيدر الأطول */
+    .modal-image-container {
+        height: 220px
     }
 }
 
-@media (max-width: 480px) {
-    .header {
-        padding: 8px 0;
+@media (max-width:576px) {
+    .header .container {
+        justify-content: center
     }
 
+    .logo-container {
+        flex: 1 1 100%;
+        justify-content: center
+    }
+
+    .org-name-line2 {
+        display: block
+    }
+
+    /* نسمح باللف */
     .nav-list {
-        gap: 3px;
+        gap: 8px
     }
 
     .nav-list a {
         padding: 5px 8px;
-        font-size: 0.8rem;
+        font-size: .85rem
+    }
+}
+
+@media (max-width:480px) {
+    .nav-list {
+        gap: 6px
+    }
+
+    .nav-list a {
+        padding: 5px 8px;
+        font-size: .8rem
     }
 
     .login-btn a,
     .language-btn {
         padding: 5px 10px;
-        font-size: 0.8rem;
+        font-size: .8rem
     }
 
     .logo img {
-        height: 40px;
+        height: 42px
     }
 
     .org-name-line1 {
-        font-size: 1.1rem;
+        font-size: 1rem
+    }
+}
+
+@media (max-width:360px) {
+    .container {
+        width: calc(100% - 36px)
     }
 
-    .org-name-line2 {
-        font-size: 0.8rem;
+    .nav-list {
+        gap: 6px
     }
 
-    main {
-        margin-top: 160px;
+    .nav-list a {
+        padding: 5px 7px;
+        font-size: .78rem
+    }
+}
+
+/* احترام تقليل الحركة */
+@media (prefers-reduced-motion:reduce) {
+    .header {
+        transition: none
+    }
+
+    .event-card:hover {
+        transform: none;
+        box-shadow: var(--box-shadow)
+    }
+
+    .event-image,
+    .background-slideshow,
+    .background-slideshow img {
+        transition: none
     }
 }

@@ -1,29 +1,80 @@
+/* ======================
+   المتغيرات العامة (مطابقة للنمط السابق)
+   ====================== */
 :root {
     --primary-color: #2E86AB;
     --secondary-color: #F18F01;
     --accent-color: #5BBA6F;
-    --dark-color: #000000;
-    --dark-color_1: #424040;
+    --dark-color: #000;
+    --dark-color-1: #424040;
+    --dark-color_1: var(--dark-color-1);
+    /* توافق مع الاسم السابق */
     --light-color: #5ad27e;
     --white: #fff;
-    --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    --transition: all 0.3s ease;
+    --box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+    --transition: .3s ease;
+
+    /* ارتفاعات الهيدر الافتراضية (fallback) */
+    --header-h: 78px;
+    /* Desktop */
+    --header-h-tablet: 112px;
+    /* Tablet  */
+    --header-h-mobile: 160px;
+    /* Mobile  */
+
+    /* دعم أجهزة النوتش */
+    --safe-top: env(safe-area-inset-top, 0px);
 }
 
-/* أنماط الخلفية المتغيرة */
+/* ======================
+   تهيئة عامة
+   ====================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box
+}
+
+html,
+body {
+    height: 100%
+}
+
+html {
+    scroll-behavior: smooth
+}
+
+body {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    background: var(--light-color);
+    color: var(--dark-color);
+    line-height: 1.6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* حاوية عامة */
+.container {
+    width: calc(100% - 60px);
+    max-width: 1400px;
+    margin: 0 auto
+}
+
+/* ======================
+   خلفية متغيّرة + طبقة شفافية موحّدة
+   ====================== */
 .background-slideshow {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0.7;
+    inset: 0;
+    z-index: -2;
+    opacity: .7;
     transition: opacity 1s ease-in-out;
 }
 
 .background-slideshow img {
     position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -32,78 +83,61 @@
 }
 
 .background-slideshow img.active {
-    opacity: 1;
+    opacity: 1
 }
 
-/* أنماط عامة */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--white);
-}
-main,
-.header,
-.footer {
-    position: relative;
-    background-color: rgba(255, 255, 255, 0.85); /* إعادة الشفافية */
-}
-html, body {
-    height: 100%;
-    min-height: 100%;
-}
-main {
-    flex: 1;
-    padding-top: 100px;
-    z-index: 1;
-}
-.container {
-    width: calc(100% - 60px);
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0;
-}
-
-/* شريط التنقل - معدل لثبات التنسيق */
-.header {
-    background-color: var(--white);
-    box-shadow: var(--box-shadow);
+/* طبقة تفتيح فوق الخلفية */
+body::before {
+    content: "";
     position: fixed;
-    width: 100%;
+    inset: 0;
+    background: rgba(255, 255, 255, .85);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* ======================
+   الهيدر و التنقّل (ثابت + يختفي عند النزول)
+   ====================== */
+.header {
+    position: fixed;
     top: 0;
-    z-index: 1000;
-    padding: 10px 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: var(--white);
+    box-shadow: var(--box-shadow);
+    padding: max(10px, var(--safe-top)) 0 10px;
+    transition: transform .35s ease, opacity .25s ease;
+    will-change: transform;
+}
+
+.header.is-hidden {
+    transform: translateY(calc(-100% - var(--safe-top)));
+    opacity: 0;
+    pointer-events: none;
 }
 
 .header .container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 18px;
     padding: 0 20px;
-    gap: 20px;
+    flex-wrap: nowrap;
+    overflow: visible;
 }
 
 .logo-container {
     display: flex;
     align-items: center;
-    gap: 15px;
-    order: 1;
-    flex-shrink: 0;
+    gap: 12px;
+    min-width: 0
 }
 
 .logo img {
-    height: 70px;
-    width: auto;
+    height: 56px;
+    width: auto
 }
 
 .org-name {
@@ -111,129 +145,130 @@ main {
     flex-direction: column;
     line-height: 1.2;
     color: var(--primary-color);
-    font-weight: bold;
-}
-background-slideshow {
-    z-index: -1; /* خلف كل شيء */
+    font-weight: 700;
+    min-width: 0;
 }
 
-.header {
-    z-index: 1000; /* أعلى العناصر */
+.org-name-line1,
+.org-name-line2 {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word
 }
 
-main {
-    z-index: 1; /* فوق الخلفية ولكن تحت الهيدر */
-}
-
-.footer {
-    z-index: 1;
-}
 .org-name-line1 {
-    font-size: 1.5rem;
-    white-space: nowrap;
+    font-size: clamp(1.05rem, 1vw + 1rem, 1.4rem)
 }
 
 .org-name-line2 {
-    font-size: 1.1rem;
-    color: var(--secondary-color);
-    white-space: nowrap;
+    font-size: clamp(.9rem, .6vw + .85rem, 1.05rem);
+    color: var(--secondary-color)
 }
 
-.buttons-container {
-    order: 2;
+/* القائمة الرئيسية */
+.nav-list {
+    list-style: none;
     display: flex;
     align-items: center;
-    flex-grow: 1;
-    justify-content: flex-end;
+    gap: 12px;
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-wrap: nowrap;
+    overflow: visible;
 }
 
-.nav-list {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+.nav-list>li:not(.login-btn) {
+    flex: 0 1 auto
+}
+
+.nav-list>li.login-btn {
+    margin-inline-start: auto;
+    flex-shrink: 0
+}
+
+.nav-list>li.login-btn a {
+    white-space: nowrap
 }
 
 .nav-list a {
+    display: block;
     text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
     color: var(--dark-color);
     font-weight: 500;
-    padding: 8px 15px;
+    padding: 8px 12px;
+    border-radius: 6px;
     transition: var(--transition);
-    border-radius: 4px;
-    display: block;
-    white-space: nowrap;
-    text-align: center;
 }
 
 .nav-list a:hover {
     color: var(--primary-color);
-    background-color: rgba(46, 134, 171, 0.1);
+    background: rgba(46, 134, 171, .1)
 }
 
 .login-btn a {
-    background-color: var(--secondary-color);
-    color: var(--white) !important;
-    padding: 8px 15px;
-    border-radius: 4px;
+    background: var(--secondary-color);
+    color: #fff !important;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: var(--transition);
+    margin: 0 !important;
+    border: none !important;
     text-decoration: none !important;
 }
 
 .login-btn a:hover {
-    background-color: #e07f00;
+    background: #e07f00
 }
 
+/* محوّل اللغة */
 .language-switcher {
     position: relative;
     display: inline-flex;
-    align-items: center;
+    align-items: center
 }
 
 .language-btn {
     background: none;
-    border: none;
-    color: var(--dark-color);
+    border: 0;
     cursor: pointer;
-    padding: 8px 15px;
+    color: var(--dark-color);
+    padding: 8px 12px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     gap: 8px;
     font-weight: 500;
-    border-radius: 4px;
     transition: var(--transition);
-    text-decoration: none;
-    font-size: inherit;
 }
 
 .language-btn:hover {
     color: var(--primary-color);
-    background-color: rgba(46, 134, 171, 0.1);
+    background: rgba(46, 134, 171, .1)
 }
 
 .language-menu {
     display: none;
     position: absolute;
     top: 100%;
-    right: 0;
-    background-color: var(--white);
+    inset-inline-end: 0;
     min-width: 150px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    z-index: 100;
+    background: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    z-index: 1000;
     list-style: none;
     padding: 10px 0;
-    margin-top: 5px;
+    margin-top: 6px;
 }
 
 .language-switcher:hover .language-menu {
-    display: block;
+    display: block
 }
 
 .language-menu li a {
-    padding: 10px 20px;
+    padding: 10px 16px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -243,20 +278,37 @@ main {
 }
 
 .language-menu li a:hover {
-    background-color: rgba(46, 134, 171, 0.1);
-    color: var(--primary-color);
+    background: rgba(46, 134, 171, .1);
+    color: var(--primary-color)
 }
 
-/* المحتوى الرئيسي */
+/* دعم اللمس (عند إضافة .active من JS) */
+@media(hover:none) {
+    .language-switcher:hover .language-menu {
+        display: none
+    }
+
+    .language-switcher.active .language-menu {
+        display: block
+    }
+}
+
+/* ======================
+   تعويض مساحة الهيدر الثابت + هوامش الروابط
+   ====================== */
 main {
-    margin-top: 0;
-    padding-top: 100px;
-    position: relative;
-    z-index: 1;
+    padding-top: var(--header-dyn, calc(var(--header-h) + var(--safe-top) + 8px))
 }
 
+:where(section, .section, [id]) {
+    scroll-margin-top: calc(var(--header-dyn, var(--header-h)) + 16px)
+}
+
+/* ======================
+   الأقسام (شبكة)
+   ====================== */
 .section {
-    padding: 60px 0;
+    padding: 60px 0
 }
 
 .section-title {
@@ -268,7 +320,7 @@ main {
 }
 
 .section-title::after {
-    content: '';
+    content: "";
     display: block;
     width: 80px;
     height: 4px;
@@ -277,64 +329,63 @@ main {
     border-radius: 2px;
 }
 
-/* أنماط الأقسام */
+/* شبكة أقسام الخدمات/الفئات */
 .sections-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 30px;
     padding: 20px;
 }
 
 .section-card {
-    background-color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, .9);
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--box-shadow);
+    transition: transform .3s ease, box-shadow .3s ease;
     display: flex;
     flex-direction: column;
     height: 100%;
     position: relative;
-    will-change: transform;
     opacity: 0;
     transform: translateY(30px);
-    animation: fadeInUp 0.6s ease forwards;
+    animation: fadeInUp .6s ease forwards;
 }
 
 @keyframes fadeInUp {
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0)
     }
 }
 
 .section-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .12)
 }
 
 .section-image-container {
     height: 200px;
     overflow: hidden;
-    position: relative;
+    position: relative
 }
 
 .section-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    transition: transform .5s ease
 }
 
 .section-card:hover .section-image {
-    transform: scale(1.03);
+    transform: scale(1.03)
 }
 
 .section-content {
     padding: 20px;
     flex: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: column
 }
 
 .section-title-card {
@@ -353,20 +404,20 @@ main {
 }
 
 .services-count {
-    background-color: var(--accent-color);
-    color: white;
+    background: var(--accent-color);
+    color: #fff;
     padding: 5px 10px;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: .8rem;
     margin-bottom: 15px;
     display: inline-block;
     align-self: center;
 }
 
 .explore-btn {
-    background-color: var(--secondary-color);
-    color: var(--white);
-    border: none;
+    background: var(--secondary-color);
+    color: #fff;
+    border: 0;
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
@@ -378,16 +429,20 @@ main {
 }
 
 .explore-btn:hover {
-    background-color: #e07f00;
-    transform: translateY(-2px);
+    background: #e07f00;
+    transform: translateY(-2px)
 }
 
-/* أنماط الفوتر */
+/* ======================
+   الفوتر
+   ====================== */
 .footer {
-    background-color: var(--dark-color_1);
-    color: var(--white);
+    background: var(--dark-color-1);
+    color: #fff;
     padding: 50px 0 0;
     font-size: 1.05rem;
+    margin-top: 0;
+    padding-bottom: max(25px, env(safe-area-inset-bottom));
 }
 
 .footer-content {
@@ -401,19 +456,19 @@ main {
 .footer-logo {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-start
 }
 
 .footer-logo img {
     height: 80px;
     width: auto;
-    margin-bottom: 20px;
+    margin-bottom: 20px
 }
 
 .footer-logo p {
     font-size: 1.1rem;
     line-height: 1.6;
-    margin-bottom: 15px;
+    margin-bottom: 15px
 }
 
 .footer-links h4,
@@ -426,15 +481,15 @@ main {
 .footer-links ul {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0
 }
 
 .footer-links li {
-    margin-bottom: 15px;
+    margin-bottom: 15px
 }
 
 .footer-links a {
-    color: var(--white);
+    color: #fff;
     text-decoration: none;
     transition: var(--transition);
     font-size: 1.05rem;
@@ -444,11 +499,11 @@ main {
 
 .footer-links a:hover {
     color: var(--secondary-color);
-    padding-right: 8px;
+    padding-right: 8px
 }
 
 .footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, .15);
     padding: 25px 0;
     text-align: center;
     display: flex;
@@ -460,13 +515,13 @@ main {
 .footer-bottom p {
     margin: 0;
     font-size: 1rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, .8)
 }
 
 .social-icons {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 15px
 }
 
 .social-icons a {
@@ -474,127 +529,173 @@ main {
     height: 40px;
     line-height: 40px;
     font-size: 1.1rem;
-    background-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, .15);
     border-radius: 50%;
-    color: var(--white);
-    transition: all 0.3s ease;
+    color: #fff;
+    transition: all .3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .social-icons a:hover {
-    background-color: var(--secondary-color);
-    transform: translateY(-3px);
+    background: var(--secondary-color);
+    transform: translateY(-3px)
 }
 
-/* تحسينات للشاشات الصغيرة */
-@media (max-width: 1200px) {
-    .sections-container {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 900px) {
-    .sections-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .header {
-        height: auto;
-        padding: 10px 0;
-    }
-
-    .header .container {
-        flex-direction: row;
-        justify-content: space-between;
-        gap: 10px;
-        padding: 0 15px;
-    }
-
-    .logo-container {
-        order: 1;
-        flex-direction: row;
-        align-items: center;
-        gap: 10px;
-        margin-top: 0;
-        padding-top: 0;
-        border-top: none;
-        width: auto;
-    }
-
-    .buttons-container {
-        order: 2;
-        width: auto;
+/* ======================
+   تجاوبية
+   ====================== */
+@media (max-width:1200px) {
+    .logo img {
+        height: 52px
     }
 
     .nav-list {
+        flex-wrap: wrap;
+        gap: 12px 16px
+    }
+
+    .nav-list>li.login-btn {
+        order: 99;
+        width: 100%;
+        margin-inline-start: 0;
+        display: flex;
         justify-content: flex-end;
-        gap: 8px;
+    }
+
+    [dir="rtl"] .nav-list>li.login-btn {
+        justify-content: flex-start
+    }
+}
+
+@media (max-width:992px) {
+
+    /* تعويض أعلى المحتوى للتايبليت */
+    main {
+        padding-top: calc(var(--header-dyn, var(--header-h-tablet)) + var(--safe-top) + 8px)
+    }
+
+    :where(section, .section, [id]) {
+        scroll-margin-top: calc(var(--header-dyn, var(--header-h-tablet)) + 16px)
+    }
+
+    .header .container {
+        flex-wrap: wrap;
+        row-gap: 8px
+    }
+
+    .nav-list {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%
+    }
+
+    .logo img {
+        height: 50px
+    }
+}
+
+@media (max-width:768px) {
+
+    /* تعويض أعلى المحتوى للموبايل */
+    main {
+        padding-top: calc(var(--header-dyn, var(--header-h-mobile)) + var(--safe-top) + 8px)
+    }
+
+    :where(section, .section, [id]) {
+        scroll-margin-top: calc(var(--header-dyn, var(--header-h-mobile)) + 16px)
     }
 
     .nav-list a {
         padding: 6px 10px;
-        font-size: 0.9rem;
+        font-size: .9rem
     }
 
     .logo img {
-        height: 50px;
-    }
-
-    .org-name-line1 {
-        font-size: 1.2rem;
-    }
-
-    .org-name-line2 {
-        font-size: 0.9rem;
-    }
-
-    main {
-        margin-top: 120px;
+        height: 46px
     }
 }
 
-@media (max-width: 480px) {
-    .header {
-        padding: 8px 0;
+@media (max-width:576px) {
+    .header .container {
+        justify-content: center
     }
 
     .logo-container {
-        flex-direction: column;
-        gap: 5px;
+        flex: 1 1 100%;
+        justify-content: center
     }
 
+    .org-name-line2 {
+        display: block
+    }
+
+    /* نسمح باللف */
     .nav-list {
-        gap: 5px;
+        gap: 8px
     }
 
     .nav-list a {
         padding: 5px 8px;
-        font-size: 0.8rem;
+        font-size: .85rem
+    }
+}
+
+@media (max-width:480px) {
+    .nav-list {
+        gap: 6px
+    }
+
+    .nav-list a {
+        padding: 5px 8px;
+        font-size: .8rem
     }
 
     .login-btn a,
     .language-btn {
         padding: 5px 10px;
-        font-size: 0.8rem;
+        font-size: .8rem
     }
 
     .logo img {
-        height: 40px;
+        height: 42px
     }
 
     .org-name-line1 {
-        font-size: 1.1rem;
+        font-size: 1rem
+    }
+}
+
+@media (max-width:360px) {
+    .container {
+        width: calc(100% - 36px)
     }
 
-    .org-name-line2 {
-        font-size: 0.8rem;
+    .nav-list {
+        gap: 6px
     }
 
-    main {
-        margin-top: 140px;
+    .nav-list a {
+        padding: 5px 7px;
+        font-size: .78rem
+    }
+}
+
+/* احترام تفضيل تقليل الحركة */
+@media (prefers-reduced-motion:reduce) {
+    .header {
+        transition: none
+    }
+
+    .section-card:hover {
+        transform: none;
+        box-shadow: var(--box-shadow)
+    }
+
+    .section-image,
+    .background-slideshow,
+    .background-slideshow img {
+        transition: none
     }
 }

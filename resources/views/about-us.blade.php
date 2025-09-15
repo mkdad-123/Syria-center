@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="{{ $locale }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{{ __('main.site_subname') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
     <title>{{ __('main.site_name') }} - {{ __('titles.about_us') }}</title>
 
     <!-- Preload أهم الموارد -->
@@ -22,12 +23,55 @@
     </noscript>
 
     <!-- تحميل CSS الأساسي -->
-    <link href="{{ asset('css/about-us.css') }}" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="{{ asset('css/about-us.css') }}" rel="stylesheet">
 
     <!-- Preload صور الخلفية -->
     <link rel="preload" href="{{ asset('/ima1.webp') }}" as="image">
     <link rel="preload" href="{{ asset('/ima2.webp') }}" as="image">
     <link rel="preload" href="{{ asset('/ima3.webp') }}" as="image">
+    <style>
+        /* حركة إخفاء/إظهار الهيدر */
+        .header {
+            transition: transform .35s ease, opacity .25s ease;
+            will-change: transform;
+        }
+
+        /* إخفاء الهيدر عند النزول */
+        .header.is-hidden {
+            transform: translateY(calc(-100% - var(--safe-top)));
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* تعويض ديناميكي لارتفاع الهيدر (يبقى المحتوى ثابت بدون قفزة) */
+        main {
+            padding-top: var(--header-dyn, calc(var(--header-h) + var(--safe-top) + 8px));
+        }
+
+        /* الروابط #id ما تتغطى بالهيدر عندما تكون بالأعلى */
+        :where(section, .section, [id]) {
+            scroll-margin-top: calc(var(--header-dyn, var(--header-h)) + 16px);
+        }
+    </style>
+    <style>
+        #siteHeader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+        }
+    </style>
+    <style>
+        @media (prefers-reduced-motion: reduce) {
+            .header {
+                transition: none
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -38,7 +82,7 @@
         <img src="{{ asset('/ima3.webp') }}" alt="خلفية 3">
     </div>
 
-    <header class="header">
+    <header id="siteHeader" class="header">
         <div class="container">
             <div class="logo-container">
                 <div class="logo">
@@ -49,7 +93,7 @@
                     <span class="org-name-line2">{{ __('main.site_subname') }}</span>
                 </div>
             </div>
-             <div class="buttons-container">
+            <div class="buttons-container">
                 <nav class="nav">
                     <ul class="nav-list">
                         <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
@@ -165,6 +209,29 @@
     </footer>
 
     <script src="{{ asset('js/about-us.js') }}" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.getElementById('siteHeader') || document.querySelector('.header');
+
+            // حساب ارتفاع الهيدر الحقيقي لتعويضه في الـ main
+            function setHeaderPad() {
+                if (!header) return;
+                document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+            }
+            setHeaderPad();
+            window.addEventListener('resize', setHeaderPad);
+
+            // إظهار الهيدر فقط عند أعلى الصفحة، وإخفاؤه عند أي نزول
+            function toggleHeader() {
+                if (window.scrollY > 0) header.classList.add('is-hidden');
+                else header.classList.remove('is-hidden');
+            }
+            toggleHeader(); // للحالة المبدئية
+            document.addEventListener('scroll', toggleHeader, {
+                passive: true
+            });
+        });
+    </script>
 
 </body>
 
