@@ -78,11 +78,10 @@ return [
     |
     */
 
-    'locale' => env('APP_LOCALE', 'en'),
+    'locale' => env('APP_LOCALE', 'ar'),
+    'fallback_locale' => 'ar',   // لو مافي ترجمة لمفتاح، برضو يعرض عربي
+    'faker_locale' => 'ar_SA',   // اختياري
 
-    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
-
-    'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
     /*
     |--------------------------------------------------------------------------

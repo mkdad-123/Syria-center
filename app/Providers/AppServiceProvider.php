@@ -38,6 +38,7 @@ use App\Services\Pages\{
     ContactPageService,
     VolunteerPageService
 };
+use Illuminate\Routing\Router;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -63,8 +64,26 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot(Router $router): void
     {
+
+        RateLimiter::for('login', function (Request $request) {
+            $email = (string) str($request->input('email'))->lower()->trim();
+
+            return [
+                // 5 محاولات في الدقيقة لكل (email + IP)
+                Limit::perMinute(5)->by($email . '|' . $request->ip())
+                    // استجابة مخصصة عند الحظر (اختياري)
+                    ->response(function () {
+                        return back()
+                            ->withErrors(['email' => __('Too many login attempts. Please try again in 1 minute.')])
+                            ->withInput();
+                    }),
+                // (اختياري) حدّ عام لكل IP لتخفيف الهجمات
+                // Limit::perMinute(20)->by($request->ip()),
+            ];
+        });
+
         VerifyEmail::createUrlUsing(function ($notifiable) {
             return URL::temporarySignedRoute(
                 'verification.verify.public',
@@ -84,10 +103,10 @@ class AppServiceProvider extends ServiceProvider
             $switch
                 ->locales(['ar', 'en']);
         });
+    $router->aliasMiddleware('setLocale', \App\Http\Middleware\SetLocale::class);
 
-        URL::defaults(['lang' => app()->getLocale()]);
-
-        Route::pattern('lang', 'ar|en');
+        URL::defaults(['locale' => app()->getLocale()]);
+        Route::pattern('locale', 'ar|en');                   // ✅
         $this->configureRateLimiting();
     }
     protected function configureRateLimiting()

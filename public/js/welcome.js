@@ -1,242 +1,285 @@
-﻿
-// وظيفة لتعيين الكوكي
-function setLanguageCookie(lang) {
-    document.cookie = `lang=${lang};path=/;max-age=${30 * 24 * 60 * 60}`;
-}
+﻿/* welcome.js — locale-prefix friendly, no post-render text swaps
+   - No ?lang=… or cookie-driven DOM changes (prevents language flash)
+   - Language switching updates the first URL segment (/ar|/en) and reloads
+   - Efficient header sizing (ResizeObserver) and scroll hide/show (rAF throttle)
+   - Safe, lightweight carousels + background slideshow
+*/
 
-// وظيفة لقراءة الكوكي
-function getLanguageCookie() {
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-        const [name, value] = cookie.trim().split('=');
-        if (name === 'lang') {
-            return value;
+(() => {
+    "use strict";
+
+    // ---------- small utils ----------
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+    const on = (el, ev, fn, opts) => el && el.addEventListener(ev, fn, opts);
+    const rafThrottle = (fn) => {
+        let ticking = false;
+        return (...args) => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    ticking = false;
+                    fn(...args);
+                });
+                ticking = true;
+            }
+        };
+    };
+
+    const ready = (fn) => {
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", fn, { once: true });
+        } else {
+            fn();
         }
+    };
+
+    // Replace/ensure first path segment is locale (ar|en)
+    function buildLocaleUrl(newLocale) {
+        const { pathname, search, hash, origin } = window.location;
+        const parts = pathname.split("/").filter(Boolean);
+        if (parts.length && (parts[0] === "ar" || parts[0] === "en")) {
+            parts[0] = newLocale;
+        } else {
+            parts.unshift(newLocale);
+        }
+        return origin + "/" + parts.join("/") + search + hash;
     }
-    return null;
-}
 
-// وظيفة تهيئة الكاروسيل
-function initCarousel(carouselId, prevBtnId, nextBtnId) {
-    const carousel = document.getElementById(carouselId);
-    if (!carousel) return;
+    // ---------- header: dynamic padding + hide on scroll ----------
+    function setupHeader() {
+        const header = $("#siteHeader") || $(".header");
+        if (!header) return;
 
-    const slides = carousel.querySelectorAll('.team-member, .partner');
+        // Keep CSS var --header-dyn in sync with actual header height
+        const setHeaderPad = () => {
+            const h = header.offsetHeight || 0;
+            document.documentElement.style.setProperty("--header-dyn", `${h}px`);
+        };
 
-    if (slides.length <= 1) {
+        // Prefer ResizeObserver (no reflow loops on resize)
+        if ("ResizeObserver" in window) {
+            const ro = new ResizeObserver(setHeaderPad);
+            ro.observe(header);
+        } else {
+            on(window, "resize", rafThrottle(setHeaderPad), { passive: true });
+            on(window, "load", setHeaderPad, { once: true });
+        }
+        setHeaderPad();
+
+        // Hide header when scrolling down (simple: hidden if scrollY > 0)
+        const toggleHeader = () => {
+            if (window.scrollY > 0) header.classList.add("is-hidden");
+            else header.classList.remove("is-hidden");
+        };
+        toggleHeader();
+        on(document, "scroll", rafThrottle(toggleHeader), { passive: true });
+    }
+
+    // ---------- background slideshow (simple fade via .active class) ----------
+    function setupBackgroundSlideshow(intervalMs = 5000) {
+        const imgs = $$(".background-slideshow img");
+        if (imgs.length <= 1) {
+            if (imgs[0]) imgs[0].classList.add("active");
+            return;
+        }
+
+        let idx = 0;
+        imgs[idx].classList.add("active");
+
+        setInterval(() => {
+            const prev = idx;
+            idx = (idx + 1) % imgs.length;
+            imgs[prev].classList.remove("active");
+            imgs[idx].classList.add("active");
+        }, intervalMs);
+    }
+
+    // ---------- generic carousel (for teams/partners) ----------
+    function initCarousel(carouselId, prevBtnId, nextBtnId) {
+        const root = document.getElementById(carouselId);
+        if (!root) return;
+
+        const slides = $$(".team-member, .partner", root);
+        const indicatorsContainer = $(".carousel-indicators", root);
         const prevBtn = document.getElementById(prevBtnId);
         const nextBtn = document.getElementById(nextBtnId);
-        const indicatorsContainer = carousel.querySelector('.carousel-indicators');
 
-        if (prevBtn) prevBtn.style.display = 'none';
-        if (nextBtn) nextBtn.style.display = 'none';
-        if (indicatorsContainer) indicatorsContainer.style.display = 'none';
-
-        if (slides.length === 1) {
-            slides[0].classList.add('active');
-            slides[0].style.display = 'block';
-            slides[0].style.opacity = '1';
-            slides[0].style.transform = 'scale(1)';
+        // No or single slide: simplify UI and bail
+        if (slides.length <= 1) {
+            if (prevBtn) prevBtn.style.display = "none";
+            if (nextBtn) nextBtn.style.display = "none";
+            if (indicatorsContainer) indicatorsContainer.style.display = "none";
+            if (slides.length === 1) {
+                slides[0].classList.add("active");
+                slides[0].style.display = "block";
+                slides[0].style.opacity = "1";
+                slides[0].style.transform = "scale(1)";
+            }
+            return;
         }
-        return;
-    }
 
-    const prevBtn = document.getElementById(prevBtnId);
-    const nextBtn = document.getElementById(nextBtnId);
-    let currentIndex = 0;
-    let slideInterval;
-    const slideDuration = 5000;
+        // Build indicators once
+        if (indicatorsContainer) {
+            indicatorsContainer.innerHTML = "";
+            slides.forEach((_, i) => {
+                const dot = document.createElement("div");
+                dot.className = "carousel-indicator" + (i === 0 ? " active" : "");
+                dot.setAttribute("data-index", String(i));
+                indicatorsContainer.appendChild(dot);
+            });
+        }
 
-    // إنشاء المؤشرات
-    const indicatorsContainer = carousel.querySelector('.carousel-indicators');
-    if (indicatorsContainer) {
-        slides.forEach((_, index) => {
-            const indicator = document.createElement('div');
-            indicator.className = 'carousel-indicator';
-            if (index === 0) indicator.classList.add('active');
-            indicator.addEventListener('click', () => goToSlide(index));
-            indicatorsContainer.appendChild(indicator);
-        });
-    }
+        const indicators = $$(".carousel-indicator", root);
+        let current = 0;
+        let timer = 0;
+        const DURATION = 5000;
+        const TRANSITION_MS = 800;
 
-    const indicators = carousel.querySelectorAll('.carousel-indicator');
-
-    function init() {
-        slides.forEach((slide, index) => {
-            if (index === 0) {
-                slide.classList.add('active');
-            } else {
-                slide.style.display = 'none';
-            }
-        });
-        startSlideShow();
-    }
-
-    function goToSlide(index) {
-        if (index === currentIndex) return;
-        clearInterval(slideInterval);
-
-        const prevIndex = currentIndex;
-        currentIndex = index;
-
-        updateCarousel(prevIndex, currentIndex);
-        startSlideShow();
-    }
-
-    function moveSlide(direction) {
-        clearInterval(slideInterval);
-        const prevIndex = currentIndex;
-        currentIndex = (currentIndex + direction + slides.length) % slides.length;
-        updateCarousel(prevIndex, currentIndex);
-        startSlideShow();
-    }
-
-    function updateCarousel(prevIndex, newIndex) {
-        indicators.forEach((indicator, idx) => {
-            if (idx === newIndex) {
-                indicator.classList.add('active');
-            } else {
-                indicator.classList.remove('active');
-            }
+        // Initial state
+        slides.forEach((s, i) => {
+            s.style.display = i === 0 ? "block" : "none";
+            if (i === 0) s.classList.add("active");
         });
 
-        const outgoingSlide = slides[prevIndex];
-        outgoingSlide.classList.remove('active');
-        outgoingSlide.style.opacity = '0';
-        outgoingSlide.style.transform = 'scale(0.8)';
+        function goto(index) {
+            if (index === current) return;
+            const prev = current;
+            current = index;
 
-        const incomingSlide = slides[newIndex];
-        incomingSlide.style.display = 'block';
+            // Indicators
+            indicators.forEach((d, i) =>
+                d.classList.toggle("active", i === current)
+            );
 
-        setTimeout(() => {
-            incomingSlide.classList.add('active');
-            incomingSlide.style.opacity = '1';
-            incomingSlide.style.transform = 'scale(1)';
+            const out = slides[prev];
+            const _in = slides[current];
 
-            setTimeout(() => {
-                outgoingSlide.style.display = 'none';
-            }, 800);
-        }, 10);
+            // Prepare incoming
+            _in.style.display = "block";
+
+            // Animate (CSS-friendly: rely on .active class)
+            out.classList.remove("active");
+            out.style.opacity = "0";
+            out.style.transform = "scale(0.92)";
+
+            // Force next tick to apply styles consistently
+            requestAnimationFrame(() => {
+                _in.classList.add("active");
+                _in.style.opacity = "1";
+                _in.style.transform = "scale(1)";
+            });
+
+            // After transition, hide previous to avoid tab order & pointer issues
+            window.clearTimeout(timer);
+            timer = window.setTimeout(() => {
+                out.style.display = "none";
+            }, TRANSITION_MS);
+        }
+
+        function move(dir) {
+            const next = (current + dir + slides.length) % slides.length;
+            stop();
+            goto(next);
+            start();
+        }
+
+        function start() {
+            stop();
+            timer = window.setInterval(() => move(1), DURATION);
+        }
+        function stop() {
+            window.clearInterval(timer);
+        }
+
+        // Bindings
+        indicators.forEach((dot) =>
+            on(dot, "click", () => goto(Number(dot.getAttribute("data-index"))))
+        );
+        on(prevBtn, "click", () => move(-1));
+        on(nextBtn, "click", () => move(1));
+        on(root, "mouseenter", stop, { passive: true });
+        on(root, "mouseleave", start, { passive: true });
+
+        start();
     }
 
-    function startSlideShow() {
-        clearInterval(slideInterval);
-        slideInterval = setInterval(() => {
-            moveSlide(1);
-        }, slideDuration);
-    }
+    // ---------- language switcher (URL prefix swap) ----------
+    function setupLanguageSwitcher() {
+        const switcher = $(".language-switcher");
+        if (!switcher) return;
 
-    if (prevBtn) prevBtn.addEventListener('click', () => moveSlide(-1));
-    if (nextBtn) nextBtn.addEventListener('click', () => moveSlide(1));
+        const btn = $(".language-btn", switcher);
+        const menu = $(".language-menu", switcher);
 
-    init();
-    carousel.addEventListener('mouseenter', () => clearInterval(slideInterval));
-    carousel.addEventListener('mouseleave', startSlideShow);
-}
-
-// تهيئة جميع الوظائف عند تحميل الصفحة
-document.addEventListener('DOMContentLoaded', function () {
-    // التحقق من لغة الكوكي
-    const preferredLang = getLanguageCookie();
-    const currentLang = document.documentElement.lang;
-
-    if (preferredLang && preferredLang !== currentLang) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('lang', preferredLang);
-        window.location.href = url.toString();
-    }
-
-    // عرض الشرائح الخلفية
-    const backgroundImages = document.querySelectorAll('.background-slideshow img');
-    let currentImage = 0;
-
-    function changeBackground() {
-        backgroundImages[currentImage].classList.remove('active');
-        currentImage = (currentImage + 1) % backgroundImages.length;
-        backgroundImages[currentImage].classList.add('active');
-    }
-
-    setInterval(changeBackground, 5000);
-
-    // تهيئة الكاروسيلات
-    initCarousel('teamCarousel', 'prevBtn', 'nextBtn');
-    initCarousel('partnersCarousel', 'partnersPrevBtn', 'partnersNextBtn');
-
-    // تبديل اللغة
-    const languageSwitcher = document.querySelector('.language-switcher');
-    if (languageSwitcher) {
-        const languageBtn = languageSwitcher.querySelector('.language-btn');
-        const languageMenu = languageSwitcher.querySelector('.language-menu');
-
-        languageBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const isOpen = languageMenu.style.display === 'block';
-            languageMenu.style.display = isOpen ? 'none' : 'block';
-        });
-
-        document.addEventListener('click', function (e) {
-            if (!languageSwitcher.contains(e.target)) {
-                languageMenu.style.display = 'none';
-            }
-        });
-
-        languageMenu.addEventListener('click', function (e) {
-            e.stopPropagation();
-        });
-
-        document.querySelectorAll('.language-menu a').forEach(link => {
-            link.addEventListener('click', function (e) {
+        if (btn && menu) {
+            on(btn, "click", (e) => {
                 e.preventDefault();
-                const lang = this.getAttribute('data-lang');
-                setLanguageCookie(lang);
-                const url = new URL(window.location.href);
-                url.searchParams.set('lang', lang);
-                window.location.href = url.toString();
+                e.stopPropagation();
+                const open = menu.style.display === "block";
+                menu.style.display = open ? "none" : "block";
+            });
+
+            on(document, "click", (e) => {
+                if (!switcher.contains(e.target)) menu.style.display = "none";
+            });
+
+            on(menu, "click", (e) => e.stopPropagation());
+        }
+
+        // Accept links/buttons with data-lang anywhere inside the menu
+        $$("[data-lang]", switcher).forEach((node) => {
+            on(node, "click", (e) => {
+                e.preventDefault();
+                const newLocale = node.getAttribute("data-lang");
+                if (!newLocale || !/^(ar|en)$/.test(newLocale)) return;
+                // Navigate to same path but with locale prefix changed — server will render correct HTML immediately.
+                window.location.assign(buildLocaleUrl(newLocale));
             });
         });
     }
 
-    // القوائم المنسدلة للهواتف
-    const dropdowns = document.querySelectorAll('.dropdown');
-    dropdowns.forEach(dropdown => {
-        if (window.innerWidth <= 768) {
-            const dropbtn = dropdown.querySelector('.dropbtn');
-            dropbtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                dropdown.classList.toggle('active');
-            });
-        }
-    });
+    // ---------- mobile dropdowns ----------
+    function setupMobileDropdowns() {
+        const mq = window.matchMedia("(max-width: 768px)");
+        const apply = () => {
+            const dropdowns = $$(".dropdown");
+            if (!dropdowns.length) return;
 
-    document.addEventListener('click', function (event) {
-        if (!event.target.matches('.dropbtn') && !event.target.matches('.dropbtn *')) {
-            dropdowns.forEach(dropdown => {
-                dropdown.classList.remove('active');
-            });
-        }
-    });
+            // Clean previous to avoid stacking listeners if breakpoint toggles
+            dropdowns.forEach((dd) => dd.classList.remove("active"));
 
+            if (mq.matches) {
+                dropdowns.forEach((dropdown) => {
+                    const btn = $(".dropbtn", dropdown);
+                    if (!btn) return;
+                    on(btn, "click", (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        dropdown.classList.toggle("active");
+                    });
+                });
 
-}); document.addEventListener('DOMContentLoaded', function () {
-    const header = document.getElementById('siteHeader') || document.querySelector('.header');
+                on(document, "click", () => {
+                    dropdowns.forEach((d) => d.classList.remove("active"));
+                });
+            }
+        };
 
-    // تعويض ارتفاع الهيدر الحقيقي
-    function setHeaderPad() {
-        if (!header) return;
-        document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+        apply();
+        // Update behavior when crossing breakpoint
+        mq.addEventListener?.("change", apply);
     }
-    setHeaderPad();
-    addEventListener('resize', setHeaderPad);
-    addEventListener('load', setHeaderPad);
 
-    // أخفِ الهيدر عند أي نزول، وأظهره فقط عند أعلى الصفحة
-    function toggleHeader() {
-        if (window.scrollY > 0) header.classList.add('is-hidden');
-        else header.classList.remove('is-hidden');
-    }
-    toggleHeader();
-    document.addEventListener('scroll', toggleHeader, {
-        passive: true
+    // ---------- boot ----------
+    ready(() => {
+        setupHeader();
+        setupBackgroundSlideshow(5000);
+
+        // Carousels (IDs as per your markup)
+        initCarousel("teamCarousel", "prevBtn", "nextBtn");
+        initCarousel("partnersCarousel", "partnersPrevBtn", "partnersNextBtn");
+
+        setupLanguageSwitcher();
+        setupMobileDropdowns();
     });
-});
+})();

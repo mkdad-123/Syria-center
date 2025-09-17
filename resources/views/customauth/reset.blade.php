@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{{ $locale ?? app()->getLocale() }}" dir="{{ ($locale ?? app()->getLocale()) === 'ar' ? 'rtl' : 'ltr' }}">
+
 <head>
+    <link rel="icon" href="{{ asset('logo.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{-- مهم لطلبات fetch --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title data-translate="page_title">تعيين كلمة مرور جديدة - المركز السوري للتنمية المستدامة</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>{{ __('auth.reset_password_title') }} - {{ __('main.site_name') }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
             --primary-color: #2E86AB;
@@ -15,62 +18,56 @@
             --dark-color: #333;
             --light-color: #f8f9fa;
             --white: #fff;
-            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+            --transition: .3s ease;
+            --header-bg: rgba(255, 255, 255, .95);
+            --header-border: rgba(0, 0, 0, .06)
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
         }
 
         body {
             color: var(--dark-color);
             line-height: 1.6;
             min-height: 100vh;
-            position: relative;
             overflow-x: hidden;
-            background-color: var(--light-color);
+            background: var(--light-color)
         }
 
-        /* خلفية متحركة */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(46, 134, 171, 0.1) 0%, rgba(241, 143, 1, 0.1) 100%);
-            z-index: -2;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(46, 134, 171, .08) 0%, rgba(241, 143, 1, .08) 100%);
+            z-index: -2
         }
 
         .bg-animation {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             z-index: -1;
-            opacity: 0.3;
+            opacity: .3;
             overflow: hidden;
+            pointer-events: none
         }
 
         .bg-animation div {
             position: absolute;
             border-radius: 50%;
-            background: rgba(46, 134, 171, 0.1);
-            animation: float 15s infinite linear;
+            background: rgba(46, 134, 171, .1);
+            animation: float 15s linear infinite
         }
 
         .bg-animation div:nth-child(1) {
             width: 300px;
             height: 300px;
             top: 10%;
-            left: 10%;
-            animation-delay: 0s;
+            left: 10%
         }
 
         .bg-animation div:nth-child(2) {
@@ -79,7 +76,7 @@
             top: 50%;
             left: 30%;
             animation-delay: 3s;
-            animation-duration: 12s;
+            animation-duration: 12s
         }
 
         .bg-animation div:nth-child(3) {
@@ -87,7 +84,7 @@
             height: 250px;
             top: 30%;
             left: 70%;
-            animation-delay: 5s;
+            animation-delay: 5s
         }
 
         .bg-animation div:nth-child(4) {
@@ -96,530 +93,475 @@
             top: 70%;
             left: 80%;
             animation-delay: 7s;
-            animation-duration: 18s;
+            animation-duration: 18s
         }
 
         @keyframes float {
             0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
+                transform: translateY(0) rotate(0)
             }
+
             100% {
-                transform: translateY(-1000px) rotate(720deg);
-                opacity: 0;
+                transform: translateY(-1000px) rotate(720deg)
             }
         }
 
-        /* شريط التنقل العلوي */
+        .container {
+            width: min(1200px, 92%);
+            margin-inline: auto;
+            padding: 0 12px
+        }
+
         .header {
-            background-color: var(--white);
-            box-shadow: var(--box-shadow);
-            position: fixed;
-            width: 100%;
+            position: sticky;
             top: 0;
             z-index: 1000;
-            padding: 10px 0;
+            background: var(--header-bg);
+            backdrop-filter: saturate(140%) blur(6px);
+            -webkit-backdrop-filter: saturate(140%) blur(6px);
+            border-bottom: 1px solid var(--header-border);
+            padding: 8px
         }
 
         .header .container {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap
         }
 
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
+            min-width: 0
         }
 
         .logo img {
-            height: 50px;
-            width: auto;
+            height: 52px;
+            width: auto
         }
 
         .org-name {
-            font-size: 1.2rem;
-            font-weight: bold;
+            font-size: 1.05rem;
+            font-weight: 700;
             color: var(--primary-color);
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis
         }
 
-        /* زر الترجمة */
         .language-switcher {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap
         }
 
         .language-btn {
             background: none;
-            border: none;
+            border: 0;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: .95rem;
             color: var(--dark-color);
+            padding: 8px 10px;
+            border-radius: 6px;
             transition: var(--transition);
-            padding: 5px 10px;
-            border-radius: 4px;
+            text-decoration: none
         }
 
         .language-btn:hover {
-            background-color: rgba(0, 0, 0, 0.05);
+            background: rgba(0, 0, 0, .05)
         }
 
         .language-btn.active {
             color: var(--primary-color);
-            font-weight: bold;
+            font-weight: 700
         }
 
-        /* تصميم الصفحة الرئيسية */
-        .reset-page {
+        .page {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 80px 0;
+            min-height: calc(100vh - 70px);
+            padding: 40px 0
         }
 
-        .reset-container {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 10px;
+        .card {
+            background: rgba(255, 255, 255, .96);
+            border-radius: 12px;
             box-shadow: var(--box-shadow);
             width: 100%;
-            max-width: 500px;
-            padding: 40px;
+            max-width: 520px;
+            padding: 36px;
+            margin: 20px;
             position: relative;
             overflow: hidden;
-            border-top: 5px solid var(--primary-color);
-            margin: 20px;
-            animation: fadeIn 0.5s ease-out;
+            border-top: 5px solid var(--primary-color)
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .form-title {
+        .title {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
             color: var(--primary-color);
-            font-size: 1.8rem;
-            position: relative;
+            font-size: 1.75rem;
+            position: relative
         }
 
-        .form-title::after {
+        .title::after {
             content: '';
             display: block;
             width: 60px;
             height: 3px;
             background: var(--secondary-color);
-            margin: 15px auto;
-            border-radius: 2px;
+            margin: 14px auto 0;
+            border-radius: 2px
         }
 
         .form-group {
-            margin-bottom: 25px;
-            position: relative;
+            margin-bottom: 18px
         }
 
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--dark-color);
+            font-weight: 600
         }
 
         .input-container {
-            position: relative;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--dark-color);
-            z-index: 2;
+            position: relative
         }
 
         .form-control {
             width: 100%;
-            padding: 12px 15px 12px 40px;
+            padding: 12px 14px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
             font-size: 1rem;
             transition: var(--transition);
-            background-color: #f9f9f9;
-            text-align: right;
+            background: #f9f9f9
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(46, 134, 171, 0.2);
+            box-shadow: 0 0 0 3px rgba(46, 134, 171, .2)
         }
 
-        .btn-primary {
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
-            color: var(--white);
-            padding: 12px 30px;
-            font-weight: 500;
-            transition: var(--transition);
+        [dir="rtl"] .form-control {
+            padding: 12px 14px 12px 42px;
+            text-align: right
         }
 
-        .btn-primary:hover {
-            background-color: #e07f00;
-            border-color: #e07f00;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        [dir="rtl"] .input-icon {
+            left: 14px;
+            right: auto
         }
 
-        .btn-block {
-            display: block;
+        [dir="ltr"] .form-control {
+            padding: 12px 42px 12px 14px;
+            text-align: left
+        }
+
+        [dir="ltr"] .input-icon {
+            right: 14px;
+            left: auto
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #100f0f
+        }
+
+        .btn {
+            display: inline-block;
             width: 100%;
+            background: var(--secondary-color);
+            color: #fff;
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition)
         }
 
-        /* رسائل الخطأ والنجاح */
-        .invalid-feedback {
-            color: #dc3545;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            text-align: right;
-        }
-
-        .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            text-align: right;
+        .btn:hover {
+            background: #e07f00;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .1)
         }
 
         .alert-success {
+            background: #d4edda;
             color: #155724;
-            background-color: #d4edda;
-            border-color: #c3e6cb;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            border: 1px solid #c3e6cb
         }
 
         .alert-danger {
+            background: #f8d7da;
             color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            border: 1px solid #f5c6cb
         }
 
-        /* تذييل الصفحة */
+        .error-message {
+            color: #dc3545;
+            font-size: .85rem;
+            margin-top: 6px
+        }
+
+        .has-error .form-control {
+            border-color: #dc3545
+        }
+
         .footer {
-            background-color: var(--dark-color);
-            color: var(--white);
-            padding: 20px 0;
+            background: #222;
+            color: #fff;
             text-align: center;
-            position: relative;
-        }
-
-        .footer p {
-            margin-bottom: 10px;
+            padding: 18px 0;
+            border-top: 1px solid rgba(255, 255, 255, .06)
         }
 
         .social-icons a {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             width: 40px;
             height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            text-align: center;
-            line-height: 40px;
-            color: var(--white);
+            background: rgba(255, 255, 255, .1);
+            color: #fff;
             margin: 0 5px;
-            transition: var(--transition);
+            transition: var(--transition)
         }
 
         .social-icons a:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-3px);
+            background: var(--secondary-color);
+            transform: translateY(-3px)
         }
 
-        /* التجاوب مع الشاشات الصغيرة */
-        @media (max-width: 768px) {
-            .reset-container {
-                padding: 30px 20px;
-                margin: 20px 10px;
-            }
-
-            .form-title {
-                font-size: 1.5rem;
-            }
-
-            .logo-container {
+        @media (max-width:768px) {
+            .header .container {
                 flex-direction: column;
-                gap: 5px;
+                gap: 10px
+            }
+
+            .page {
+                min-height: calc(100vh - 64px);
+                padding: 30px 0
+            }
+
+            .card {
+                padding: 24px 18px;
+                margin: 16px 10px
+            }
+
+            .logo img {
+                height: 46px
             }
 
             .org-name {
-                font-size: 1rem;
+                font-size: 1rem
             }
+        }
 
-            .form-control {
-                padding: 12px 15px 12px 35px;
-            }
+        /* أخفِ أي عنصر نضيف له d-none */
+        .d-none {
+            display: none !important;
+        }
 
-            .input-icon {
-                right: 10px;
-                font-size: 0.9rem;
-            }
-
-            .header .container {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .language-switcher {
-                margin-top: 10px;
-            }
+        /* ولو بقي عنصر تنبيه بلا نص، أخفِه تلقائياً */
+        .alert-success:empty,
+        .alert-danger:empty {
+            display: none;
         }
     </style>
 </head>
 
 <body>
-    <!-- خلفية متحركة -->
-    <div class="bg-animation">
+    @php
+        $locale = $locale ?? app()->getLocale();
+        $swapLocaleUrl = function (string $lang) {
+            $segments = request()->segments();
+            if (!empty($segments) && in_array($segments[0], ['ar', 'en'], true)) {
+                $segments[0] = $lang;
+            } else {
+                array_unshift($segments, $lang);
+            }
+            $path = implode('/', $segments);
+            $qs = request()->getQueryString();
+            return url($path) . ($qs ? '?' . $qs : '');
+        };
+    @endphp
+
+    <div class="bg-animation" aria-hidden="true">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
     </div>
 
-    <!-- شريط التنقل العلوي -->
     <header class="header">
         <div class="container">
             <div class="logo-container">
-                <div class="logo">
-                    <img src="{{ asset('logo.png') }}" alt="شعار المركز السوري للتنمية المستدامة">
-                </div>
-                <div class="org-name" data-translate="org_name">المركز السوري للتنمية المستدامة والتمكين المجتمعي</div>
+                <div class="logo"><img src="{{ asset('logo.png') }}" alt="{{ __('main.site_name') }}"></div>
+                <div class="org-name">{{ __('main.site_name') }} — {{ __('main.site_subname') }}</div>
             </div>
-
-            <!-- زر الترجمة -->
             <div class="language-switcher">
-                <button class="language-btn active" data-lang="ar">العربية</button>
-                <button class="language-btn" data-lang="en">English</button>
+                <a class="language-btn {{ $locale === 'ar' ? 'active' : '' }}"
+                    href="{{ $swapLocaleUrl('ar') }}">العربية</a>
+                <a class="language-btn {{ $locale === 'en' ? 'active' : '' }}"
+                    href="{{ $swapLocaleUrl('en') }}">English</a>
             </div>
         </div>
     </header>
 
-    <!-- قسم تعيين كلمة المرور الجديدة -->
-    <div class="reset-page">
-        <div class="reset-container">
-            <h2 class="form-title" data-translate="reset_title">تعيين كلمة مرور جديدة</h2>
+    <main class="page">
+        <section class="card">
+            <h2 class="title">{{ __('auth.reset_password_title') }}</h2>
 
-            <form id="resetPasswordForm">
+            {{-- تنبيهات عامة من السيرفر إن وُجدت --}}
+            @if (session('status'))
+                <div class="alert-success">{{ session('status') }}</div>
+            @endif
+            @if ($errors->any())
+                <div class="alert-danger" role="alert" style="margin-bottom:16px">
+                    <ul style="margin:0;padding-inline-start:18px">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            {{-- ملاحظة هامة: نرسل إلى راوت POST الصحيح --}}
+            <form id="resetPasswordForm" method="POST"
+                action="{{ route('password.reset.post', ['locale' => $locale]) }}">
                 @csrf
-                <input type="hidden" name="email" value="{{ request()->query('email') }}">
-                <input type="hidden" name="token" value="{{ request()->query('token') }}">
+                {{-- هذه القيم تأتي من رابط /{locale}/reset?email=...&token=... --}}
+                <input type="hidden" name="email" value="{{ request('email') }}">
+                <input type="hidden" name="token" value="{{ request('token') }}">
 
-                <div class="form-group">
-                    <label for="password" data-translate="new_password_label">كلمة المرور الجديدة</label>
+                <div class="form-group {{ $errors->has('password') ? 'has-error' : '' }}">
+                    <label for="password">{{ __('auth.new_password') }}</label>
                     <div class="input-container">
-                        <i class="fas fa-lock input-icon"></i>
-                        <input type="password" class="form-control" id="password" name="password" required>
+                        <i class="fas fa-lock input-icon" aria-hidden="true"></i>
+                        <input type="password" id="password" name="password" class="form-control" required
+                            autocomplete="new-password">
                     </div>
-                    <div class="invalid-feedback" id="passwordError"></div>
+                    @if ($errors->has('password'))
+                        <span class="error-message">{{ $errors->first('password') }}</span>
+                    @endif
                 </div>
 
-                <div class="form-group">
-                    <label for="password_confirmation" data-translate="confirm_password_label">تأكيد كلمة المرور</label>
+                <div class="form-group {{ $errors->has('password_confirmation') ? 'has-error' : '' }}">
+                    <label for="password_confirmation">{{ __('auth.password_confirmation') }}</label>
                     <div class="input-container">
-                        <i class="fas fa-lock input-icon"></i>
-                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                        <i class="fas fa-lock input-icon" aria-hidden="true"></i>
+                        <input type="password" id="password_confirmation" name="password_confirmation"
+                            class="form-control" required autocomplete="new-password">
                     </div>
-                    <div class="invalid-feedback" id="passwordConfirmationError"></div>
+                    @if ($errors->has('password_confirmation'))
+                        <span class="error-message">{{ $errors->first('password_confirmation') }}</span>
+                    @endif
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">
-                    <span id="submitText" data-translate="reset_button">تعيين كلمة المرور</span>
-                    <span id="submitSpinner" class="d-none">
-                        <i class="fas fa-spinner fa-spin"></i> <span data-translate="processing_text">جاري المعالجة...</span>
-                    </span>
+                <button type="submit" class="btn btn-block" id="submitBtn">
+                    <span id="submitText">{{ __('auth.reset_button') }}</span>
                 </button>
             </form>
 
-            <div class="alert alert-success mt-3 d-none" id="successMessage"></div>
-            <div class="alert alert-danger mt-3 d-none" id="errorMessage"></div>
-        </div>
-    </div>
+            {{-- رسائل واجهة لنتيجة الـ fetch --}}
+            <div class="alert-success d-none" id="successMessage"></div>
+            <div class="alert-danger d-none" id="errorMessage"></div>
+        </section>
+    </main>
 
-    <!-- تذييل الصفحة -->
     <footer class="footer">
         <div class="container">
-            <p data-translate="copyright_text">&copy; {{ date('Y') }} المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.</p>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
+            <p>&copy; {{ date('Y') }} {{ __('main.site_name') }}. {{ __('auth.rights_reserved') }}</p>
+            <div class="social-icons" aria-label="social links">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="X / Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
             </div>
         </div>
     </footer>
 
     <script>
-        // ترجمة النصوص
-        const translations = {
-            ar: {
-                page_title: "تعيين كلمة مرور جديدة - المركز السوري للتنمية المستدامة",
-                org_name: "المركز السوري للتنمية المستدامة والتمكين المجتمعي",
-                reset_title: "تعيين كلمة مرور جديدة",
-                new_password_label: "كلمة المرور الجديدة",
-                confirm_password_label: "تأكيد كلمة المرور",
-                reset_button: "تعيين كلمة المرور",
-                processing_text: "جاري المعالجة...",
-                copyright_text: `© ${new Date().getFullYear()} المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.`,
-                success_message: "تم تعيين كلمة المرور بنجاح!",
-                error_message: "حدث خطأ أثناء تعيين كلمة المرور"
-            },
-            en: {
-                org_name: "Syrian Center for Sustainable Development and Community Empowerment ",
-                reset_title: "Reset Password",
-                new_password_label: "New Password",
-                confirm_password_label: "Confirm Password",
-                reset_button: "Reset Password",
-                processing_text: "Processing...",
-                copyright_text: `© ${new Date().getFullYear()} Syrian Center for Sustainable Development. All rights reserved.`,
-                success_message: "Password has been reset successfully!",
-                error_message: "An error occurred while resetting password"
-            }
-        };
-
-        // تغيير اللغة
-        document.querySelectorAll('.language-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const lang = this.dataset.lang;
-
-                // تحديث حالة الأزرار
-                document.querySelectorAll('.language-btn').forEach(b => {
-                    b.classList.remove('active');
-                });
-                this.classList.add('active');
-
-                // تغيير اتجاه الصفحة
-                document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-                document.documentElement.lang = lang;
-
-                // تطبيق الترجمة
-                document.querySelectorAll('[data-translate]').forEach(element => {
-                    const key = element.getAttribute('data-translate');
-                    if (translations[lang][key]) {
-                        element.textContent = translations[lang][key];
-                    }
-                });
-
-                // تحديث عنوان الصفحة
-                document.title = translations[lang]['page_title'];
-
-                // تغيير مكان الأيقونات في حقول الإدخال
-                if (lang === 'en') {
-                    document.querySelectorAll('.input-icon').forEach(icon => {
-                        icon.style.left = 'auto';
-                        icon.style.right = '15px';
-                    });
-                    document.querySelectorAll('.form-control').forEach(input => {
-                        input.style.textAlign = 'left';
-                        input.style.padding = '12px 40px 12px 15px';
-                    });
-                } else {
-                    document.querySelectorAll('.input-icon').forEach(icon => {
-                        icon.style.left = '15px';
-                        icon.style.right = 'auto';
-                    });
-                    document.querySelectorAll('.form-control').forEach(input => {
-                        input.style.textAlign = 'right';
-                        input.style.padding = '12px 15px 12px 40px';
-                    });
-                }
-            });
-        });
-
-        document.getElementById('resetPasswordForm').addEventListener('submit', function(e) {
+        // نمنع ظهور JSON في الصفحة: نُرسل عبر fetch ونُعالج الرد
+        document.getElementById('resetPasswordForm')?.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Reset validation states
-            document.querySelectorAll('.is-invalid').forEach(el => {
-                el.classList.remove('is-invalid');
-            });
-            document.querySelectorAll('.invalid-feedback').forEach(el => {
-                el.textContent = '';
-            });
+            const btn = document.getElementById('submitBtn');
+            const txt = document.getElementById('submitText');
+            const successBox = document.getElementById('successMessage');
+            const errorBox = document.getElementById('errorMessage');
 
-            // Show loading state
-            const submitText = document.getElementById('submitText');
-            const submitSpinner = document.getElementById('submitSpinner');
-            const submitBtn = this.querySelector('button[type="submit"]');
+            // إخفاء الرسائل
+            successBox.classList.add('d-none');
+            errorBox.classList.add('d-none');
 
-            submitText.classList.add('d-none');
-            submitSpinner.classList.remove('d-none');
-            submitBtn.disabled = true;
+            // تعطيل الزر
+            btn.disabled = true;
+            txt.textContent = '{{ __('auth.processing') }}';
 
-            const formData = {
+            const payload = {
                 email: document.querySelector('input[name="email"]').value,
                 token: document.querySelector('input[name="token"]').value,
                 password: document.getElementById('password').value,
-                password_confirmation: document.getElementById('password_confirmation').value,
-                _token: document.querySelector('meta[name="csrf-token"]').content
+                password_confirmation: document.getElementById('password_confirmation').value
             };
 
-            const successMessage = document.getElementById('successMessage');
-            const errorMessage = document.getElementById('errorMessage');
-
-            // Reset messages
-            successMessage.classList.add('d-none');
-            errorMessage.classList.add('d-none');
-
-            fetch('/reset', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    successMessage.textContent = translations[document.documentElement.lang]['success_message'];
-                    successMessage.classList.remove('d-none');
-
-                    // Redirect to login after 3 seconds
-                    setTimeout(() => {
-                        window.location.href = '/login';
-                    }, 3000);
-                } else {
-                    if (data.errors) {
-                        // Handle validation errors
-                        Object.keys(data.errors).forEach(key => {
-                            const errorElement = document.getElementById(`${key}Error`);
-                            const inputElement = document.getElementById(key);
-                            if (errorElement && inputElement) {
-                                errorElement.textContent = data.errors[key][0];
-                                inputElement.classList.add('is-invalid');
-                            }
-                        });
+            fetch(this.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        successBox.textContent = '{{ __('auth.reset_success') }}';
+                        successBox.classList.remove('d-none');
+                        // إعادة التوجيه لتسجيل الدخول بعد ثانيتين
+                        setTimeout(() => {
+                            window.location.href = "{{ route('login', ['locale' => $locale]) }}";
+                        }, 2000);
+                    } else {
+                        // أخطاء تحقق أو رسالة عامة
+                        if (data.errors) {
+                            const first = Object.values(data.errors)[0][0];
+                            errorBox.textContent = first;
+                        } else {
+                            errorBox.textContent = data.message || '{{ __('auth.error_message') }}';
+                        }
+                        errorBox.classList.remove('d-none');
                     }
-
-                    errorMessage.textContent = data.message || translations[document.documentElement.lang]['error_message'];
-                    errorMessage.classList.remove('d-none');
-                }
-            })
-            .catch(error => {
-                errorMessage.textContent = translations[document.documentElement.lang]['error_message'];
-                errorMessage.classList.remove('d-none');
-                console.error('Error:', error);
-            })
-            .finally(() => {
-                submitText.classList.remove('d-none');
-                submitSpinner.classList.add('d-none');
-                submitBtn.disabled = false;
-            });
+                })
+                .catch(() => {
+                    errorBox.textContent = '{{ __('auth.error_message') }}';
+                    errorBox.classList.remove('d-none');
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    txt.textContent = '{{ __('auth.reset_button') }}';
+                });
         });
     </script>
 </body>
+
 </html>

@@ -15,6 +15,7 @@ use App\Models\CustomUser;
 use App\Models\ResetPassword;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+
 class ResetPasswordController extends Controller
 {
     protected $guard = 'custom'; // تحديد الـ guard المخصص
@@ -23,7 +24,7 @@ class ResetPasswordController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|exists:customusers',
+            'email' => 'required|email|exists:customusers,email',
         ]);
 
         if ($validator->fails()) {
@@ -48,12 +49,20 @@ class ResetPasswordController extends Controller
 
         Mail::to($request->email)->send(new ResetPasswordMail($code));
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني',
-            'email' => $request->email
-        ]);
+        if ($request->ajax() || $request->expectsJson() || $request->wantsJson()) {
+            return response()->json([
+                'status'  => 'success',
+                'message' => __('auth.success_code_sent'),
+                'email'   => $request->email,
+            ]);
+        }
+
+        // طلب عادي -> وجّه لصفحة التحقق مع تمرير الإيميل
+        return redirect()
+            ->route('password.verify', ['locale' => app()->getLocale(), 'email' => $request->email])
+            ->with('status', __('auth.success_code_sent'));
     }
+
 
     public function verifyResetCode(Request $request)
     {
@@ -142,4 +151,5 @@ class ResetPasswordController extends Controller
             'status' => 'success',
             'message' => 'تم إعادة تعيين كلمة المرور بنجاح'
         ]);
-    }}
+    }
+}

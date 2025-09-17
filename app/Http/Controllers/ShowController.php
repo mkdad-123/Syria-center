@@ -61,12 +61,17 @@ class ShowController extends Controller
 
         return $this->sectionsPage->render($locale, ['refresh' => $force]);
     }
-
-    public function showServicesPage(Request $request, $id)
+    public function showServicesPage(Request $request)
     {
-        $locale    = app()->getLocale();
-        $force     = $request->boolean('refresh');
-        $sectionId = (int) $id;
+        // التقط القيم صراحةً من الراوت
+        $locale    = $request->route('locale') ?? app()->getLocale();
+        $sectionId = (int) $request->route('section');
+
+        if ($sectionId <= 0) {
+            abort(404);
+        }
+
+        $force = $request->boolean('refresh');
 
         return $this->servicesPage->render($locale, [
             'section_id' => $sectionId,
@@ -74,29 +79,38 @@ class ShowController extends Controller
         ]);
     }
 
-    public function showServicesDetailesPage(Request $request, $id)
+
+    public function showServicesDetailesPage(Request $request)
     {
-        $locale    = app()->getLocale();
-        $force     = $request->boolean('refresh');
-        $serviceId = (int) $id;
+        // التقط القيم صراحةً من الراوت
+        $locale    = $request->route('locale') ?? app()->getLocale();
+        $serviceId = (int) $request->route('service'); // اسم الباراميتر من الراوت
+
+        if ($serviceId <= 0) {
+            abort(404);
+        }
 
         return $this->serviceDetailsPage->render($locale, [
             'service_id' => $serviceId,
-            'refresh'    => $force,
+            'refresh'    => $request->boolean('refresh'),
         ]);
     }
 
-    public function showArticlePage(Request $request, $id)
+    public function showArticlePage(Request $request)
     {
-        $locale    = app()->getLocale();
-        $force     = $request->boolean('refresh');
-        $articleId = (int) $id;
+        $locale    = $request->route('locale') ?? app()->getLocale();
+        $articleId = (int) $request->route('id');
+
+        if ($articleId <= 0) {
+            abort(404);
+        }
 
         return $this->articlePage->render($locale, [
             'article_id' => $articleId,
-            'refresh'    => $force,
+            'refresh'    => $request->boolean('refresh'),
         ]);
     }
+
 
     public function showContactInfoPage(Request $request)
     {
@@ -106,15 +120,21 @@ class ShowController extends Controller
         return $this->contactPage->render($locale, ['refresh' => $force]);
     }
 
-    public function showVolunteerPage(Request $request, $vol)
+    public function showVolunteerPage(Request $request)
     {
-        $locale = app()->getLocale();
-        $force  = $request->boolean('refresh');
-        $id     = (int) $vol;
+        // إقرأ البادئة والـ id من الراوت مباشرة
+        $locale = $request->route('locale') ?? app()->getLocale();
+
+        // {vol} اختياري في الراوت عندك، لذلك قد يكون null
+        $volId  = $request->route('vol');
+        $id     = is_numeric($volId) ? (int) $volId : 0;
+
+        // إن أردتها إلزامية:
+        // if ($id <= 0) abort(404);
 
         return $this->volunteerPage->render($locale, [
-            'volunteer_id' => $id,
-            'refresh'      => $force,
+            'volunteer_id' => $id,                        // 0 لو لم يُمرَّر
+            'refresh'      => $request->boolean('refresh'),
         ]);
     }
 }

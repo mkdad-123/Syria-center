@@ -1,45 +1,67 @@
-﻿// تأكد من أن الكود ينفذ بعد تحميل الصفحة
-document.addEventListener('DOMContentLoaded', function() {
-    // وظيفة لتعيين الكوكي
-    function setLanguageCookie(lang) {
-        document.cookie = `lang=${lang};path=/;max-age=${30 * 24 * 60 * 60};SameSite=Lax`;
+﻿/* about-us.js — بدون كوكي لغة ولا ?lang=، منع وميض اللغة */
+(() => {
+    "use strict";
+
+    const $ = (s, r = document) => r.querySelector(s);
+    const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+    // يبني رابط بنفس المسار لكن يبدّل أول سيغمنت إلى ar|en
+    function buildLocaleUrl(newLocale) {
+        const { pathname, search, hash, origin } = window.location;
+        const parts = pathname.split("/").filter(Boolean);
+        if (parts.length && (parts[0] === "ar" || parts[0] === "en")) {
+            parts[0] = newLocale;
+        } else {
+            parts.unshift(newLocale);
+        }
+        return origin + "/" + parts.join("/") + search + hash;
     }
 
-    // وظيفة لقراءة الكوكي
-    function getLanguageCookie() {
-        return document.cookie.split('; ').find(row => row.startsWith('lang='))?.split('=')[1];
-    }
+    function setupLanguageSwitcher() {
+        const switcher = $(".language-switcher");
+        if (!switcher) return;
 
-    // تبديل اللغة عند النقر على الروابط
-    document.querySelectorAll('[data-lang]').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const lang = this.getAttribute('data-lang');
-            setLanguageCookie(lang);
-            window.location.reload();
+        const btn = $(".language-btn", switcher);
+        const menu = $(".language-menu", switcher);
+
+        if (btn && menu) {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault(); e.stopPropagation();
+                menu.style.display = menu.style.display === "block" ? "none" : "block";
+            });
+            document.addEventListener("click", (e) => {
+                if (!switcher.contains(e.target)) menu.style.display = "none";
+            });
+            menu.addEventListener("click", (e) => e.stopPropagation());
+        }
+
+        $$("[data-lang]", switcher).forEach((node) => {
+            node.addEventListener("click", (e) => {
+                e.preventDefault();
+                const newLocale = node.getAttribute("data-lang");
+                if (!/^(ar|en)$/.test(newLocale)) return;
+                window.location.assign(buildLocaleUrl(newLocale)); // تحميل HTML الصحيح فورًا
+            });
         });
+    }
+
+    function setupBackgroundSlideshow(intervalMs = 5000) {
+        const imgs = $$(".background-slideshow img");
+        if (!imgs.length) return;
+        if (imgs.length === 1) { imgs[0].classList.add("active"); return; }
+
+        let idx = 0;
+        imgs[idx].classList.add("active");
+        setInterval(() => {
+            const prev = idx;
+            idx = (idx + 1) % imgs.length;
+            imgs[prev].classList.remove("active");
+            imgs[idx].classList.add("active");
+        }, intervalMs);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        setupLanguageSwitcher();
+        setupBackgroundSlideshow(5000);
     });
-
-    // التحقق من اللغة المفضلة عند التحميل
-    const preferredLang = getLanguageCookie();
-    const currentLang = document.documentElement.lang;
-
-    if (preferredLang && preferredLang !== currentLang) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('lang', preferredLang);
-        window.location.href = url.toString();
-    }
-
-    // تغيير خلفية الصفحة تلقائياً
-    const backgroundImages = document.querySelectorAll('.background-slideshow img');
-    let currentImage = 0;
-
-    function changeBackground() {
-        backgroundImages[currentImage].classList.remove('active');
-        currentImage = (currentImage + 1) % backgroundImages.length;
-        backgroundImages[currentImage].classList.add('active');
-    }
-
-    setInterval(changeBackground, 5000);
-});
-
+})();

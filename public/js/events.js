@@ -1,136 +1,131 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
-    // تحسين: تخزين العناصر المكررة في متغيرات
-    const docEl = document.documentElement;
-    const bodyEl = document.body;
+﻿/* about-us.js — نسخة محسّنة ونظيفة
+   - بدون كوكي لغة ولا ?lang= (منع وميض اللغة)
+   - تبديل اللغة بتعديل البادئة (/ar|/en) مباشرة
+   - سلايد شو خلفية + نوافذ مودال للأحداث + زر "عرض المزيد"
+*/
+(() => {
+    "use strict";
 
-    // وظيفة لتعيين الكوكي
-    function setLanguageCookie(lang) {
-        document.cookie = `lang=${lang};path=/;max-age=${30 * 24 * 60 * 60};SameSite=Lax`;
-    }
+    // ---------- أدوات صغيرة ----------
+    const $ = (s, r = document) => r.querySelector(s);
+    const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-    // وظيفة لقراءة الكوكي
-    function getLanguageCookie() {
-        const cookies = document.cookie.split('; ');
-        for (let i = 0; i < cookies.length; i++) {
-            if (cookies[i].startsWith('lang=')) {
-                return cookies[i].split('=')[1];
-            }
+    // يبني رابط بنفس المسار مع تبديل أول سيغمنت إلى ar|en
+    function buildLocaleUrl(newLocale) {
+        const { pathname, search, hash, origin } = window.location;
+        const parts = pathname.split("/").filter(Boolean);
+        if (parts.length && (parts[0] === "ar" || parts[0] === "en")) {
+            parts[0] = newLocale;
+        } else {
+            parts.unshift(newLocale);
         }
-        return null;
+        return origin + "/" + parts.join("/") + search + hash;
     }
 
-    // إصلاح: تبديل اللغة - استخدام الحدث بشكل صحيح
-    document.querySelectorAll('[data-lang]').forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const lang = this.getAttribute('data-lang');
-            setLanguageCookie(lang);
-            window.location.reload();
+    // ---------- تبديل اللغة من .language-switcher ----------
+    function setupLanguageSwitcher() {
+        const switcher = $(".language-switcher");
+        if (!switcher) return;
+
+        const btn = $(".language-btn", switcher);
+        const menu = $(".language-menu", switcher);
+
+        if (btn && menu) {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault(); e.stopPropagation();
+                menu.style.display = menu.style.display === "block" ? "none" : "block";
+            });
+            document.addEventListener("click", (e) => {
+                if (!switcher.contains(e.target)) menu.style.display = "none";
+            });
+            menu.addEventListener("click", (e) => e.stopPropagation());
+        }
+
+        $$("[data-lang]", switcher).forEach((node) => {
+            node.addEventListener("click", (e) => {
+                e.preventDefault();
+                const newLocale = node.getAttribute("data-lang");
+                if (!/^(ar|en)$/.test(newLocale)) return;
+                window.location.assign(buildLocaleUrl(newLocale)); // HTML صحيح فورًا
+            });
         });
-    });
-
-    // التحقق من اللغة المفضلة عند التحميل
-    const preferredLang = getLanguageCookie();
-    const currentLang = docEl.lang;
-
-    if (preferredLang && preferredLang !== currentLang) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('lang', preferredLang);
-        window.location.href = url.toString();
     }
 
-    // إصلاح: تغيير خلفية الصفحة
-    const backgroundImages = document.querySelectorAll('.background-slideshow img');
-    let currentImage = 0;
-    let slideshowInterval;
+    // ---------- سلايد شو الخلفية ----------
+    function setupBackgroundSlideshow(intervalMs = 5000) {
+        const imgs = $$(".background-slideshow img");
+        if (!imgs.length) return;
+        if (imgs.length === 1) { imgs[0].classList.add("active"); return; }
 
-    function initSlideshow() {
-        if (backgroundImages.length > 0) {
-            clearInterval(slideshowInterval);
-            slideshowInterval = setInterval(changeBackground, 5000);
-        }
+        let idx = 0;
+        imgs[idx].classList.add("active");
+        setInterval(() => {
+            const prev = idx;
+            idx = (idx + 1) % imgs.length;
+            imgs[prev].classList.remove("active");
+            imgs[idx].classList.add("active");
+        }, intervalMs);
     }
 
-    function changeBackground() {
-        if (backgroundImages.length > 0) {
-            backgroundImages[currentImage]?.classList?.remove('active');
-            currentImage = (currentImage + 1) % backgroundImages.length;
-            backgroundImages[currentImage]?.classList?.add('active');
+    // ---------- نوافذ مودال للأحداث ----------
+    function setupEventModals() {
+        const body = document.body;
+
+        function openEventModal(eventId) {
+            const modal = document.getElementById("eventModal" + eventId);
+            if (!modal) return;
+            modal.style.display = "block";
+            body.style.overflow = "hidden";
+            body.style.position = "fixed";
         }
-    }
 
-    // بدء العرض المتحرك بعد التأكد من تحميل الصور
-    if (backgroundImages.length > 0) {
-        initSlideshow();
-    }
-
-    // إصلاح: وظائف النافذة العائمة
-    window.openEventModal = function (eventId) {
-        const modal = document.getElementById('eventModal' + eventId);
-        if (modal) {
-            modal.style.display = 'block';
-            bodyEl.style.overflow = 'hidden';
-            bodyEl.style.position = 'fixed';
+        function closeEventModal(eventId) {
+            const modal = document.getElementById("eventModal" + eventId);
+            if (!modal) return;
+            modal.style.display = "none";
+            body.style.overflow = "auto";
+            body.style.position = "static";
         }
-    };
 
-    window.closeEventModal = function (eventId) {
-        const modal = document.getElementById('eventModal' + eventId);
-        if (modal) {
-            modal.style.display = 'none';
-            bodyEl.style.overflow = 'auto';
-            bodyEl.style.position = 'static';
-        }
-    };
+        // اجعل الدوال متاحة عالميًا إذا كان القالب يناديها بالـHTML
+        window.openEventModal = openEventModal;
+        window.closeEventModal = closeEventModal;
 
-    // إصلاح: إغلاق النافذة عند النقر خارجها
-    document.addEventListener('click', function (e) {
-        if (e.target.classList.contains('event-modal')) {
-            const modalId = e.target.id.replace('eventModal', '');
-            window.closeEventModal(modalId);
-        }
-    });
-
-    // إصلاح: إغلاق النافذة عند الضغط على Escape
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
-            const openModal = document.querySelector('.event-modal[style*="display: block"]');
-            if (openModal) {
-                const modalId = openModal.id.replace('eventModal', '');
-                window.closeEventModal(modalId);
+        // إغلاق عند النقر خارج المودال
+        document.addEventListener("click", (e) => {
+            if (e.target.classList?.contains("event-modal")) {
+                const modalId = e.target.id.replace("eventModal", "");
+                closeEventModal(modalId);
             }
-        }
-    });
-
-    // إصلاح: زر "عرض المزيد"
-    document.querySelectorAll('.details-btn').forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const eventId = this.getAttribute('data-event-id') || this.href.split('/').pop();
-            window.openEventModal(eventId);
         });
-    });
-});
 
-document.addEventListener('DOMContentLoaded', function () {
-    const header = document.getElementById('siteHeader') || document.querySelector('.header');
+        // إغلاق عند ESC
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                const openModal = document.querySelector('.event-modal[style*="display: block"]');
+                if (openModal) {
+                    const modalId = openModal.id.replace("eventModal", "");
+                    closeEventModal(modalId);
+                }
+            }
+        });
 
-    // تعويض ارتفاع الهيدر الحقيقي
-    function setHeaderPad() {
-        if (!header) return;
-        document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+        // زر "عرض المزيد"
+        $$(".details-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                const directId = btn.getAttribute("data-event-id");
+                const fromHref = btn.href ? btn.href.split("/").pop() : null;
+                const eventId = directId || fromHref;
+                if (eventId) openEventModal(eventId);
+            });
+        });
     }
-    setHeaderPad();
-    addEventListener('resize', setHeaderPad);
-    addEventListener('load', setHeaderPad);
 
-    // أخفِ الهيدر عند أي نزول، وأظهره فقط عند أعلى الصفحة
-    function toggleHeader() {
-        if (window.scrollY > 0) header.classList.add('is-hidden');
-        else header.classList.remove('is-hidden');
-    }
-    toggleHeader();
-    document.addEventListener('scroll', toggleHeader, {
-        passive: true
+    // ---------- تشغيل ----------
+    document.addEventListener("DOMContentLoaded", () => {
+        setupLanguageSwitcher();
+        setupBackgroundSlideshow(5000);
+        setupEventModals();
     });
-});
+})();
