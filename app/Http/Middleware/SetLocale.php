@@ -12,25 +12,25 @@ use Carbon\Carbon;
 
 class SetLocale
 {
-     public function handle($request, Closure $next)
+    public function handle($request, Closure $next)
     {
-        $allowed = ['ar','en'];
+        $routeLocale = $request->route('locale');
+        $cookieLocale = Cookie::get('lang');
+        $locale = $routeLocale ?? $cookieLocale ?? 'ar';
 
-        // المصدر الوحيد: ?lang= ثم كوكي lang ثم افتراضي ar
-        $locale = $request->query('lang') ?? Cookie::get('lang') ?? 'ar';
-        if (!in_array($locale, $allowed, true)) {
+        if (! in_array($locale, ['ar', 'en'])) {
             $locale = 'ar';
         }
 
-        // لو وصل ?lang= حدّث الكوكي (سنة)
-        if ($request->has('lang') && Cookie::get('lang') !== $locale) {
-            Cookie::queue(Cookie::make('lang', $locale, 60*24*365, '/', null, false, false, false, 'Lax'));
-        }
-
         app()->setLocale($locale);
-        Carbon::setLocale($locale);
+        \Carbon\Carbon::setLocale($locale);
         View::share('locale', $locale);
         View::share('dir', $locale === 'ar' ? 'rtl' : 'ltr');
+
+        // ثبّت الكوكي لسنة
+        if ($cookieLocale !== $locale) {
+            Cookie::queue(Cookie::make('lang', $locale, 60 * 24 * 365, '/', null, false, false, false, 'Lax'));
+        }
 
         return $next($request);
     }

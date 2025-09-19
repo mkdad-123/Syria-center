@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale()==='ar' ? 'rtl' : 'ltr' }}">
+<html lang="{{ $locale }}" dir="{{ $locale == 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
+    <link rel="icon" href="{{ asset('logo.png') }}">
+
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 
@@ -10,11 +12,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>{{ __('main.site_name') }} - {{ __('titles.sections') }}</title>
 
-    <!-- Preload الموارد الحرجة -->
     <link rel="preload" href="{{ asset('css/sections.css') }}" as="style">
     <link rel="preload" href="{{ asset('/logo.png') }}" as="image" type="image/png">
 
-    <!-- تحميل Font Awesome بشكل غير متزامن -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         media="print" onload="this.media='all'">
@@ -22,22 +22,108 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     </noscript>
 
-    <!-- تحسين تحميل الصور -->
     <link rel="preload" href="{{ asset('/ima1.webp') }}" as="image" type="image/webp">
     <link rel="preload" href="{{ asset('/ima2.webp') }}" as="image" type="image/webp">
     <link rel="preload" href="{{ asset('/ima3.webp') }}" as="image" type="image/webp">
 
-    <!-- تحميل CSS بشكل غير متزامن -->
     <link href="{{ asset('css/sections.css') }}" rel="stylesheet" media="print" onload="this.media='all'">
+
+    <style>
+        .logo-container,
+        .header,
+        .section-title {
+            opacity: 0;
+            animation: fadeIn .5s forwards
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1
+            }
+        }
+
+        :root {
+            --header-h: 78px;
+            --header-h-tablet: 112px;
+            --header-h-mobile: 160px;
+            --safe-top: env(safe-area-inset-top, 0px)
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+            transition: transform .35s ease, opacity .25s ease;
+            will-change: transform
+        }
+
+        .header.is-hidden {
+            transform: translateY(calc(-100% - var(--safe-top)));
+            opacity: 0;
+            pointer-events: none
+        }
+
+        main {
+            padding-top: var(--header-dyn, calc(var(--header-h) + var(--safe-top) + 8px))
+        }
+
+        :where(section, .section, [id]) {
+            scroll-margin-top: calc(var(--header-dyn, var(--header-h)) + 16px)
+        }
+
+        @media (max-width:992px) {
+            main {
+                padding-top: calc(var(--header-dyn, var(--header-h-tablet)) + var(--safe-top) + 8px)
+            }
+
+            :where(section, .section, [id]) {
+                scroll-margin-top: calc(var(--header-dyn, var(--header-h-tablet)) + 16px)
+            }
+        }
+
+        @media (max-width:768px) {
+            main {
+                padding-top: calc(var(--header-dyn, var(--header-h-mobile)) + var(--safe-top) + 8px)
+            }
+
+            :where(section, .section, [id]) {
+                scroll-margin-top: calc(var(--header-dyn, var(--header-h-mobile)) + 16px)
+            }
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            .header {
+                transition: none
+            }
+        }
+    </style>
+
+    @php
+        /**
+         * أنشئ رابطاً لنفس الصفحة مع استبدال بادئة اللغة فقط (ar/en)
+         */
+        $swapLocaleUrl = function (string $lang) {
+            $segments = request()->segments(); // مثال: ['ar','home','sections']
+            if (!empty($segments) && in_array($segments[0], ['ar', 'en'], true)) {
+                $segments[0] = $lang;
+            } else {
+                array_unshift($segments, $lang);
+            }
+            return url(implode('/', $segments));
+        };
+    @endphp
 </head>
 
 <body>
-    <!-- تحسين خلفية Slideshow -->
     <div class="background-slideshow">
-        <img src="{{ asset('/ima1.webp') }}" class="active" alt="خلفية 1" loading="lazy" width="1920"
+        <img src="{{ asset('/ima1.webp') }}" class="active" alt="" loading="lazy" width="1920"
             height="1080">
-        <img src="{{ asset('/ima2.webp') }}" alt="خلفية 2" loading="lazy" width="1920" height="1080">
-        <img src="{{ asset('/ima3.webp') }}" alt="خلفية 3" loading="lazy" width="1920" height="1080">
+        <img src="{{ asset('/ima2.webp') }}" alt="" loading="lazy" width="1920" height="1080">
+        <img src="{{ asset('/ima3.webp') }}" alt="" loading="lazy" width="1920" height="1080">
     </div>
 
     <header id="siteHeader" class="header">
@@ -52,50 +138,67 @@
                     <span class="org-name-line2">{{ __('main.site_subname') }}</span>
                 </div>
             </div>
+
             <div class="buttons-container">
                 <nav class="nav">
                     <ul class="nav-list">
-                        <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
-                        <li><a href="{{ route('about-us') }}">{{ __('main.menu.about') }}</a></li>
-                        <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
-                        <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
-                        <li class="language-switcher" style="list-style: none;">
-                            <button class="language-btn" aria-label="Change language">
+                        {{-- ✅ كل الروابط تمرّر locale --}}
+                        <li><a href="{{ route('home', ['locale' => $locale]) }}">{{ __('main.menu.home') }}</a></li>
+                        <li><a href="{{ route('about-us', ['locale' => $locale]) }}">{{ __('main.menu.about') }}</a>
+                        </li>
+                        <li><a href="{{ route('events', ['locale' => $locale]) }}">{{ __('main.menu.news') }}</a></li>
+                        <li><a
+                                href="{{ route('compliants', ['locale' => $locale]) }}">{{ __('main.menu.contact') }}</a>
+                        </li>
+
+                        {{-- ✅ مبدّل اللغة: يبدّل البادئة ويبقيك بنفس الصفحة --}}
+                        <li class="language-switcher" style="list-style:none;">
+                            <button class="language-btn" type="button" aria-label="Change language">
                                 <i class="fas fa-globe"></i>
-                                <span class="current-lang">{{ $locale == 'ar' ? 'العربية' : 'English' }}</span>
+                                <span class="current-lang">{{ $locale === 'ar' ? 'العربية' : 'English' }}</span>
                                 <i class="fas fa-chevron-down"></i>
                             </button>
                             <ul class="language-menu">
-                                <li><a href="#" data-lang="ar"><i class="fas fa-language"></i> العربية</a></li>
-                                <li><a href="#" data-lang="en"><i class="fas fa-language"></i> English</a></li>
+                                <li><a href="{{ $swapLocaleUrl('ar') }}"><i class="fas fa-language"></i> العربية</a>
+                                </li>
+                                <li><a href="{{ $swapLocaleUrl('en') }}"><i class="fas fa-language"></i> English</a>
+                                </li>
                             </ul>
                         </li>
-                        <li class="login-btn">
-                            <a href="{{ route('logout') }}"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                {{ __('main.buttons.logout') }}
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                style="display: none;">
-                                @csrf
-                            </form>
-                        </li>
+
+                        {{-- دخول/خروج (إن أردت إبقائها) --}}
+                        @if (Auth::guard('custom')->check())
+                            <li class="login-btn">
+                                <a href="{{ route('logout', ['locale' => $locale]) }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    {{ __('main.buttons.logout') }}
+                                </a>
+                                <form id="logout-form" action="{{ route('logout', ['locale' => $locale]) }}"
+                                    method="POST" style="display:none;">
+                                    @csrf
+                                </form>
+                            </li>
+                        @else
+                            <li class="login-btn"><a
+                                    href="{{ route('login', ['locale' => $locale]) }}">{{ __('main.buttons.login') }}</a>
+                            </li>
+                        @endif
                     </ul>
                 </nav>
             </div>
         </div>
     </header>
 
-    <!-- القسم الرئيسي -->
     <main>
         <section class="section">
             <div class="container">
                 <h1 class="section-title">{{ __('main.titles.sections') }}</h1>
+
                 <div class="sections-container">
                     @foreach ($sections as $index => $section)
                         <div class="section-card" style="animation-delay: {{ $index * 0.1 }}s">
                             <div class="section-image-container">
-                                @if ($section['image'])
+                                @if (!empty($section['image']))
                                     <img src="{{ asset('storage/' . $section['image']) }}"
                                         alt="{{ $section['name'] }}" class="section-image" loading="lazy"
                                         width="300" height="200">
@@ -105,47 +208,57 @@
                                         width="300" height="200">
                                 @endif
                             </div>
+
                             <div class="section-content">
                                 <h3 class="section-title-card">{{ $section['name'] }}</h3>
-                                <span class="services-count">{{ count($section['services']) }}
-                                    {{ __('main.titles.services_count') }}</span>
-                                <p class="section-description">{{ Str::limit($section['description'], 100) }}</p>
-                                <a href="{{ route('services', ['section' => $section['id']]) }}"
+                                <span class="services-count">
+                                    {{ count($section['services']) }} {{ __('main.titles.services_count') }}
+                                </span>
+                                <p class="section-description">
+                                    {{ \Illuminate\Support\Str::limit($section['description'] ?? '', 100) }}
+                                </p>
+
+                                {{-- ✅ رابط الخدمات مع locale والـ section --}}
+                                <a href="{{ route('services', ['locale' => $locale, 'section' => $section['id']]) }}"
+
                                     class="explore-btn">{{ __('main.buttons.explore') }}</a>
                             </div>
                         </div>
                     @endforeach
                 </div>
+
             </div>
         </section>
     </main>
 
-    <!-- تذييل الصفحة -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <!-- قسم الشعار والمعلومات -->
                 <div class="footer-logo">
-                    <img src="{{ asset('logo.png') }}"  alt="{{ __('main.site_name') }}" width="50" height="50"
-                        loading="lazy">
+                    <img src="{{ asset('logo.png') }}" alt="{{ __('main.site_name') }}" width="50"
+                        height="50" loading="lazy">
                     <p>{{ __('main.site_name') }}<br>
-                        <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span>
+                        <span style="color:var(--secondary-color);">{{ __('main.site_subname') }}</span>
                     </p>
                 </div>
 
-                <!-- قسم الروابط السريعة -->
                 <div class="footer-links">
                     <h4>{{ __('main.footer.quick_links') }}</h4>
                     <ul>
-                        <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
-                        <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
-                        <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
-                        <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
+                        <li><a href="{{ route('events', ['locale' => $locale]) }}">{{ __('main.menu.news') }}</a>
+                        </li>
+                        <li><a
+                                href="{{ route('sections', ['locale' => $locale]) }}">{{ __('main.menu.services') }}</a>
+                        </li>
+                        <li><a
+                                href="{{ route('compliants', ['locale' => $locale]) }}">{{ __('main.menu.contact') }}</a>
+                        </li>
+                        <li><a href="{{ route('home', ['locale' => $locale]) }}">{{ __('main.menu.home') }}</a>
+                        </li>
                     </ul>
                 </div>
             </div>
 
-            <!-- حقوق النشر ووسائل التواصل الاجتماعي -->
             <div class="footer-bottom">
                 <p>{{ __('main.footer.copyright') }} &copy; {{ date('Y') }}</p>
                 <div class="social-icons">
@@ -174,13 +287,31 @@
         </div>
     </footer>
 
-    <!-- تحميل JavaScript بشكل غير متزامن -->
     <script src="{{ asset('js/sections.js') }}" defer></script>
 
-    <!-- Preload الصور التالية للخلفية -->
     <link rel="preload" href="{{ asset('/ima2.webp') }}" as="image" media="(min-width: 800px)">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.getElementById('siteHeader') || document.querySelector('.header');
 
+            function setHeaderPad() {
+                if (!header) return;
+                document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+            }
+            setHeaderPad();
+            addEventListener('resize', setHeaderPad);
+            addEventListener('load', setHeaderPad);
 
+            function toggleHeader() {
+                if (window.scrollY > 0) header.classList.add('is-hidden');
+                else header.classList.remove('is-hidden');
+            }
+            toggleHeader();
+            document.addEventListener('scroll', toggleHeader, {
+                passive: true
+            });
+        });
+    </script>
 </body>
 
 </html>

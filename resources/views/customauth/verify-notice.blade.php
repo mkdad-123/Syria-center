@@ -1,10 +1,12 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
+        <link rel="icon" href="{{ asset('logo.png') }}">
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>تفعيل البريد - المركز السوري للتنمية المستدامة والتمكين المجتمعي</title>
+    <title data-translate="page_title">تفعيل البريد - المركز السوري للتنمية المستدامة والتمكين المجتمعي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
@@ -37,13 +39,12 @@
             background: #f6f7f9;
         }
 
-        /* خلفية ناعمة + فقاعات */
         body::before {
             content: '';
             position: fixed;
             inset: 0;
             background: linear-gradient(135deg, rgba(46, 134, 171, .10) 0%, rgba(241, 143, 1, .10) 100%);
-            z-index: -2;
+            z-index: -2
         }
 
         .bg-animation {
@@ -66,8 +67,7 @@
             width: 300px;
             height: 300px;
             top: 10%;
-            left: 10%;
-            animation-delay: 0s
+            left: 10%
         }
 
         .bg-animation div:nth-child(2) {
@@ -113,7 +113,6 @@
             margin-inline: auto
         }
 
-        /* الهيدر (مطابق لصفحة تسجيل الدخول) */
         .header {
             position: sticky;
             top: 0;
@@ -153,13 +152,40 @@
             text-overflow: ellipsis
         }
 
-        /* المحتوى الرئيسي */
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .language-btn {
+            background: none;
+            border: 0;
+            cursor: pointer;
+            font-size: .95rem;
+            color: var(--dark-color);
+            padding: 8px 10px;
+            border-radius: 6px;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .language-btn:hover {
+            background: rgba(0, 0, 0, .05)
+        }
+
+        .language-btn.active {
+            color: var(--primary-color);
+            font-weight: 700
+        }
+
         .page {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: calc(100vh - 70px);
-            padding: 40px 0;
+            padding: 40px 0
         }
 
         .card {
@@ -262,7 +288,6 @@
             text-decoration: underline
         }
 
-        /* تجاوب */
         @media (max-width:992px) {
             .logo img {
                 height: 48px
@@ -332,8 +357,6 @@
 </head>
 
 <body>
-
-    <!-- خلفية متحركة -->
     <div class="bg-animation">
         <div></div>
         <div></div>
@@ -341,65 +364,137 @@
         <div></div>
     </div>
 
-    <!-- هيدر مع الشعار (مطابق للّوجين) -->
     <header class="header">
         <div class="container">
             <div class="logo-container">
                 <div class="logo"><img src="{{ asset('logo.png') }}"
                         alt="شعار المركز السوري للتنمية المستدامة والتمكين المجتمعي"></div>
-                <div class="org-name">المركز السوري للتنمية المستدامة والتمكين المجتمعي</div>
+                <div class="org-name" data-translate="org_name">المركز السوري للتنمية المستدامة والتمكين المجتمعي</div>
+            </div>
+
+            <!-- مُحوّل لغة أمامي (بدون مسارات/داتا خارجية) -->
+            <div class="language-switcher" aria-label="Language switcher">
+                <button type="button" class="language-btn active" data-lang="ar">العربية</button>
+                <button type="button" class="language-btn" data-lang="en">English</button>
             </div>
         </div>
     </header>
 
-    <!-- المحتوى -->
     <main class="page">
         <div class="card">
-            <h2>رجاءً فعّل بريدك الإلكتروني</h2>
+            <h2 data-translate="heading">رجاءً فعّل بريدك الإلكتروني</h2>
 
-            {{-- نعرض البريد: من جلسة auth إن وُجدت، أو من session("unverified_email") للمسجّل غير المُسجل دخولاً --}}
             <p class="muted">
-                أرسلنا رابط تفعيل إلى:
-                <b>{{ optional(auth('custom')->user())->email ?? (session('unverified_email') ?? 'بريدك الإلكتروني') }}</b>
+                <span data-translate="sent_to">أرسلنا رابط تفعيل إلى:</span>
+                <b
+                    id="user-email">{{ optional(auth('custom')->user())->email ?? (session('unverified_email') ?? 'بريدك الإلكتروني') }}</b>
             </p>
 
-            {{-- رسائل الحالة --}}
+            {{-- رسائل الحالة (النص يُترجم عبر JS) --}}
             @if (session('status') === 'verification-link-sent')
-                <div class="success"><i class="fa-solid fa-check-circle"></i> تم إرسال رابط تفعيل جديد إلى بريدك.</div>
+                <div class="success"><i class="fa-solid fa-check-circle"></i> <span
+                        data-translate="status_verification_link_sent">تم إرسال رابط تفعيل جديد إلى بريدك.</span></div>
             @elseif (session('status') === 'email-verified')
-                <div class="success"><i class="fa-solid fa-check-circle"></i> تم تفعيل بريدك بنجاح.</div>
+                <div class="success"><i class="fa-solid fa-check-circle"></i> <span
+                        data-translate="status_email_verified">تم تفعيل بريدك بنجاح.</span></div>
             @elseif (session('status') === 'email-already-verified')
-                <div class="success"><i class="fa-solid fa-circle-info"></i> هذا البريد مُفعّل مسبقًا.</div>
+                <div class="success"><i class="fa-solid fa-circle-info"></i> <span
+                        data-translate="status_email_already_verified">هذا البريد مُفعّل مسبقًا.</span></div>
             @endif
 
-            <div class="warn"><i class="fa-solid fa-triangle-exclamation"></i> إذا لم يصلك البريد خلال دقائق، تحقّق من
-                مجلد الرسائل غير المرغوب فيها (Spam).</div>
+            <div class="warn">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span data-translate="warn_text">إذا لم يصلك البريد خلال دقائق، تحقّق من مجلد الرسائل غير المرغوب فيها
+                    (Spam).</span>
+            </div>
 
-            {{-- إن كان المستخدم مسجلاً دخولاً (auth:custom) نُظهر زر إعادة الإرسال --}}
             @auth('custom')
                 @if (!auth('custom')->user()->hasVerifiedEmail())
                     <form class="row" method="POST" action="{{ route('verification.send') }}">
                         @csrf
-                        <button type="submit">إعادة إرسال رابط التفعيل</button>
-                        <a href="{{ route('home') }}" class="link">العودة للصفحة الرئيسية</a>
+                        <button type="submit" data-translate="resend_btn">إعادة إرسال رابط التفعيل</button>
+                        <a href="{{ route('home') }}" class="link" data-translate="back_home">العودة للصفحة الرئيسية</a>
                     </form>
                 @else
-                    <p><a href="{{ route('home') }}" class="link">الانتقال إلى الصفحة الرئيسية</a></p>
+                    <p><a href="{{ route('home') }}" class="link" data-translate="go_home">الانتقال إلى الصفحة
+                            الرئيسية</a></p>
                 @endif
             @endauth
 
-            {{-- إن لم يكن مسجلاً دخولاً: لا نعرض زر إعادة الإرسال (المسار خلف auth) --}}
             @guest('custom')
                 <p class="muted">
-                    لإعادة إرسال الرابط لاحقًا يمكنك
-                    <a href="{{ route('login') }}" class="link">تسجيل الدخول</a>
-                    ثم العودة إلى هذه الصفحة.
+                    <span data-translate="guest_hint_1">لإعادة إرسال الرابط لاحقًا يمكنك</span>
+                    <a href="{{ route('login') }}" class="link" data-translate="guest_hint_2">تسجيل الدخول</a>
+                    <span data-translate="guest_hint_3">ثم العودة إلى هذه الصفحة.</span>
                 </p>
-                <p><a href="{{ route('home') }}" class="link">العودة للصفحة الرئيسية</a></p>
+                <p><a href="{{ route('home') }}" class="link" data-translate="back_home">العودة للصفحة الرئيسية</a></p>
             @endguest
         </div>
     </main>
 
+    <script>
+        // قاموس الترجمة داخل نفس البليد — بدون أي اعتماد على ملفات أو قاعدة بيانات
+        const translations = {
+            ar: {
+                page_title: "تفعيل البريد - المركز السوري للتنمية المستدامة والتمكين المجتمعي",
+                org_name: "المركز السوري للتنمية المستدامة والتمكين المجتمعي",
+                heading: "رجاءً فعّل بريدك الإلكتروني",
+                sent_to: "أرسلنا رابط تفعيل إلى:",
+                status_verification_link_sent: "تم إرسال رابط تفعيل جديد إلى بريدك.",
+                status_email_verified: "تم تفعيل بريدك بنجاح.",
+                status_email_already_verified: "هذا البريد مُفعّل مسبقًا.",
+                warn_text: "إذا لم يصلك البريد خلال دقائق، تحقّق من مجلد الرسائل غير المرغوب فيها (Spam).",
+                resend_btn: "إعادة إرسال رابط التفعيل",
+                back_home: "العودة للصفحة الرئيسية",
+                go_home: "الانتقال إلى الصفحة الرئيسية",
+                guest_hint_1: "لإعادة إرسال الرابط لاحقًا يمكنك",
+                guest_hint_2: "تسجيل الدخول",
+                guest_hint_3: "ثم العودة إلى هذه الصفحة."
+            },
+            en: {
+                page_title: "Verify Email — Syrian Center for Sustainable Development & Community Empowerment",
+                org_name: "Syrian Center for Sustainable Development & Community Empowerment",
+                heading: "Please verify your email",
+                sent_to: "We sent a verification link to:",
+                status_verification_link_sent: "A new verification link has been sent to your email.",
+                status_email_verified: "Your email has been verified successfully.",
+                status_email_already_verified: "This email is already verified.",
+                warn_text: "If you don’t receive the email within minutes, please check your Spam folder.",
+                resend_btn: "Resend verification link",
+                back_home: "Back to Home",
+                go_home: "Go to Home",
+                guest_hint_1: "To resend the link later, you can",
+                guest_hint_2: "log in",
+                guest_hint_3: "and come back to this page."
+            }
+        };
+
+        // تفعيل التبديل بين اللغتين (بدون استدعاء خوادم)
+        document.querySelectorAll('.language-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+
+                // زر نشط
+                document.querySelectorAll('.language-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                // اتجاه الصفحة وعلامة اللغة
+                document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+                document.documentElement.lang = lang;
+
+                // تحديث كل العناصر التي تحمل data-translate
+                document.querySelectorAll('[data-translate]').forEach(el => {
+                    const key = el.getAttribute('data-translate');
+                    if (translations[lang][key]) el.textContent = translations[lang][key];
+                });
+
+                // تحديث العنوان (title)
+                if (translations[lang].page_title) {
+                    document.title = translations[lang].page_title;
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

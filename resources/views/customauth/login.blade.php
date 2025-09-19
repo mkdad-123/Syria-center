@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{{ $locale ?? app()->getLocale() }}" dir="{{ ($locale ?? app()->getLocale()) === 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
+    <link rel="icon" href="{{ asset('logo.png') }}">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - المركز السوري للتنمية المستدامة</title>
+    <title>{{ __('auth.login_title') }} - {{ __('main.site_name') }}</title>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
-        /* ======================
-     متغيّرات عامّة
-     ====================== */
         :root {
             --primary-color: #2E86AB;
             --secondary-color: #F18F01;
@@ -23,7 +24,6 @@
             --header-border: rgba(0, 0, 0, .06);
         }
 
-        /* الأساسيات */
         * {
             margin: 0;
             padding: 0;
@@ -34,80 +34,17 @@
             color: var(--dark-color);
             line-height: 1.6;
             min-height: 100vh;
-            position: relative;
             overflow-x: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* خلفية ناعمة + فقاعات */
+        /* خلفية ناعمة */
         body::before {
             content: '';
             position: fixed;
             inset: 0;
-            background: linear-gradient(135deg, rgba(46, 134, 171, .1) 0%, rgba(241, 143, 1, .1) 100%);
-            z-index: -2;
-        }
-
-        .bg-animation {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            opacity: .3;
-            overflow: hidden;
-            pointer-events: none
-        }
-
-        .bg-animation div {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(46, 134, 171, .1);
-            animation: float 15s linear infinite
-        }
-
-        .bg-animation div:nth-child(1) {
-            width: 300px;
-            height: 300px;
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s
-        }
-
-        .bg-animation div:nth-child(2) {
-            width: 200px;
-            height: 200px;
-            top: 50%;
-            left: 30%;
-            animation-delay: 3s;
-            animation-duration: 12s
-        }
-
-        .bg-animation div:nth-child(3) {
-            width: 250px;
-            height: 250px;
-            top: 30%;
-            left: 70%;
-            animation-delay: 5s
-        }
-
-        .bg-animation div:nth-child(4) {
-            width: 180px;
-            height: 180px;
-            top: 70%;
-            left: 80%;
-            animation-delay: 7s;
-            animation-duration: 18s
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1
-            }
-
-            100% {
-                transform: translateY(-1000px) rotate(720deg);
-                opacity: 0
-            }
+            background: linear-gradient(135deg, rgba(46, 134, 171, .08) 0%, rgba(241, 143, 1, .08) 100%);
+            z-index: -1
         }
 
         .container {
@@ -115,12 +52,9 @@
             margin-inline: auto
         }
 
-        /* ======================
-     الهيدر (ثابت sticky)
-     ====================== */
+        /* هيدر لاصق */
         .header {
             position: sticky;
-            /* يبقى بالأعلى بدون تغطية المحتوى */
             top: 0;
             z-index: 1000;
             background: var(--header-bg);
@@ -134,7 +68,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
+            gap: 16px
         }
 
         .logo-container {
@@ -150,15 +84,15 @@
         }
 
         .org-name {
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             font-weight: 700;
             color: var(--primary-color);
             white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis;
+            text-overflow: ellipsis
         }
 
-        /* محوّل اللغة */
+        /* مبدّل اللغة */
         .language-switcher {
             display: flex;
             align-items: center;
@@ -175,6 +109,7 @@
             padding: 8px 10px;
             border-radius: 6px;
             transition: var(--transition);
+            text-decoration: none
         }
 
         .language-btn:hover {
@@ -186,23 +121,20 @@
             font-weight: 700
         }
 
-        /* ======================
-     صفحة تسجيل الدخول
-     ====================== */
+        /* صفحة تسجيل الدخول */
         .login-page {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: calc(100vh - 70px);
-            /* مساحة محترمة أسفل الهيدر */
-            padding: 40px 0;
+            padding: 40px 0
         }
 
         .login-container {
             width: 100%;
             max-width: 520px;
             margin: 20px;
-            background: rgba(255, 255, 255, .95);
+            background: rgba(255, 255, 255, .96);
             border-radius: 12px;
             box-shadow: var(--box-shadow);
             padding: 36px;
@@ -216,7 +148,7 @@
             margin-bottom: 24px;
             color: var(--primary-color);
             font-size: 1.75rem;
-            position: relative;
+            position: relative
         }
 
         .login-title::after {
@@ -226,7 +158,7 @@
             height: 3px;
             background: var(--secondary-color);
             margin: 14px auto 0;
-            border-radius: 2px;
+            border-radius: 2px
         }
 
         .form-group {
@@ -245,13 +177,12 @@
 
         .form-control {
             width: 100%;
-            padding: 12px 14px 12px 42px;
+            padding: 12px 14px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
             transition: var(--transition);
             background: #f9f9f9;
-            text-align: right;
         }
 
         .form-control:focus {
@@ -260,9 +191,29 @@
             box-shadow: 0 0 0 3px rgba(46, 134, 171, .2)
         }
 
+        /* محاذاة الأيقونات بحسب الاتجاه */
+        [dir="rtl"] .form-control {
+            padding: 12px 14px 12px 42px;
+            text-align: right
+        }
+
+        [dir="rtl"] .input-icon {
+            left: 14px;
+            right: auto
+        }
+
+        [dir="ltr"] .form-control {
+            padding: 12px 42px 12px 14px;
+            text-align: left
+        }
+
+        [dir="ltr"] .input-icon {
+            right: 14px;
+            left: auto
+        }
+
         .input-icon {
             position: absolute;
-            left: 14px;
             top: 50%;
             transform: translateY(-50%);
             color: #777
@@ -324,12 +275,10 @@
             font-size: .9rem
         }
 
-        /* رسائل */
         .error-message {
             color: #dc3545;
             font-size: .85rem;
-            margin-top: 6px;
-            text-align: right
+            margin-top: 6px
         }
 
         .has-error .form-control {
@@ -345,19 +294,13 @@
             border: 1px solid #c3e6cb
         }
 
-        /* ======================
-     الفوتر
-     ====================== */
+        /* فوتر */
         .footer {
             background: #222;
             color: #fff;
             text-align: center;
             padding: 18px 0;
-            border-top: 1px solid rgba(255, 255, 255, .06);
-        }
-
-        .footer p {
-            margin-bottom: 10px
+            border-top: 1px solid rgba(255, 255, 255, .06)
         }
 
         .social-icons a {
@@ -378,52 +321,10 @@
             transform: translateY(-3px)
         }
 
-        /* ======================
-     تجاوب
-     ====================== */
-        @media (max-width: 992px) {
-            .logo img {
-                height: 48px
-            }
-
-            .org-name {
-                font-size: 1.05rem
-            }
-
-            .header .container {
-                gap: 12px
-            }
-
-            .login-container {
-                padding: 30px
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                padding: 10px 0
-            }
-
+        @media (max-width:768px) {
             .header .container {
                 flex-direction: column;
-                align-items: center;
                 gap: 10px
-            }
-
-            .logo-container {
-                gap: 6px
-            }
-
-            .logo img {
-                height: 46px
-            }
-
-            .org-name {
-                font-size: 1rem
-            }
-
-            .language-switcher {
-                justify-content: center
             }
 
             .login-page {
@@ -436,69 +337,65 @@
                 margin: 16px 10px
             }
 
-            .form-control {
-                padding: 12px 14px 12px 38px
-            }
-
-            .input-icon {
-                left: 10px;
-                font-size: .95rem
-            }
-        }
-
-        @media (max-width: 420px) {
             .logo img {
-                height: 42px
+                height: 46px
             }
 
             .org-name {
-                font-size: .95rem
-            }
-
-            .btn {
-                padding: 11px 14px
+                font-size: 1rem
             }
         }
     </style>
-
 </head>
 
 <body>
-    <!-- خلفية متحركة -->
-    <div class="bg-animation">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
+    @php
+        // اضبط اللغة الحالية
+        $locale = $locale ?? app()->getLocale();
 
-    <!-- شريط التنقل العلوي مع الشعار في المنتصف -->
+        // دالة تبديل بادئة اللغة مع الحفاظ على نفس الصفحة والـ query string
+        $swapLocaleUrl = function (string $lang) {
+            $segments = request()->segments(); // مثل: ['ar','login']
+            if (!empty($segments) && in_array($segments[0], ['ar', 'en'], true)) {
+                $segments[0] = $lang;
+            } else {
+                array_unshift($segments, $lang);
+            }
+            $path = implode('/', $segments);
+            $qs = request()->getQueryString();
+            return url($path) . ($qs ? '?' . $qs : '');
+        };
+    @endphp
+
+    <!-- الهيدر -->
     <header class="header">
         <div class="container">
             <div class="logo-container">
                 <div class="logo">
-                    <img src="logo.png" alt="شعار المركز السوري للتنمية المستدامة">
+                    <img src="{{ asset('logo.png') }}" alt="{{ __('main.site_name') }}">
                 </div>
-                <div class="org-name" data-translate="org_name">المركز السوري للتنمية المستدامة والتمكين المجتمعي</div>
+                <div class="org-name">{{ __('main.site_name') }}  {{ __('main.site_subname') }}</div>
             </div>
 
-            <!-- زر الترجمة -->
+            <!-- مبدّل اللغة (يحافظ على الصفحة) -->
             <div class="language-switcher">
-                <button class="language-btn active" data-lang="ar">العربية</button>
-                <button class="language-btn" data-lang="en">English</button>
+                <a class="language-btn {{ $locale === 'ar' ? 'active' : '' }}"
+                    href="{{ $swapLocaleUrl('ar') }}">العربية</a>
+                <a class="language-btn {{ $locale === 'en' ? 'active' : '' }}"
+                    href="{{ $swapLocaleUrl('en') }}">English</a>
             </div>
         </div>
     </header>
 
-    <!-- قسم تسجيل الدخول -->
+    <!-- صفحة تسجيل الدخول -->
     <div class="login-page">
         <div class="login-container">
-            <h2 class="login-title" data-translate="login_title">تسجيل الدخول</h2>
+            <h2 class="login-title">{{ __('auth.login_title') }}</h2>
 
-            <!-- عرض رسائل الخطأ -->
+            {{-- رسائل الخطأ العامة --}}
             @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
+                <div class="alert alert-danger" role="alert" style="margin-bottom:16px">
+                    <ul style="margin:0;padding-inline-start:18px">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -506,22 +403,20 @@
                 </div>
             @endif
 
-            <!-- عرض رسالة النجاح -->
+            {{-- رسالة نجاح (إن وُجدت) --}}
             @if (session('success'))
-                <div class="alert-success" data-translate="success_message">
-                    {{ session('success') }}
-                </div>
+                <div class="alert-success">{{ session('success') }}</div>
             @endif
 
-            <form id="loginForm" method="POST" action="{{ route('login.submit') }}">
+            <form id="loginForm" method="POST" action="{{ route('login.submit', ['locale' => $locale]) }}">
                 @csrf
 
                 <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-                    <label for="email" data-translate="username_label">البريد الالكتروني</label>
+                    <label for="email">{{ __('auth.email') }}</label>
                     <div class="input-container">
-                        <i class="fas fa-user input-icon"></i>
-                        <input type="text" id="email" name="email" class="form-control"
-                            value="{{ old('email') }}" required autofocus>
+                        <i class="fas fa-user input-icon" aria-hidden="true"></i>
+                        <input type="email" id="email" name="email" class="form-control"
+                            value="{{ old('email') }}" required autofocus autocomplete="username">
                     </div>
                     @if ($errors->has('email'))
                         <span class="error-message">{{ $errors->first('email') }}</span>
@@ -529,10 +424,11 @@
                 </div>
 
                 <div class="form-group {{ $errors->has('password') ? 'has-error' : '' }}">
-                    <label for="password" data-translate="password_label">كلمة المرور</label>
+                    <label for="password">{{ __('auth.password') }}</label>
                     <div class="input-container">
-                        <i class="fas fa-lock input-icon"></i>
-                        <input type="password" id="password" name="password" class="form-control" required>
+                        <i class="fas fa-lock input-icon" aria-hidden="true"></i>
+                        <input type="password" id="password" name="password" class="form-control" required
+                            autocomplete="current-password">
                     </div>
                     @if ($errors->has('password'))
                         <span class="error-message">{{ $errors->first('password') }}</span>
@@ -540,125 +436,48 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="form-check">
+                    <div class="form-check" style="display:flex; align-items:center; gap:8px;">
                         <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                        <label class="form-check-label" for="remember" data-translate="remember_me">
-                            تذكرني
-                        </label>
+                        <label class="form-check-label" for="remember">{{ __('auth.remember_me') }}</label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-block" data-translate="login_button">تسجيل الدخول</button>
+                    <button type="submit" class="btn btn-block">
+                        {{ __('auth.login_button') }}
+                    </button>
                 </div>
             </form>
 
-            <div class="divider">
-                <span class="divider-text" data-translate="or_text">أو</span>
-            </div>
+            <div class="divider"><span class="divider-text">{{ __('auth.or') }}</span></div>
 
             <div class="login-footer">
-                <a href="{{ route('register') }}" data-translate="register_link">ليس لديك حساب؟ إنشاء حساب جديد</a>
-                <a href="{{ route('password.request') }}" data-translate="forgot_password_link">نسيت كلمة المرور؟</a>
+                <a href="{{ route('register', ['locale' => $locale]) }}">{{ __('auth.register_link') }}</a>
+                <a href="{{ route('password.request', ['locale' => $locale]) }}">{{ __('auth.forgot_password') }}</a>
             </div>
         </div>
     </div>
 
-    <!-- تذييل الصفحة -->
+    <!-- الفوتر -->
     <footer class="footer">
         <div class="container">
-            <p data-translate="copyright_text">&copy; 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.</p>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
+            <p>&copy; {{ date('Y') }} {{ __('main.site_name') }}. {{ __('auth.rights_reserved') }}</p>
+            <div class="social-icons" aria-label="social links">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="X / Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
             </div>
         </div>
     </footer>
 
     <script>
-        // ترجمة النصوص
-        const translations = {
-            ar: {
-                org_name: "المركز السوري للتنمية المستدامة والتمكين المجتمعي",
-                login_title: "تسجيل الدخول",
-                username_label: "البريد الالكتروني",
-                password_label: "كلمة المرور",
-                remember_me: "تذكرني",
-                login_button: "تسجيل الدخول",
-                or_text: "أو",
-                register_link: "ليس لديك حساب؟ إنشاء حساب جديد",
-                forgot_password_link: "نسيت كلمة المرور؟",
-                copyright_text: "© 2023 المركز السوري للتنمية المستدامة. جميع الحقوق محفوظة.",
-                success_message: "تم تسجيل الدخول بنجاح!"
-            },
-            en: {
-                org_name: "Syrian Center for Sustainable Development and Community Empowerment ",
-                login_title: "Login",
-                username_label: "Eamil",
-                password_label: "Password",
-                remember_me: "Remember Me",
-                login_button: "Login",
-                or_text: "OR",
-                register_link: "Don't have an account? Register",
-                forgot_password_link: "Forgot Password?",
-                copyright_text: "© 2023 Syrian Center for Sustainable Development. All rights reserved.",
-                success_message: "Logged in successfully!"
-            }
-        };
-
-        // تغيير اللغة
-        document.querySelectorAll('.language-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const lang = this.dataset.lang;
-
-                // تحديث حالة الأزرار
-                document.querySelectorAll('.language-btn').forEach(b => {
-                    b.classList.remove('active');
-                });
-                this.classList.add('active');
-
-                // تغيير اتجاه الصفحة
-                document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-                document.documentElement.lang = lang;
-
-                // تطبيق الترجمة
-                document.querySelectorAll('[data-translate]').forEach(element => {
-                    const key = element.getAttribute('data-translate');
-                    if (translations[lang][key]) {
-                        element.textContent = translations[lang][key];
-                    }
-                });
-
-                // تغيير مكان الأيقونات في حقول الإدخال
-                if (lang === 'en') {
-                    document.querySelectorAll('.input-icon').forEach(icon => {
-                        icon.style.left = 'auto';
-                        icon.style.right = '15px';
-                    });
-                    document.querySelectorAll('.form-control').forEach(input => {
-                        input.style.textAlign = 'left';
-                        input.style.padding = '12px 40px 12px 15px';
-                    });
-                } else {
-                    document.querySelectorAll('.input-icon').forEach(icon => {
-                        icon.style.left = '15px';
-                        icon.style.right = 'auto';
-                    });
-                    document.querySelectorAll('.form-control').forEach(input => {
-                        input.style.textAlign = 'right';
-                        input.style.padding = '12px 15px 12px 40px';
-                    });
-                }
-            });
-        });
-
-        // تغيير حالة زر تسجيل الدخول أثناء الإرسال
-        document.getElementById('loginForm').addEventListener('submit', function() {
+        // تعطيل زر الإرسال مؤقتاً أثناء المعالجة
+        document.getElementById('loginForm')?.addEventListener('submit', function() {
             const btn = this.querySelector('button[type="submit"]');
+            if (!btn) return;
             btn.disabled = true;
-            btn.innerHTML = this.lang === 'ar' ? 'جاري تسجيل الدخول...' : 'Logging in...';
+            btn.textContent = '{{ __('auth.logging_in') }}';
         });
     </script>
 </body>

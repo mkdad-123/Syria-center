@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale()==='ar' ? 'rtl' : 'ltr' }}">
+<html lang="{{ $locale }}" dir="{{ $dir }}">
 
 <head>
+    <link rel="icon" href="{{ asset('logo.png') }}">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="{{ $locale }}">
     <meta name="description" content="{{ __('main.site_subname') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
     <title>{{ __('main.site_name') }} - {{ __('titles.about_us') }}</title>
 
-    <!-- Preload أهم الموارد -->
+    {{-- Preload --}}
     <link rel="preload" href="{{ asset('css/about-us.css') }}" as="style">
     <link rel="preload" href="{{ asset('/logo.png') }}" as="image">
-
-    <!-- تحسين تحميل Font Awesome -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style"
         onload="this.onload=null;this.rel='stylesheet'">
@@ -22,22 +20,69 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     </noscript>
 
-    <!-- تحميل CSS الأساسي -->
     <link href="{{ asset('css/about-us.css') }}" rel="stylesheet">
 
-    <!-- Preload صور الخلفية -->
     <link rel="preload" href="{{ asset('/ima1.webp') }}" as="image">
     <link rel="preload" href="{{ asset('/ima2.webp') }}" as="image">
     <link rel="preload" href="{{ asset('/ima3.webp') }}" as="image">
 
+    <style>
+        .header {
+            transition: transform .35s ease, opacity .25s ease;
+            will-change: transform
+        }
+
+        .header.is-hidden {
+            transform: translateY(calc(-100% - var(--safe-top)));
+            opacity: 0;
+            pointer-events: none
+        }
+
+        main {
+            padding-top: var(--header-dyn, calc(var(--header-h, 78px) + var(--safe-top, 0px) + 8px))
+        }
+
+        :where(section, .section, [id]) {
+            scroll-margin-top: calc(var(--header-dyn, var(--header-h, 78px)) + 16px)
+        }
+
+        #siteHeader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .1)
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            .header {
+                transition: none
+            }
+        }
+    </style>
+
+    @php
+        // Helper: ارجع نفس الـ URL الحالي لكن مع استبدال البادئة للّغة
+        $swapLocaleUrl = function (string $lang) {
+            $segments = request()->segments(); // ['ar','home','about-us'...] أو بدون بادئة
+            if (!empty($segments) && in_array($segments[0], ['ar', 'en'], true)) {
+                $segments[0] = $lang; // بدّل أول جزء
+            } else {
+                array_unshift($segments, $lang); // أضف البادئة إن لم تكن موجودة
+            }
+            return url(implode('/', $segments));
+        };
+    @endphp
 </head>
 
 <body>
-    <!-- خلفية متغيرة للصفحة -->
+    {{-- خلفية متغيرة --}}
     <div class="background-slideshow">
-        <img src="{{ asset('/ima1.webp') }}" class="active" alt="خلفية 1">
-        <img src="{{ asset('/ima2.webp') }}" alt="خلفية 2">
-        <img src="{{ asset('/ima3.webp') }}" alt="خلفية 3">
+        <img src="{{ asset('/ima1.webp') }}" class="active" alt="">
+        <img src="{{ asset('/ima2.webp') }}" alt="">
+        <img src="{{ asset('/ima3.webp') }}" alt="">
     </div>
 
     <header id="siteHeader" class="header">
@@ -51,37 +96,50 @@
                     <span class="org-name-line2">{{ __('main.site_subname') }}</span>
                 </div>
             </div>
+
             <div class="buttons-container">
                 <nav class="nav">
                     <ul class="nav-list">
-                        <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
-                        <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
-                        <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
-                        <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
+                        {{-- ✅ جميع الروابط تمرّر locale --}}
+                        <li><a href="{{ route('home', ['locale' => $locale]) }}">{{ __('main.menu.home') }}</a></li>
+                        <li><a
+                                href="{{ route('sections', ['locale' => $locale]) }}">{{ __('main.menu.services') }}</a>
+                        </li>
+                        <li><a href="{{ route('events', ['locale' => $locale]) }}">{{ __('main.menu.news') }}</a></li>
+                        <li><a
+                                href="{{ route('compliants', ['locale' => $locale]) }}">{{ __('main.menu.contact') }}</a>
+                        </li>
+
+                        {{-- سويتشر اللغة: يبدّل البادئة في نفس الصفحة --}}
                         <li class="language-switcher">
-                            <button class="language-btn">
+                            <button class="language-btn" type="button">
                                 <i class="fas fa-globe"></i>
-                                <span class="current-lang">{{ $locale == 'ar' ? 'العربية' : 'English' }}</span>
+                                <span class="current-lang">{{ $locale === 'ar' ? 'العربية' : 'English' }}</span>
                                 <i class="fas fa-chevron-down"></i>
                             </button>
                             <ul class="language-menu">
-                                <li><a href="#" data-lang="ar"><i class="fas fa-language"></i> العربية</a></li>
-                                <li><a href="#" data-lang="en"><i class="fas fa-language"></i> English</a></li>
+                                <li><a href="{{ $swapLocaleUrl('ar') }}"><i class="fas fa-language"></i> العربية</a>
+                                </li>
+                                <li><a href="{{ $swapLocaleUrl('en') }}"><i class="fas fa-language"></i> English</a>
+                                </li>
                             </ul>
                         </li>
+
                         @if (Auth::guard('custom')->check())
                             <li class="login-btn">
-                                <a href="{{ route('logout') }}"
+                                <a href="{{ route('logout', ['locale' => $locale]) }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     {{ __('main.buttons.logout') }}
                                 </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                    style="display: none;">
+                                <form id="logout-form" action="{{ route('logout', ['locale' => $locale]) }}"
+                                    method="POST" style="display:none;">
                                     @csrf
                                 </form>
                             </li>
                         @else
-                            <li class="login-btn"><a href="{{ route('login') }}">{{ __('main.buttons.login') }}</a>
+                            <li class="login-btn">
+                                <a
+                                    href="{{ route('login', ['locale' => $locale]) }}">{{ __('main.buttons.login') }}</a>
                             </li>
                         @endif
                     </ul>
@@ -90,9 +148,8 @@
         </div>
     </header>
 
-    <!-- القسم الرئيسي -->
     <main>
-        <!-- قسم من نحن -->
+        {{-- قسم من نحن --}}
         <section class="section">
             <div class="container">
                 @php
@@ -102,9 +159,9 @@
                     if (is_string($aboutUs)) {
                         $aboutContent = $aboutUs;
                     } elseif ($aboutUs instanceof \App\Models\Setting) {
+                        // لا تستخدم أي JS لاستبدال النص؛ نقرأ الترجمة مباشرة
                         $aboutContent =
-                            $aboutUs->getTranslation('content', app()->getLocale(), false) ??
-                            __('No content available');
+                            $aboutUs->getTranslation('content', app()->getLocale(), true) ?? __('No content available');
                         $aboutImage = $aboutUs->image;
                     } else {
                         $aboutContent = __('No content available');
@@ -118,7 +175,9 @@
                         <div class="about-image-overlay"></div>
                     </div>
                 @endif
+
                 <h1 class="section-title">{{ __('main.titles.about') }}</h1>
+
                 <div class="about-content-container">
                     <div id="about-content">
                         {!! $aboutContent !!}
@@ -127,7 +186,8 @@
             </div>
         </section>
     </main>
-    <!-- تذييل الصفحة -->
+
+    {{-- Footer --}}
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -135,17 +195,23 @@
                     <img src="{{ asset('/logo.png') }}" alt="{{ __('main.site_name') }}">
                     <p>{{ __('main.site_name') }} - {{ __('main.site_subname') }}</p>
                 </div>
+
                 <div class="footer-links">
                     <h4>{{ __('main.footer.quick_links') }}</h4>
                     <ul>
-                        <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
-                        <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
-                        <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
-                        <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
+                        <li><a href="{{ route('home', ['locale' => $locale]) }}">{{ __('main.menu.home') }}</a></li>
+                        <li><a
+                                href="{{ route('sections', ['locale' => $locale]) }}">{{ __('main.menu.services') }}</a>
+                        </li>
+                        <li><a href="{{ route('events', ['locale' => $locale]) }}">{{ __('main.menu.news') }}</a>
+                        </li>
+                        <li><a
+                                href="{{ route('compliants', ['locale' => $locale]) }}">{{ __('main.menu.contact') }}</a>
+                        </li>
                     </ul>
                 </div>
-
             </div>
+
             <div class="footer-bottom">
                 <p>&copy; {{ date('Y') }} {{ __('main.site_name') }}. {{ __('main.footer.copyright') }}</p>
                 <div class="social-icons">
@@ -166,9 +232,29 @@
         </div>
     </footer>
 
+    {{-- JS: فقط سلوكيات واجهة بدون تبديل نصوص --}}
     <script src="{{ asset('js/about-us.js') }}" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.getElementById('siteHeader');
 
+            function setHeaderPad() {
+                if (!header) return;
+                document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+            }
+            setHeaderPad();
+            window.addEventListener('resize', setHeaderPad);
 
+            function toggleHeader() {
+                if (window.scrollY > 0) header.classList.add('is-hidden');
+                else header.classList.remove('is-hidden');
+            }
+            toggleHeader();
+            document.addEventListener('scroll', toggleHeader, {
+                passive: true
+            });
+        });
+    </script>
 </body>
 
 </html>

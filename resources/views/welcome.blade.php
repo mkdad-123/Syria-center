@@ -1,33 +1,127 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale()==='ar' ? 'rtl' : 'ltr' }}">
+<html lang="{{ $locale }}" dir="{{ $dir }}">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="Content-Language" content="{{ $locale }}">
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>    <title>{{ __('main.site_name') }} - {{ __('main.site_subname') }}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="{{ asset('logo.png') }}">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <title>{{ __('main.site_name') }} - {{ __('main.site_subname') }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="{{ asset('css/welcome.css') }}" rel="stylesheet">
-{{-- <style>
+    <style>
+        :root {
+            --header-h: 78px;
+            --header-h-tablet: 112px;
+            --header-h-mobile: 160px;
+            --safe-top: env(safe-area-inset-top, 0px)
+        }
 
-    </style> --}}
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+            transition: transform .35s ease, opacity .25s ease;
+            will-change: transform
+        }
+
+        .header.is-hidden {
+            transform: translateY(calc(-100% - var(--safe-top)));
+            opacity: 0;
+            pointer-events: none
+        }
+
+        main {
+            padding-top: var(--header-dyn, calc(var(--header-h) + var(--safe-top) + 8px))
+        }
+
+        :where(section, .section, [id]) {
+            scroll-margin-top: calc(var(--header-dyn, var(--header-h)) + 16px)
+        }
+
+        @media (max-width:992px) {
+            main {
+                padding-top: calc(var(--header-dyn, var(--header-h-tablet)) + var(--safe-top) + 8px)
+            }
+
+            :where(section, .section, [id]) {
+                scroll-margin-top: calc(var(--header-dyn, var(--header-h-tablet)) + 16px)
+            }
+        }
+
+        @media (max-width:768px) {
+            main {
+                padding-top: calc(var(--header-dyn, var(--header-h-mobile)) + var(--safe-top) + 8px)
+            }
+
+            :where(section, .section, [id]) {
+                scroll-margin-top: calc(var(--header-dyn, var(--header-h-mobile)) + 16px)
+            }
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            .header {
+                transition: none
+            }
+        }
+    </style>
 </head>
 
 <body>
+    @php
+        use Illuminate\Support\Str;
+
+        // اللغة الحالية
+        $locale = $locale ?? app()->getLocale();
+        $loc = $loc ?? $locale;
+
+        // حضّر $aboutContent من $aboutUs بأي شكل كانت (Collection/array/model/string)
+        if (!isset($aboutContent)) {
+            $aboutModel =
+                $aboutUs instanceof \Illuminate\Support\Collection
+                    ? $aboutUs->first()
+                    : (is_array($aboutUs)
+                        ? $aboutUs[0] ?? null
+                        : $aboutUs);
+
+            if (is_string($aboutModel)) {
+                $aboutContent = $aboutModel;
+            } elseif ($aboutModel instanceof \App\Models\Setting) {
+                // fallback=true لاختيار لغة بديلة لو مافي ترجمة
+                $aboutContent = $aboutModel->getTranslation('content', $locale, true) ?? '';
+            } else {
+                $aboutContent = '';
+            }
+        }
+
+        // عرّف $isShortContent إن لم يكن معرّفاً (قبل أي استخدام له)
+        if (!isset($isShortContent)) {
+            $textOnly = trim(strip_tags($aboutContent));
+            $wordCount = $textOnly === '' ? 0 : count(preg_split('/\s+/u', $textOnly));
+            $isShortContent = $wordCount <= 40;
+        }
+    @endphp
+
+
     <!-- خلفية متغيرة للصفحة -->
     <div class="background-slideshow">
-        <img src="{{ asset('/ima1.webp') }}" class="active" alt="خلفية 1">
-        <img src="{{ asset('/ima2.webp') }}" alt="خلفية 2">
-        <img src="{{ asset('/ima3.webp') }}" alt="خلفية 3">
+        <img src="{{ asset('ima1.webp') }}" class="active" alt="خلفية 1">
+        <img src="{{ asset('ima2.webp') }}" alt="خلفية 2">
+        <img src="{{ asset('ima3.webp') }}" alt="خلفية 3">
     </div>
 
-    <!-- شريط التنقل العلوي المعدل -->
-    <header class="header">
+    <!-- شريط التنقل العلوي -->
+    <header class="header" id="siteHeader">
         <div class="container">
             <div class="logo-container">
                 <div class="logo">
-                    <img src="\logo.png" alt="{{ __('main.site_name') }}">
+                    <img src="{{ asset('logo.png') }}" alt="{{ __('main.site_name') }}">
                 </div>
                 <div class="org-name">
                     <span class="org-name-line1">{{ __('main.site_name') }}</span>
@@ -37,13 +131,17 @@
             <div class="buttons-container">
                 <nav class="nav">
                     <ul class="nav-list">
-                        <li><a href="{{ route('about-us') }}">{{ __('main.menu.about') }}</a></li>
-                        <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
-                        <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
-                        <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
+                        <li><a href="{{ route('about-us', ['locale' => $loc]) }}">{{ __('main.menu.about') }}</a></li>
+                        <li><a href="{{ route('sections', ['locale' => $loc]) }}">{{ __('main.menu.services') }}</a>
+                        </li>
+                        <li><a href="{{ route('events', ['locale' => $loc]) }}">{{ __('main.menu.news') }}</a></li>
+                        <li><a href="{{ route('compliants', ['locale' => $loc]) }}">{{ __('main.menu.contact') }}</a>
+                        </li>
+
                         <li class="dropdown">
-                            <a href="javascript:void(0)" class="dropbtn">{{ __('main.menu.sections') }} <i
-                                    class="fas fa-chevron-down"></i></a>
+                            <a href="javascript:void(0)" class="dropbtn">
+                                {{ __('main.menu.sections') }} <i class="fas fa-chevron-down"></i>
+                            </a>
                             <div class="dropdown-content">
                                 <a href="#mission">{{ __('main.menu.about') }}</a>
                                 <a href="#target">{{ __('main.menu.target') }}</a>
@@ -52,6 +150,7 @@
                                 <a href="#partners">{{ __('main.menu.partners') }}</a>
                             </div>
                         </li>
+
                         <li class="language-switcher">
                             <button class="language-btn">
                                 <i class="fas fa-globe"></i>
@@ -63,75 +162,41 @@
                                 <li><a href="#" data-lang="en"><i class="fas fa-language"></i> English</a></li>
                             </ul>
                         </li>
+
                         <li class="login-btn">
                             @auth('custom')
-                                <a href="{{ route('logout') }}"
+                                <a href="{{ route('logout', ['locale' => $loc]) }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     {{ __('main.buttons.logout') }}
                                 </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
-                                    @csrf</form>
+                                <form id="logout-form" action="{{ route('logout', ['locale' => $loc]) }}" method="POST"
+                                    style="display:none;">
+                                    @csrf
+                                </form>
                             @else
-                                <a href="{{ route('login') }}">{{ __('main.buttons.login') }}</a>
+                                <a href="{{ route('login', ['locale' => $loc]) }}">{{ __('main.buttons.login') }}</a>
                             @endauth
                         </li>
-
-
                     </ul>
                 </nav>
             </div>
         </div>
     </header>
 
-    <!-- القسم الرئيسي -->
     <main>
-
         <section id="about" class="section about-section">
             <div class="container">
                 <h2 class="section-title">{{ __('main.titles.about') }}</h2>
                 <div class="about-container">
-                    <!-- الصورة الجديدة -->
                     <div class="about-image">
                         <div class="about-image-card">
-                            <img src="\image1.jpg" alt="{{ __('main.titles.about') }}">
+                            <img src="{{ asset('image1.jpg') }}" alt="{{ __('main.titles.about') }}">
                         </div>
                     </div>
-
-                    @php
-                        use Illuminate\Support\Str; // لو ما عندك alias
-
-                        $aboutContent = '';
-
-                        // حوّل Array/Collection لأول عنصر (إن وُجد)
-                        if ($aboutUs instanceof \Illuminate\Support\Collection) {
-                            $aboutUs = $aboutUs->first();
-                        } elseif (is_array($aboutUs)) {
-                            $aboutUs = $aboutUs[0] ?? null;
-                        }
-
-                        if (is_string($aboutUs)) {
-                            $aboutContent = $aboutUs;
-                        } elseif ($aboutUs instanceof \App\Models\Setting) {
-                            // ملاحظة: فعّل fallback للّغة (انظر النقطة 4)
-                            $aboutContent =
-                                $aboutUs->getTranslation('content', $locale, true) ?? __('No content available');
-                        } else {
-                            $aboutContent = __('No content available');
-                        }
-
-                        $textOnly = trim(strip_tags($aboutContent));
-                        $wordCount = $textOnly === '' ? 0 : count(preg_split('/\s+/u', $textOnly));
-                        $isShortContent = $wordCount <= 40;
-                    @endphp
-
                     <div class="about-content">
                         @if (request()->routeIs('about-us'))
-                            <!-- عرض المحتوى كاملاً في صفحة about-us -->
-                            <div class="full-content">
-                                {!! $aboutContent !!}
-                            </div>
+                            <div class="full-content">{!! $aboutContent !!}</div>
                         @else
-                            <!-- عرض المحتوى مع زر اقرأ المزيد دائمًا -->
                             <div class="{{ $isShortContent ? 'full-content' : 'short-content' }}">
                                 @if ($isShortContent)
                                     {!! $aboutContent !!}
@@ -140,26 +205,25 @@
                                 @endif
 
                                 <div class="read-more-btn-container">
-                                    <a href="{{ route('about-us') }}" class="read-more-btn">
+                                    <a href="{{ route('about-us', ['locale' => $loc]) }}" class="read-more-btn">
                                         {{ __('main.buttons.read_more') }}
                                     </a>
                                 </div>
                             </div>
                         @endif
                     </div>
+
+
                 </div>
             </div>
         </section>
 
-        <!-- Mission & Vision Section - Fixed -->
         <section id="mission" class="section mission-section">
             <div class="container">
                 <div class="mission-vision">
                     <div class="mission">
-                        <h3 style="color: #000;">{{ __('main.titles.mission') }}</h3>
-                        <div class="icon-wrapper">
-                            <i class="far fa-lightbulb"></i>
-                        </div>
+                        <h3 style="color:#000;">{{ __('main.titles.mission') }}</h3>
+                        <div class="icon-wrapper"><i class="far fa-lightbulb"></i></div>
                         @php
                             $missionContent = '';
                             if (is_string($message)) {
@@ -173,11 +237,10 @@
                         @endphp
                         {!! $missionContent !!}
                     </div>
+
                     <div class="vision">
-                        <h3 style="color: #000;">{{ __('main.titles.vision') }}</h3>
-                        <div class="icon-wrapper">
-                            <i class="fas fa-crosshairs"></i>
-                        </div>
+                        <h3 style="color:#000;">{{ __('main.titles.vision') }}</h3>
+                        <div class="icon-wrapper"><i class="fas fa-crosshairs"></i></div>
                         @php
                             $visionContent = '';
                             if (is_string($vision)) {
@@ -195,13 +258,10 @@
             </div>
         </section>
 
-        <!-- Target Group Section - Fixed -->
         <section id="target" class="section target-section">
             <div class="container">
                 <h2 class="section-title">{{ __('main.titles.target') }}</h2>
-                <div class="target-icon">
-                    <i class="fas fa-users" style="color: #000;"></i>
-                </div>
+                <div class="target-icon"><i class="fas fa-users" style="color:#000;"></i></div>
                 <div class="target-content">
                     @php
                         $targetContent = '';
@@ -218,7 +278,7 @@
                 </div>
             </div>
         </section>
-        <!-- قسم ما نقدمه -->
+
         <section id="services" class="section services-section">
             <div class="container">
                 <h2 class="section-title">{{ __('main.titles.services') }}</h2>
@@ -243,7 +303,8 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <a href="{{ route('sections') }}" class="btn">{{ __('main.buttons.discover') }}</a>
+                    <a href="{{ route('sections', ['locale' => $loc]) }}"
+                        class="btn">{{ __('main.buttons.discover') }}</a>
                 </div>
             </div>
         </section>
@@ -255,9 +316,10 @@
                     <div class="team-slide">
                         @foreach ($team as $member)
                             <div class="team-member {{ $loop->first ? 'active' : '' }}">
-                                <a href="{{ route('volunteers', ['vol' => $member['id'] ?? null]) }}">
+                                <a
+                                    href="{{ route('volunteers', ['locale' => $loc, 'vol' => $member['id'] ?? null]) }}">
                                     <img src="{{ asset('storage/' . $member['image']) }}"
-                                        alt="{{ $member['name'] }}" style="cursor: pointer;">
+                                        alt="{{ $member['name'] }}" style="cursor:pointer;">
                                 </a>
                                 <h3>{{ $member['name'] }}</h3>
                                 @if (!empty($member['skills']))
@@ -271,7 +333,6 @@
                                         @endif
                                     </div>
                                 @endif
-
                                 <p>{{ $member['bio'] }}</p>
                             </div>
                         @endforeach
@@ -285,7 +346,6 @@
             </div>
         </section>
 
-        <!-- Partners Section - Improved -->
         <section id="partners" class="section partners-section">
             <div class="container">
                 <h2 class="section-title">{{ __('main.titles.partners') }}</h2>
@@ -293,13 +353,9 @@
                     id="partnersCarousel">
                     <div class="partners-slide">
                         @foreach ($partners as $partner)
-                            {{-- Debug output --}}
                             <div class="partner {{ $loop->first ? 'active' : '' }}">
                                 <img src="{{ asset('storage/' . $partner['image']) }}" alt="{{ $partner['name'] }}">
-                                <p>
-                                    {!! $partner['name'] !!}
-                                </p>
-
+                                <p>{!! $partner['name'] !!}</p>
                                 <p>
                                     @if (is_array($partner['description']))
                                         {!! $partner['description'][$locale] ?? ($partner['description']['en'] ?? '') !!}
@@ -309,7 +365,6 @@
                                 </p>
                             </div>
                         @endforeach
-
                     </div>
                     <button class="carousel-btn" id="partnersPrevBtn"><i class="fas fa-chevron-left"></i></button>
                     <button class="carousel-btn" id="partnersNextBtn"><i class="fas fa-chevron-right"></i></button>
@@ -319,30 +374,28 @@
         </section>
     </main>
 
-    <!-- تذييل الصفحة -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <!-- قسم الشعار والمعلومات -->
                 <div class="footer-logo">
-                    <img src="{{ asset('/logo.png') }}" alt="{{ __('main.site_name') }}">
+                    <img src="{{ asset('logo.png') }}" alt="{{ __('main.site_name') }}">
                     <p>{{ __('main.site_name') }}<br>
-                        <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span>
+                        <span style="color:var(--secondary-color);">{{ __('main.site_subname') }}</span>
                     </p>
                 </div>
 
-                <!-- قسم الروابط السريعة -->
                 <div class="footer-links">
                     <h4>{{ __('main.footer.quick_links') }}</h4>
                     <ul>
-                        <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
-                        <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
-                        <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
+                        <li><a href="{{ route('events', ['locale' => $loc]) }}">{{ __('main.menu.news') }}</a></li>
+                        <li><a href="{{ route('sections', ['locale' => $loc]) }}">{{ __('main.menu.services') }}</a>
+                        </li>
+                        <li><a href="{{ route('compliants', ['locale' => $loc]) }}">{{ __('main.menu.contact') }}</a>
+                        </li>
                         <li><a href="#about">{{ __('main.menu.about') }}</a></li>
                     </ul>
                 </div>
 
-                <!-- قسم معلومات الاتصال -->
                 <div class="footer-contact">
                     <h4>{{ __('main.footer.contact_us') }}</h4>
                     @if (isset($contactInfo['phones'][0]) && count($contactInfo['phones']) > 0)
@@ -351,15 +404,12 @@
                     @if (isset($contactInfo['emails'][0]) && count($contactInfo['emails']) > 0)
                         <p><i class="fas fa-envelope"></i> {{ $contactInfo['emails'][0] }}</p>
                     @endif
-                    @if (isset($contactInfo['address'][0]))
+                    @if (isset($contactInfo['address']))
                         <p><i class="fas fa-map-marker-alt"></i> {{ $contactInfo['address'] }}</p>
                     @endif
                 </div>
             </div>
 
-
-
-            <!-- حقوق النشر ووسائل التواصل الاجتماعي -->
             <div class="footer-bottom">
                 <p>{{ __('main.footer.copyright') }} &copy; {{ date('Y') }}</p>
                 <div class="social-icons">
@@ -385,10 +435,33 @@
             </div>
         </div>
     </footer>
-    <script src="{{ asset('js\welcome.js') }}"></script>
-    {{-- <script>
 
-    </script> --}}
+    {{-- استخدم about-us.js المحسّن (أو welcome.js بنسخته الجديدة) --}}
+    <script src="{{ asset('js/about-us.js') }}"></script>
+
+    {{-- سكربت الهيدر الخفيف (إن لم يكن داخل ملف JS خارجي) --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.getElementById('siteHeader');
+
+            function setHeaderPad() {
+                if (!header) return;
+                document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+            }
+            setHeaderPad();
+            addEventListener('resize', setHeaderPad);
+            addEventListener('load', setHeaderPad);
+
+            function toggleHeader() {
+                if (window.scrollY > 0) header.classList.add('is-hidden');
+                else header.classList.remove('is-hidden');
+            }
+            toggleHeader();
+            document.addEventListener('scroll', toggleHeader, {
+                passive: true
+            });
+        });
+    </script>
 </body>
 
 </html>

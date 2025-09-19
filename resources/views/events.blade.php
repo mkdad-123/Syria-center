@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale()==='ar' ? 'rtl' : 'ltr' }}">
+<html lang="{{ $locale ?? app()->getLocale() }}" dir="{{ ($locale ?? app()->getLocale()) === 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
+    <link rel="icon" href="{{ asset('logo.png') }}">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -24,12 +26,90 @@
 
     <!-- Preload logo -->
     <link rel="preload" href="{{ asset('logo.png') }}" as="image">
+
     <link rel="stylesheet" href="{{ asset('css/events.css') }}">
 
+    <style>
+        :root {
+            --header-h: 78px;
+            --header-h-tablet: 112px;
+            --header-h-mobile: 160px;
+            --safe-top: env(safe-area-inset-top, 0px);
+        }
 
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+            transition: transform .35s ease, opacity .25s ease;
+            will-change: transform;
+        }
+
+        .header.is-hidden {
+            transform: translateY(calc(-100% - var(--safe-top)));
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        main {
+            padding-top: var(--header-dyn, calc(var(--header-h) + var(--safe-top) + 8px))
+        }
+
+        :where(section, .section, [id]) {
+            scroll-margin-top: calc(var(--header-dyn, var(--header-h)) + 16px)
+        }
+
+        @media (max-width:992px) {
+            main {
+                padding-top: calc(var(--header-dyn, var(--header-h-tablet)) + var(--safe-top) + 8px)
+            }
+
+            :where(section, .section, [id]) {
+                scroll-margin-top: calc(var(--header-dyn, var(--header-h-tablet)) + 16px)
+            }
+        }
+
+        @media (max-width:768px) {
+            main {
+                padding-top: calc(var(--header-dyn, var(--header-h-mobile)) + var(--safe-top) + 8px)
+            }
+
+            :where(section, .section, [id]) {
+                scroll-margin-top: calc(var(--header-dyn, var(--header-h-mobile)) + 16px)
+            }
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            .header {
+                transition: none
+            }
+        }
+    </style>
 </head>
 
 <body>
+    @php
+        // ثبّت اللغة الحالية
+        $locale = $locale ?? app()->getLocale();
+
+        // مولّد رابط يبدّل بادئة اللغة ويحافظ على نفس الصفحة والـ query string
+        $swapLocaleUrl = function (string $lang) {
+            $segments = request()->segments(); // مثال: ['ar','events']
+            if (!empty($segments) && in_array($segments[0], ['ar', 'en'], true)) {
+                $segments[0] = $lang;
+            } else {
+                array_unshift($segments, $lang);
+            }
+            $path = implode('/', $segments);
+            $qs = request()->getQueryString();
+            return url($path) . ($qs ? '?' . $qs : '');
+        };
+    @endphp
+
     <!-- خلفية متغيرة للصفحة -->
     <div class="background-slideshow">
         <img src="{{ asset('/ima1.webp') }}" class="active" alt="خلفية 1" loading="lazy" width="1920" height="1080"
@@ -55,32 +135,43 @@
             <div class="buttons-container">
                 <nav class="nav">
                     <ul class="nav-list">
-                        <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
-                        <li><a href="{{ route('about-us') }}">{{ __('main.menu.about') }}</a></li>
-                        <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
-                        <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
+                        <li><a href="{{ route('home', ['locale' => $locale]) }}">{{ __('main.menu.home') }}</a></li>
+                        <li><a href="{{ route('about-us', ['locale' => $locale]) }}">{{ __('main.menu.about') }}</a>
+                        </li>
+                        <li><a
+                                href="{{ route('sections', ['locale' => $locale]) }}">{{ __('main.menu.services') }}</a>
+                        </li>
+                        <li><a
+                                href="{{ route('compliants', ['locale' => $locale]) }}">{{ __('main.menu.contact') }}</a>
+                        </li>
+
                         <li class="language-switcher">
-                            <button class="language-btn" aria-label="Change language">
+                            <button class="language-btn" aria-label="Change language" type="button">
                                 <i class="fas fa-globe"></i>
-                                <span class="current-lang">{{ $locale == 'ar' ? 'العربية' : 'English' }}</span>
+                                <span class="current-lang">{{ $locale === 'ar' ? 'العربية' : 'English' }}</span>
                                 <i class="fas fa-chevron-down"></i>
                             </button>
                             <ul class="language-menu">
-                                <li><a href="#" data-lang="ar" aria-label="Switch to Arabic"><i
-                                            class="fas fa-language"></i> العربية</a></li>
-                                <li><a href="#" data-lang="en" aria-label="Switch to English"><i
-                                            class="fas fa-language"></i> English</a></li>
+                                <li><a href="{{ $swapLocaleUrl('ar') }}" data-lang="ar"
+                                        aria-label="Switch to Arabic"><i class="fas fa-language"></i> العربية</a></li>
+                                <li><a href="{{ $swapLocaleUrl('en') }}" data-lang="en"
+                                        aria-label="Switch to English"><i class="fas fa-language"></i> English</a></li>
                             </ul>
                         </li>
+
                         <li class="login-btn">
-                            <a href="{{ route('logout') }}"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                {{ __('main.buttons.logout') }}
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                style="display: none;">
-                                @csrf
-                            </form>
+                            @auth('custom')
+                                <a href="{{ route('logout', ['locale' => $locale]) }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    {{ __('main.buttons.logout') }}
+                                </a>
+                                <form id="logout-form" action="{{ route('logout', ['locale' => $locale]) }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                </form>
+                            @else
+                                <a href="{{ route('login', ['locale' => $locale]) }}">{{ __('main.buttons.login') }}</a>
+                            @endauth
                         </li>
                     </ul>
                 </nav>
@@ -93,20 +184,22 @@
         <section class="section">
             <div class="container">
                 <h1 class="section-title">{{ __('main.menu.news') }}</h1>
+
                 <div class="events-container">
                     @foreach ($events as $event)
                         <div class="event-card">
                             <div class="event-image-container">
-                                @if ($event['cover_image'])
+                                @if (!empty($event['cover_image']))
                                     <img src="{{ asset('storage/' . $event['cover_image']) }}"
-                                        alt="{{ $event['title'] }}" class="event-image" loading="lazy" width="400"
-                                        height="300" decoding="async">
+                                        alt="{{ $event['title'] }}" class="event-image" loading="lazy"
+                                        width="400" height="300" decoding="async">
                                 @else
                                     <img src="{{ asset('default-event.jpg') }}"
                                         alt="{{ __('events.default_image_alt') }}" class="event-image"
                                         loading="lazy" width="400" height="300" decoding="async">
                                 @endif
                             </div>
+
                             <div class="event-content">
                                 <span class="event-type {{ $event['type'] }}"
                                     style="margin-bottom: 15px; display: inline-block;">
@@ -140,11 +233,12 @@
                                     </div>
                                 </div>
 
-                                <p class="event-description">
-                                    {!! Str::limit(strip_tags($event['description']), 100) !!}
-                                </p>
+                                <p class="event-description">{!! Str::limit(strip_tags($event['description']), 100) !!}</p>
+
                                 <button class="read-more-btn" onclick="openEventModal({{ $event['id'] }})"
-                                    aria-label="Read more about {{ $event['title'] }}">{{ __('main.menu.read_more') }}</button>
+                                    aria-label="Read more about {{ $event['title'] }}">
+                                    {{ __('main.menu.read_more') }}
+                                </button>
                             </div>
                         </div>
                     @endforeach
@@ -153,9 +247,9 @@
         </section>
     </main>
 
-    <!-- نافذة التفاصيل العائمة -->
+    <!-- نوافذ التفاصيل -->
     @foreach ($events as $event)
-        <div id="eventModal{{ $event['id'] }}" class="event-modal">
+        <div id="eventModal{{ $event['id'] }}" class="event-modal" aria-hidden="true">
             <div class="modal-content">
                 <span class="close-modal" onclick="closeEventModal({{ $event['id'] }})"
                     aria-label="Close modal">&times;</span>
@@ -197,7 +291,7 @@
                         </div>
                     </div>
 
-                    @if ($event['max_participants'])
+                    @if (!empty($event['max_participants']))
                         <div class="modal-meta-item">
                             <i class="fas fa-users" aria-hidden="true"></i>
                             <div>
@@ -208,43 +302,44 @@
                     @endif
                 </div>
 
-                @if ($event['description'])
+                @if (!empty($event['description']))
                     <div class="modal-description">
                         <h3>{{ __('main.events.description') }}:</h3>
-                        <p class="event-description">
-                            {!! strip_tags($event['description']) !!}</p>
+                        <p class="event-description">{!! strip_tags($event['description']) !!}</p>
                     </div>
                 @endif
             </div>
         </div>
     @endforeach
 
-    <!-- تذييل الصفحة -->
+    <!-- التذييل -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <!-- قسم الشعار والمعلومات -->
                 <div class="footer-logo">
-                    <img src="{{ asset('logo.png') }}"  alt="{{ __('main.site_name') }}" width="50" height="50"
-                        loading="lazy">
+                    <img src="{{ asset('logo.png') }}" alt="{{ __('main.site_name') }}" width="50"
+                        height="50" loading="lazy">
                     <p>{{ __('main.site_name') }}<br>
                         <span style="color: var(--secondary-color);">{{ __('main.site_subname') }}</span>
                     </p>
                 </div>
 
-                <!-- قسم الروابط السريعة -->
                 <div class="footer-links">
                     <h4>{{ __('main.footer.quick_links') }}</h4>
                     <ul>
-                        <li><a href="{{ route('events') }}">{{ __('main.menu.news') }}</a></li>
-                        <li><a href="{{ route('sections') }}">{{ __('main.menu.services') }}</a></li>
-                        <li><a href="{{ route('compliants') }}">{{ __('main.menu.contact') }}</a></li>
-                        <li><a href="{{ route('home') }}">{{ __('main.menu.home') }}</a></li>
+                        <li><a href="{{ route('events', ['locale' => $locale]) }}">{{ __('main.menu.news') }}</a>
+                        </li>
+                        <li><a
+                                href="{{ route('sections', ['locale' => $locale]) }}">{{ __('main.menu.services') }}</a>
+                        </li>
+                        <li><a
+                                href="{{ route('compliants', ['locale' => $locale]) }}">{{ __('main.menu.contact') }}</a>
+                        </li>
+                        <li><a href="{{ route('home', ['locale' => $locale]) }}">{{ __('main.menu.home') }}</a></li>
                     </ul>
                 </div>
             </div>
 
-            <!-- حقوق النشر ووسائل التواصل الاجتماعي -->
             <div class="footer-bottom">
                 <p>{{ __('main.footer.copyright') }} &copy; {{ date('Y') }}</p>
                 <div class="social-icons">
@@ -273,11 +368,33 @@
         </div>
     </footer>
 
-    <!-- تحميل JavaScript بطريقة غير معيقة -->
+    <!-- تحميل JavaScript -->
     <link rel="preload" href="{{ asset('js/events.js') }}" as="script">
     <script src="{{ asset('js/events.js') }}" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.getElementById('siteHeader') || document.querySelector('.header');
 
+            // تعويض ارتفاع الهيدر
+            function setHeaderPad() {
+                if (!header) return;
+                document.documentElement.style.setProperty('--header-dyn', header.offsetHeight + 'px');
+            }
+            setHeaderPad();
+            addEventListener('resize', setHeaderPad);
+            addEventListener('load', setHeaderPad);
 
+            // إخفاء/إظهار الهيدر مع التمرير
+            function toggleHeader() {
+                if (window.scrollY > 0) header.classList.add('is-hidden');
+                else header.classList.remove('is-hidden');
+            }
+            toggleHeader();
+            document.addEventListener('scroll', toggleHeader, {
+                passive: true
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -84,7 +84,7 @@ class AuhtController extends Controller
             ->with('status', 'verification-link-sent')
             ->withInput($request->only('email'));
     }
-
+    RateLimiter::clear($this->throttleKey($request));
     return redirect()->intended(route('home'));
 }
 
@@ -127,6 +127,10 @@ class AuhtController extends Controller
         Auth::guard($this->guard)->login($user);
 
         return redirect()->route('home')->with('status', 'email-verified');
+    }
+    protected function throttleKey(Request $request): string
+    {
+        return strtolower(trim((string) $request->input('email'))).'|'.$request->ip();
     }
 }
 
