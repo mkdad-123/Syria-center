@@ -26,42 +26,7 @@
     <link rel="preload" href="{{ asset('/ima2.webp') }}" as="image">
     <link rel="preload" href="{{ asset('/ima3.webp') }}" as="image">
 
-    <style>
-        .header {
-            transition: transform .35s ease, opacity .25s ease;
-            will-change: transform
-        }
 
-        .header.is-hidden {
-            transform: translateY(calc(-100% - var(--safe-top)));
-            opacity: 0;
-            pointer-events: none
-        }
-
-        main {
-            padding-top: var(--header-dyn, calc(var(--header-h, 78px) + var(--safe-top, 0px) + 8px))
-        }
-
-        :where(section, .section, [id]) {
-            scroll-margin-top: calc(var(--header-dyn, var(--header-h, 78px)) + 16px)
-        }
-
-        #siteHeader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 9999;
-            background: #fff;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, .1)
-        }
-
-        @media (prefers-reduced-motion:reduce) {
-            .header {
-                transition: none
-            }
-        }
-    </style>
 
     @php
         // Helper: ارجع نفس الـ URL الحالي لكن مع استبدال البادئة للّغة
@@ -218,14 +183,17 @@
                     @if (isset($socialMedia['facebook']))
                         <a href="{{ $socialMedia['facebook'] }}"><i class="fab fa-facebook-f"></i></a>
                     @endif
-                    @if (isset($socialMedia['twitter']))
+                    {{-- @if (isset($socialMedia['twitter']))
                         <a href="{{ $socialMedia['twitter'] }}"><i class="fab fa-twitter"></i></a>
                     @endif
                     @if (isset($socialMedia['linkedin']))
                         <a href="{{ $socialMedia['linkedin'] }}"><i class="fab fa-linkedin-in"></i></a>
-                    @endif
+                    @endif --}}
                     @if (isset($socialMedia['instagram']))
                         <a href="{{ $socialMedia['instagram'] }}"><i class="fab fa-instagram"></i></a>
+                    @endif
+                    @if (isset($socialMedia['youtube']))
+                        <a href="{{ $socialMedia['youtube'] }}" target="_blank"><i class="fab fa-youtube"></i></a>
                     @endif
                 </div>
             </div>

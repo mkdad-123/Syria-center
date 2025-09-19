@@ -5,69 +5,15 @@
     <link rel="icon" href="{{ asset('logo.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkfQJ5Gd6bZxU2hYpP2R0R8fZx7QMX7u3v6Z8+7q6bQx9bQ0P4o7r4Ykg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+
     <title>{{ __('main.site_name') }} - {{ __('titles.service_details') }}</title>
 
-    <style>
-        :root {
-            --header-h: 78px;
-            --header-h-tablet: 112px;
-            --header-h-mobile: 160px;
-            --safe-top: env(safe-area-inset-top, 0px)
-        }
 
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 9999;
-            background: #fff;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
-            transition: transform .35s ease, opacity .25s ease;
-            will-change: transform
-        }
-
-        .header.is-hidden {
-            transform: translateY(calc(-100% - var(--safe-top)));
-            opacity: 0;
-            pointer-events: none
-        }
-
-        main {
-            padding-top: var(--header-dyn, calc(var(--header-h) + var(--safe-top) + 8px))
-        }
-
-        :where(section, .section, [id]) {
-            scroll-margin-top: calc(var(--header-dyn, var(--header-h)) + 16px)
-        }
-
-        @media (max-width:992px) {
-            main {
-                padding-top: calc(var(--header-dyn, var(--header-h-tablet)) + var(--safe-top) + 8px)
-            }
-
-            :where(section, .section, [id]) {
-                scroll-margin-top: calc(var(--header-dyn, var(--header-h-tablet)) + 16px)
-            }
-        }
-
-        @media (max-width:768px) {
-            main {
-                padding-top: calc(var(--header-dyn, var(--header-h-mobile)) + var(--safe-top) + 8px)
-            }
-
-            :where(section, .section, [id]) {
-                scroll-margin-top: calc(var(--header-dyn, var(--header-h-mobile)) + 16px)
-            }
-        }
-
-        @media (prefers-reduced-motion:reduce) {
-            .header {
-                transition: none
-            }
-        }
-    </style>
 
     {{-- تبديل البادئة فقط مع الحفاظ على نفس المسار --}}
     @php
@@ -81,7 +27,7 @@
             }
             return url(implode('/', $segments));
         };
-    @endphp>
+    @endphp
 
     <link rel="preload" href="{{ asset('css/detailes.css') }}" as="style"
         onload="this.onload=null;this.rel='stylesheet'">
@@ -125,9 +71,9 @@
                         {{-- ✅ مبدّل اللغة: يبدّل البادئة ويبقيك على نفس الصفحة --}}
                         <li class="language-switcher" style="list-style:none;">
                             <button class="language-btn" type="button">
-                                <i class="fas fa-globe"></i>
+                                <i class="fa-solid fa-globe"></i>
                                 <span class="current-lang">{{ $locale == 'ar' ? 'العربية' : 'English' }}</span>
-                                <i class="fas fa-chevron-down"></i>
+                                <i class="fa-solid fa-chevron-down"></i>
                             </button>
                             <ul class="language-menu">
                                 <li><a href="{{ $swapLocaleUrl('ar') }}"><i class="fas fa-language"></i> العربية</a>
@@ -231,24 +177,24 @@
                 <p>{{ __('main.footer.copyright') }} &copy; {{ date('Y') }}</p>
                 <div class="social-icons">
                     @if (isset($socialMedia['facebook']))
-                        <a href="{{ $socialMedia['facebook'] }}" target="_blank" rel="noopener"><i
-                                class="fab fa-facebook-f"></i></a>
+                        <a href="{{ $socialMedia['facebook'] }}" target="_blank" rel="noopener">
+                            <i class="fa-brands fa-facebook-f"></i></a>
                     @endif
-                    @if (isset($socialMedia['twitter']))
+                    {{-- @if (isset($socialMedia['twitter']))
                         <a href="{{ $socialMedia['twitter'] }}" target="_blank" rel="noopener"><i
                                 class="fab fa-twitter"></i></a>
                     @endif
                     @if (isset($socialMedia['linkedin']))
                         <a href="{{ $socialMedia['linkedin'] }}" target="_blank" rel="noopener"><i
                                 class="fab fa-linkedin-in"></i></a>
-                    @endif
+                    @endif --}}
                     @if (isset($socialMedia['instagram']))
                         <a href="{{ $socialMedia['instagram'] }}" target="_blank" rel="noopener"><i
-                                class="fab fa-instagram"></i></a>
+                                class="fa-brands fa-instagram"></i></a>
                     @endif
                     @if (isset($socialMedia['youtube']))
                         <a href="{{ $socialMedia['youtube'] }}" target="_blank" rel="noopener"><i
-                                class="fab fa-youtube"></i></a>
+                                class="fa-brands fa-youtube"></i></a>
                     @endif
                 </div>
             </div>

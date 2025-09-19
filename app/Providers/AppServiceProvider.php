@@ -84,11 +84,19 @@ class AppServiceProvider extends ServiceProvider
             ];
         });
 
+        URL::forceRootUrl(config('app.url'));   // ✅ مهم محليًا عند الإرسال عبر الكيو
+
         VerifyEmail::createUrlUsing(function ($notifiable) {
             return URL::temporarySignedRoute(
-                'verification.verify.public',
+                'verification.verify.public', // اسم الراوت تبعك
                 now()->addMinutes(config('auth.verification.expire', 60)),
-                ['id' => $notifiable->getKey(), 'hash' => sha1($notifiable->getEmailForVerification())]
+                [
+                    'id'   => $notifiable->getKey(),
+                    'hash' => sha1($notifiable->getEmailForVerification()),
+                    // لو راوترك فيه {locale} وخليتها افتراضيًا بـ URL::defaults فأنت تمام
+                    // وإلا مررها صراحة:
+                    // 'locale' => app()->getLocale(),
+                ]
             );
         });
         Service::observe(ServiceDetailsObserver::class);
@@ -103,7 +111,7 @@ class AppServiceProvider extends ServiceProvider
             $switch
                 ->locales(['ar', 'en']);
         });
-    $router->aliasMiddleware('setLocale', \App\Http\Middleware\SetLocale::class);
+        $router->aliasMiddleware('setLocale', \App\Http\Middleware\SetLocale::class);
 
         URL::defaults(['locale' => app()->getLocale()]);
         Route::pattern('locale', 'ar|en');                   // ✅

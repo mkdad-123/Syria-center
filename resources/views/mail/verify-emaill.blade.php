@@ -22,7 +22,7 @@
                     <tr>
                         <td align="center"
                             style="padding:22px 20px;background:linear-gradient(135deg, rgba(46,134,171,.08), rgba(241,143,1,.08));border-bottom:1px solid #e9eef3;">
-                            <img src="https://your-domain.com/logo.png"
+                            <img src="https://www.sustainsyria.org/logo.png"
                                 alt="المركز السوري للتنمية المستدامة والتمكين المجتمعي"
                                 style="max-height:56px;display:block;margin:0 auto 10px;">
                             <div style="font-weight:700;color:#2E86AB;font-size:16px;">

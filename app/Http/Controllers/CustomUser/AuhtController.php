@@ -42,7 +42,12 @@ class AuhtController extends Controller
         ]);
 
         // أرسل رابط التفعيل (لا تسجل دخوله)
-        $user->sendEmailVerificationNotification();
+        try {
+            $user->sendEmailVerificationNotification();
+        } catch (\Throwable $e) {
+            report($e);
+            // مثلاً: flash برسالة ودّية أو لوج فقط
+        }
 
         // لعرض البريد في صفحة الإشعار بدون auth
         session()->flash('unverified_email', $user->email);
@@ -66,27 +71,27 @@ class AuhtController extends Controller
             'password' => 'required|string',
         ]);
 
-       if (Auth::guard($this->guard)->attempt($credentials, $request->boolean('remember'))) {
-    /** @var \App\Models\CustomUser $user */
-    $user = Auth::guard($this->guard)->user();
+        if (Auth::guard($this->guard)->attempt($credentials, $request->boolean('remember'))) {
+            /** @var \App\Models\CustomUser $user */
+            $user = Auth::guard($this->guard)->user();
 
-    if (! $user->hasVerifiedEmail()) {
-        Auth::guard($this->guard)->logout();
+            if (! $user->hasVerifiedEmail()) {
+                Auth::guard($this->guard)->logout();
 
-        try {
-            $user->sendEmailVerificationNotification();
-        } catch (\Throwable $e) {
-            report($e); // اختياري
+                try {
+                    $user->sendEmailVerificationNotification();
+                } catch (\Throwable $e) {
+                    report($e); // اختياري
+                }
+
+                return back()
+                    ->withErrors(['email' => 'رجاءً فعّل بريدك من الرابط المرسل إلى بريدك.'])
+                    ->with('status', 'verification-link-sent')
+                    ->withInput($request->only('email'));
+            }
+            RateLimiter::clear($this->throttleKey($request));
+            return redirect()->intended(route('home'));
         }
-
-        return back()
-            ->withErrors(['email' => 'رجاءً فعّل بريدك من الرابط المرسل إلى بريدك.'])
-            ->with('status', 'verification-link-sent')
-            ->withInput($request->only('email'));
-    }
-    RateLimiter::clear($this->throttleKey($request));
-    return redirect()->intended(route('home'));
-}
 
 
         return back()->withErrors(['email' => 'بيانات الدخول غير صحيحة.'])->withInput();
@@ -100,7 +105,7 @@ class AuhtController extends Controller
         return redirect('/');
     }
 
-        public function verifyEmailPublic(Request $request, $id, $hash)
+    public function verifyEmailPublic(Request $request, $id, $hash)
     {
         // تحقق من توقيع وصلاحية الرابط
         if (! URL::hasValidSignature($request)) {
@@ -130,7 +135,6 @@ class AuhtController extends Controller
     }
     protected function throttleKey(Request $request): string
     {
-        return strtolower(trim((string) $request->input('email'))).'|'.$request->ip();
+        return strtolower(trim((string) $request->input('email'))) . '|' . $request->ip();
     }
 }
-

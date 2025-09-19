@@ -11,66 +11,7 @@
     <title>{{ __('main.site_name') }} - {{ __('main.site_subname') }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="{{ asset('css/welcome.css') }}" rel="stylesheet">
-    <style>
-        :root {
-            --header-h: 78px;
-            --header-h-tablet: 112px;
-            --header-h-mobile: 160px;
-            --safe-top: env(safe-area-inset-top, 0px)
-        }
 
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 9999;
-            background: #fff;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
-            transition: transform .35s ease, opacity .25s ease;
-            will-change: transform
-        }
-
-        .header.is-hidden {
-            transform: translateY(calc(-100% - var(--safe-top)));
-            opacity: 0;
-            pointer-events: none
-        }
-
-        main {
-            padding-top: var(--header-dyn, calc(var(--header-h) + var(--safe-top) + 8px))
-        }
-
-        :where(section, .section, [id]) {
-            scroll-margin-top: calc(var(--header-dyn, var(--header-h)) + 16px)
-        }
-
-        @media (max-width:992px) {
-            main {
-                padding-top: calc(var(--header-dyn, var(--header-h-tablet)) + var(--safe-top) + 8px)
-            }
-
-            :where(section, .section, [id]) {
-                scroll-margin-top: calc(var(--header-dyn, var(--header-h-tablet)) + 16px)
-            }
-        }
-
-        @media (max-width:768px) {
-            main {
-                padding-top: calc(var(--header-dyn, var(--header-h-mobile)) + var(--safe-top) + 8px)
-            }
-
-            :where(section, .section, [id]) {
-                scroll-margin-top: calc(var(--header-dyn, var(--header-h-mobile)) + 16px)
-            }
-        }
-
-        @media (prefers-reduced-motion:reduce) {
-            .header {
-                transition: none
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -417,13 +358,13 @@
                         <a href="{{ $socialMedia['facebook'] }}" target="_blank"><i
                                 class="fab fa-facebook-f"></i></a>
                     @endif
-                    @if (isset($socialMedia['twitter']))
+                    {{-- @if (isset($socialMedia['twitter']))
                         <a href="{{ $socialMedia['twitter'] }}" target="_blank"><i class="fab fa-twitter"></i></a>
                     @endif
                     @if (isset($socialMedia['linkedin']))
                         <a href="{{ $socialMedia['linkedin'] }}" target="_blank"><i
                                 class="fab fa-linkedin-in"></i></a>
-                    @endif
+                    @endif --}}
                     @if (isset($socialMedia['instagram']))
                         <a href="{{ $socialMedia['instagram'] }}" target="_blank"><i
                                 class="fab fa-instagram"></i></a>

@@ -6,15 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Models\User;
-use App\Models\PasswordResetCode;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\PasswordResetMail;
-use App\Mail\ResetPasswordMail;
 use App\Models\CustomUser;
 use App\Models\ResetPassword;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\RateLimiter;
 
 class ResetPasswordController extends Controller
 {
@@ -35,10 +32,23 @@ class ResetPasswordController extends Controller
             ], 422);
         }
 
+        $key = 'reset-code:' . strtolower($request->ip()) . '|' . strtolower($request->input('email'));
+
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Too many attempts. Try again later.'
+            ], 429);
+        }
+
+        RateLimiter::hit($key, decaySeconds: 60 * 10); // 10 دقائق
+
+
+
         // حذف الأكواد القديمة لنفس البريد
         ResetPassword::where('email', $request->email)->delete();
 
-        $code = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         $expiresAt = Carbon::now()->addMinutes(30);
 
         ResetPassword::create([
@@ -47,7 +57,11 @@ class ResetPasswordController extends Controller
             'expires_at' => $expiresAt
         ]);
 
-        Mail::to($request->email)->send(new ResetPasswordMail($code));
+        $email = (string) $request->email;
+
+        dispatch(function () use ($email, $code) {
+            Mail::to($email)->queue(new \App\Mail\ResetPasswordMail($code));
+        })->afterCommit()->onQueue('emails');
 
         if ($request->ajax() || $request->expectsJson() || $request->wantsJson()) {
             return response()->json([
@@ -68,7 +82,7 @@ class ResetPasswordController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:customusers,email',
-            'code' => 'required|string|size:6',
+            'code' => 'required|digits:6',
         ]);
 
         if ($validator->fails()) {

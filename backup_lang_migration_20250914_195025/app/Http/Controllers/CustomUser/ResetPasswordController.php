@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\CustomUser;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ResetPasswordRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -15,6 +16,7 @@ use App\Models\CustomUser;
 use App\Models\ResetPassword;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+
 class ResetPasswordController extends Controller
 {
     protected $guard = 'custom'; // تحديد الـ guard المخصص
@@ -103,43 +105,30 @@ class ResetPasswordController extends Controller
         ]);
     }
 
-    public function resetPassword(Request $request)
+    public function resetPassword(\App\Http\Requests\ResetPasswordRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|exists:customusers,email',
-            'token' => 'required|string',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        $resetCode = ResetPassword::where('email', $request->email)
+        $resetCode = \App\Models\ResetPassword::where('email', $request->email)
             ->where('reset_token', $request->token)
-            ->where('expires_at', '>', Carbon::now())
+            ->where('expires_at', '>', \Carbon\Carbon::now())
             ->first();
 
         if (!$resetCode) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'توكن إعادة التعيين غير صحيح أو منتهي الصلاحية'
+                'status'  => 'error',
+                'message' => 'توكن إعادة التعيين غير صحيح أو منتهي الصلاحية',
+                'errors'  => ['token' => ['توكن إعادة التعيين غير صحيح أو منتهي الصلاحية']],
             ], 400);
         }
 
-        $user = CustomUser::where('email', $request->email)->first();
-        $user->password = Hash::make($request->password);
+        $user = \App\Models\CustomUser::where('email', $request->email)->first();
+        $user->password = \Illuminate\Support\Facades\Hash::make($request->password);
         $user->save();
 
-        // حذف السجل بعد الاستخدام
         $resetCode->delete();
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'تم إعادة تعيين كلمة المرور بنجاح'
+            'status'  => 'success',
+            'message' => 'تم إعادة تعيين كلمة المرور بنجاح',
         ]);
-    }}
+    }
+}

@@ -1,12 +1,11 @@
 <!doctype html>
-<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
+<html lang="{{ $locale ?? app()->getLocale() }}" dir="{{ ($locale ?? app()->getLocale()) === 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
-        <link rel="icon" href="{{ asset('logo.png') }}">
-
+    <link rel="icon" href="{{ asset('logo.png') }}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title data-translate="page_title">تفعيل البريد - المركز السوري للتنمية المستدامة والتمكين المجتمعي</title>
+    <title>{{ __('verify.page_title') }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
@@ -168,7 +167,7 @@
             padding: 8px 10px;
             border-radius: 6px;
             transition: var(--transition);
-            text-decoration: none;
+            text-decoration: none
         }
 
         .language-btn:hover {
@@ -198,7 +197,7 @@
             padding: 36px;
             position: relative;
             overflow: hidden;
-            border-top: 5px solid var(--primary-color);
+            border-top: 5px solid var(--primary-color)
         }
 
         h2 {
@@ -256,7 +255,6 @@
         button {
             all: unset;
             display: inline-block;
-            width: auto;
             background: var(--secondary-color);
             color: #fff;
             padding: 12px 16px;
@@ -357,6 +355,22 @@
 </head>
 
 <body>
+    @php
+        $locale = $locale ?? app()->getLocale();
+        // دالة تبديل اللغة مع الحفاظ على نفس الصفحة والـ query string
+        $swapLocaleUrl = function (string $lang) {
+            $segments = request()->segments();
+            if (!empty($segments) && in_array($segments[0], ['ar', 'en'], true)) {
+                $segments[0] = $lang;
+            } else {
+                array_unshift($segments, $lang);
+            }
+            $path = implode('/', $segments);
+            $qs = request()->getQueryString();
+            return url($path) . ($qs ? '?' . $qs : '');
+        };
+    @endphp
+
     <div class="bg-animation">
         <div></div>
         <div></div>
@@ -367,134 +381,71 @@
     <header class="header">
         <div class="container">
             <div class="logo-container">
-                <div class="logo"><img src="{{ asset('logo.png') }}"
-                        alt="شعار المركز السوري للتنمية المستدامة والتمكين المجتمعي"></div>
-                <div class="org-name" data-translate="org_name">المركز السوري للتنمية المستدامة والتمكين المجتمعي</div>
+                <div class="logo">
+                    <img src="{{ asset('logo.png') }}" alt="{{ __('main.site_name') }}">
+                </div>
+                <div class="org-name">{{ __('main.site_name') }} {{ __('main.site_subname') }}</div>
             </div>
 
-            <!-- مُحوّل لغة أمامي (بدون مسارات/داتا خارجية) -->
-            <div class="language-switcher" aria-label="Language switcher">
-                <button type="button" class="language-btn active" data-lang="ar">العربية</button>
-                <button type="button" class="language-btn" data-lang="en">English</button>
+            <div class="language-switcher" aria-label="{{ __('verify.lang_switcher') }}">
+                <a class="language-btn {{ $locale === 'ar' ? 'active' : '' }}" href="{{ $swapLocaleUrl('ar') }}">العربية</a>
+                <a class="language-btn {{ $locale === 'en' ? 'active' : '' }}" href="{{ $swapLocaleUrl('en') }}">English</a>
             </div>
         </div>
     </header>
 
     <main class="page">
         <div class="card">
-            <h2 data-translate="heading">رجاءً فعّل بريدك الإلكتروني</h2>
+            <h2>{{ __('verify.heading') }}</h2>
 
             <p class="muted">
-                <span data-translate="sent_to">أرسلنا رابط تفعيل إلى:</span>
+                <span>{{ __('verify.sent_to') }}</span>
                 <b
-                    id="user-email">{{ optional(auth('custom')->user())->email ?? (session('unverified_email') ?? 'بريدك الإلكتروني') }}</b>
+                    id="user-email">{{ optional(auth('custom')->user())->email ?? (session('unverified_email') ?? __('verify.your_email')) }}</b>
             </p>
 
-            {{-- رسائل الحالة (النص يُترجم عبر JS) --}}
             @if (session('status') === 'verification-link-sent')
-                <div class="success"><i class="fa-solid fa-check-circle"></i> <span
-                        data-translate="status_verification_link_sent">تم إرسال رابط تفعيل جديد إلى بريدك.</span></div>
+                <div class="success"><i class="fa-solid fa-check-circle"></i>
+                    {{ __('verify.statuses.verification_link_sent') }}</div>
             @elseif (session('status') === 'email-verified')
-                <div class="success"><i class="fa-solid fa-check-circle"></i> <span
-                        data-translate="status_email_verified">تم تفعيل بريدك بنجاح.</span></div>
+                <div class="success"><i class="fa-solid fa-check-circle"></i>
+                    {{ __('verify.statuses.email_verified') }}</div>
             @elseif (session('status') === 'email-already-verified')
-                <div class="success"><i class="fa-solid fa-circle-info"></i> <span
-                        data-translate="status_email_already_verified">هذا البريد مُفعّل مسبقًا.</span></div>
+                <div class="success"><i class="fa-solid fa-circle-info"></i>
+                    {{ __('verify.statuses.email_already_verified') }}</div>
             @endif
 
             <div class="warn">
                 <i class="fa-solid fa-triangle-exclamation"></i>
-                <span data-translate="warn_text">إذا لم يصلك البريد خلال دقائق، تحقّق من مجلد الرسائل غير المرغوب فيها
-                    (Spam).</span>
+                {{ __('verify.warn_check_spam') }}
             </div>
 
             @auth('custom')
                 @if (!auth('custom')->user()->hasVerifiedEmail())
-                    <form class="row" method="POST" action="{{ route('verification.send') }}">
+                    <form class="row" method="POST" action="{{ route('verification.send', ['locale' => $locale]) }}">
                         @csrf
-                        <button type="submit" data-translate="resend_btn">إعادة إرسال رابط التفعيل</button>
-                        <a href="{{ route('home') }}" class="link" data-translate="back_home">العودة للصفحة الرئيسية</a>
+                        <button type="submit">{{ __('verify.buttons.resend_link') }}</button>
+                        <a href="{{ route('home', ['locale' => $locale]) }}"
+                            class="link">{{ __('verify.links.back_home') }}</a>
                     </form>
                 @else
-                    <p><a href="{{ route('home') }}" class="link" data-translate="go_home">الانتقال إلى الصفحة
-                            الرئيسية</a></p>
+                    <p><a href="{{ route('home', ['locale' => $locale]) }}"
+                            class="link">{{ __('verify.links.go_home') }}</a></p>
                 @endif
             @endauth
 
             @guest('custom')
                 <p class="muted">
-                    <span data-translate="guest_hint_1">لإعادة إرسال الرابط لاحقًا يمكنك</span>
-                    <a href="{{ route('login') }}" class="link" data-translate="guest_hint_2">تسجيل الدخول</a>
-                    <span data-translate="guest_hint_3">ثم العودة إلى هذه الصفحة.</span>
+                    {{ __('verify.guest.hint_1') }}
+                    <a href="{{ route('login', ['locale' => $locale]) }}"
+                        class="link">{{ __('verify.guest.hint_2') }}</a>
+                    {{ __('verify.guest.hint_3') }}
                 </p>
-                <p><a href="{{ route('home') }}" class="link" data-translate="back_home">العودة للصفحة الرئيسية</a></p>
+                <p><a href="{{ route('home', ['locale' => $locale]) }}"
+                        class="link">{{ __('verify.links.back_home') }}</a></p>
             @endguest
         </div>
     </main>
-
-    <script>
-        // قاموس الترجمة داخل نفس البليد — بدون أي اعتماد على ملفات أو قاعدة بيانات
-        const translations = {
-            ar: {
-                page_title: "تفعيل البريد - المركز السوري للتنمية المستدامة والتمكين المجتمعي",
-                org_name: "المركز السوري للتنمية المستدامة والتمكين المجتمعي",
-                heading: "رجاءً فعّل بريدك الإلكتروني",
-                sent_to: "أرسلنا رابط تفعيل إلى:",
-                status_verification_link_sent: "تم إرسال رابط تفعيل جديد إلى بريدك.",
-                status_email_verified: "تم تفعيل بريدك بنجاح.",
-                status_email_already_verified: "هذا البريد مُفعّل مسبقًا.",
-                warn_text: "إذا لم يصلك البريد خلال دقائق، تحقّق من مجلد الرسائل غير المرغوب فيها (Spam).",
-                resend_btn: "إعادة إرسال رابط التفعيل",
-                back_home: "العودة للصفحة الرئيسية",
-                go_home: "الانتقال إلى الصفحة الرئيسية",
-                guest_hint_1: "لإعادة إرسال الرابط لاحقًا يمكنك",
-                guest_hint_2: "تسجيل الدخول",
-                guest_hint_3: "ثم العودة إلى هذه الصفحة."
-            },
-            en: {
-                page_title: "Verify Email — Syrian Center for Sustainable Development & Community Empowerment",
-                org_name: "Syrian Center for Sustainable Development & Community Empowerment",
-                heading: "Please verify your email",
-                sent_to: "We sent a verification link to:",
-                status_verification_link_sent: "A new verification link has been sent to your email.",
-                status_email_verified: "Your email has been verified successfully.",
-                status_email_already_verified: "This email is already verified.",
-                warn_text: "If you don’t receive the email within minutes, please check your Spam folder.",
-                resend_btn: "Resend verification link",
-                back_home: "Back to Home",
-                go_home: "Go to Home",
-                guest_hint_1: "To resend the link later, you can",
-                guest_hint_2: "log in",
-                guest_hint_3: "and come back to this page."
-            }
-        };
-
-        // تفعيل التبديل بين اللغتين (بدون استدعاء خوادم)
-        document.querySelectorAll('.language-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const lang = this.dataset.lang;
-
-                // زر نشط
-                document.querySelectorAll('.language-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-
-                // اتجاه الصفحة وعلامة اللغة
-                document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
-                document.documentElement.lang = lang;
-
-                // تحديث كل العناصر التي تحمل data-translate
-                document.querySelectorAll('[data-translate]').forEach(el => {
-                    const key = el.getAttribute('data-translate');
-                    if (translations[lang][key]) el.textContent = translations[lang][key];
-                });
-
-                // تحديث العنوان (title)
-                if (translations[lang].page_title) {
-                    document.title = translations[lang].page_title;
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

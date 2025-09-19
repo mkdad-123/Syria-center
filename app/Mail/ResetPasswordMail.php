@@ -5,14 +5,10 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ResetPasswordMail extends Mailable
+class ResetPasswordMail extends Mailable implements ShouldQueue
 {
-    use Queueable, SerializesModels;
-
     use Queueable, SerializesModels;
 
     public $code;
@@ -20,21 +16,16 @@ class ResetPasswordMail extends Mailable
     public function __construct($code)
     {
         $this->code = $code;
+        $this->onQueue('emails');    // اختياري
+        $this->afterCommit();
+        // $this->onConnection('database'); // اختياري لو عندك اتصال صفوف مخصص
+
     }
 
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'رمز إعادة تعيين كلمة المرور',
-        );
-    }
     public function build()
     {
         return $this->subject('رمز إعادة تعيين كلمة المرور')
-                    ->view('customauth.email')
-                    ->with(['code' => $this->code]);
+            ->view('customauth.email')
+            ->with(['code' => $this->code]);
     }
 }
