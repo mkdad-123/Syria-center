@@ -73,7 +73,7 @@ class SettingResource extends Resource
                             ->directory('Setting')
                             ->image()
                             ->imageEditor()
-                            ->hidden(fn (Forms\Get $get) : bool => $get('section') !== SectionEnum::AboutUs->value),
+                            ->hidden(fn (Forms\Get $get) : bool => $get('section') !== __('filament.setting.section.options.about us')),
 
                         Forms\Components\RichEditor::make('content')
                             ->label(__('filament.setting.content.label'))
@@ -116,7 +116,7 @@ class SettingResource extends Resource
                                     ->required(),
                             ])
                             ->columnSpanFull()
-                            ->hidden(fn (Forms\Get $get) => $get('section') !== SectionEnum::AboutUs->value)
+                            ->hidden(fn (Forms\Get $get) => $get('section') !== __('filament.setting.section.options.about us'))
 
         ])
             ]);

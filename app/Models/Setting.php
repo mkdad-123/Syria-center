@@ -18,7 +18,6 @@ class Setting extends Model
     public $translatable = [
         'title',
         'content',
-
     ];
 
     protected $fillable = [
@@ -28,7 +27,6 @@ class Setting extends Model
         'image',
         'extra',
         'section',
-
     ];
 
     protected $casts = [
@@ -40,80 +38,80 @@ class Setting extends Model
     /**
      * الحصول على روابط السوشيال ميديا مع قيم افتراضية آمنة
      */
-  public static function getSocialMediaLinks()
-{
-    $setting = self::where('section', 'about us')->first();
+    public static function getSocialMediaLinks()
+    {
+        $setting = self::where('section', 'about us')->first();
 
-    $defaults = [
-        'facebook' => '#',
-        'instagram' => '#',
-        'twitter' => '#',
-        'youtube' => '#',
-        'linkedin' => '#'
-    ];
+        $defaults = [
+            'facebook' => '#',
+            'instagram' => '#',
+            'twitter' => '#',
+            'youtube' => '#',
+            'linkedin' => '#'
+        ];
 
-    if (!$setting || !is_array($setting->extra)) {
-        return $defaults;
-    }
-
-    $socialLinks = $defaults;
-
-    foreach ($setting->extra as $item) {
-        if (in_array($item['key'], ['Facebook', 'Instagram', 'Twitter', 'Youtube', 'Linkedin'])) {
-            $key = strtolower($item['key']);
-            $socialLinks[$key] = $item['value'];
+        if (!$setting || !is_array($setting->extra)) {
+            return $defaults;
         }
-    }
 
-    return $socialLinks;
-}
+        $socialLinks = $defaults;
+
+        foreach ($setting->extra as $item) {
+            if (in_array($item['key'], ['Facebook', 'Instagram', 'Twitter', 'Youtube', 'Linkedin'])) {
+                $key = strtolower($item['key']);
+                $socialLinks[$key] = $item['value'];
+            }
+        }
+
+        return $socialLinks;
+    }
 
     /**
      * الحصول على معلومات التواصل مع قيم افتراضية آمنة
      */
-  public static function getContactInfo()
-{
-    $setting = self::where('section', 'about us')->first();
+    public static function getContactInfo()
+    {
+        $setting = self::where('section', 'about us')->first();
 
-    $defaults = [
-        'emails' => ['info@example.com'],
-        'phones' => ['123-456-789'],
-        'mobile_numbers' => [],
-        'address' => __('Damascus, Syria'),
-        'working_hours' => __('9:00 AM - 5:00 PM')
-    ];
+        $defaults = [
+            'emails' => ['info@example.com'],
+            'phones' => ['123-456-789'],
+            'mobile_numbers' => [],
+            'address' => __('Damascus, Syria'),
+            'working_hours' => __('9:00 AM - 5:00 PM')
+        ];
 
-    if (!$setting || !is_array($setting->extra)) {
-        return $defaults;
-    }
-
-    $extra = [
-        'emails' => [],
-        'phones' => [],
-        'mobile_numbers' => [],
-        'address' => '',
-        'instagram' => ''
-    ];
-
-    foreach ($setting->extra as $item) {
-        switch ($item['key']) {
-            case 'Email':
-                $extra['emails'][] = $item['value'];
-                break;
-            case 'Phone':
-                $extra['phones'][] = $item['value'];
-                break;
-            case 'Address':
-                $extra['address'] = $item['value'];
-                break;
-            case 'Instagram':
-                $extra['instagram'] = $item['value'];
-                break;
+        if (!$setting || !is_array($setting->extra)) {
+            return $defaults;
         }
-    }
 
-    return array_merge($defaults, $extra);
-}
+        $extra = [
+            'emails' => [],
+            'phones' => [],
+            'mobile_numbers' => [],
+            'address' => '',
+            'instagram' => ''
+        ];
+
+        foreach ($setting->extra as $item) {
+            switch ($item['key']) {
+                case 'Email':
+                    $extra['emails'][] = $item['value'];
+                    break;
+                case 'Phone':
+                    $extra['phones'][] = $item['value'];
+                    break;
+                case 'Address':
+                    $extra['address'] = $item['value'];
+                    break;
+                case 'Instagram':
+                    $extra['instagram'] = $item['value'];
+                    break;
+            }
+        }
+
+        return array_merge($defaults, $extra);
+    }
     /**
      * الحصول على قيمة من الحقل extra
      */
