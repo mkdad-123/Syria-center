@@ -52,7 +52,12 @@ return [
     'verification_error'     => 'Verification code is incorrect',
     'resend_success'         => 'Verification code has been resent to your email.',
     'resend_error'           => 'An error occurred while resending the code.',
-    'reset_success'          => 'Reset Password success'
+    'reset_success'          => 'Reset Password success',
+
+    'login_unverified'        => 'Please verify your email via the link we sent to your inbox.',
+    'login_invalid'           => 'Invalid login credentials.',
+    'invalid_signature'       => 'The verification link is invalid or has expired.',
+    'wrong_verification_link' => 'Incorrect verification link.',
 
 
 ];

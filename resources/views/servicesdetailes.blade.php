@@ -170,7 +170,7 @@
                         <li><a href="{{ route('home', ['locale' => $locale]) }}">{{ __('main.menu.home') }}</a>
                         </li>
                     </ul>
-                </div>
+                </div>git 
             </div>
 
             <div class="footer-bottom">
