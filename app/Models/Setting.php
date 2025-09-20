@@ -2,12 +2,8 @@
 
 namespace App\Models;
 
-use App\Enums\SectionEnum;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-use App\Http\Controllers\ShowController;
-
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Translatable\HasTranslations;
 
@@ -15,136 +11,136 @@ class Setting extends Model
 {
     use HasFactory, HasTranslations;
 
-    public $translatable = [
-        'title',
-        'content',
-    ];
+    protected $table = 'settings';
 
-    protected $fillable = [
-        'key',
-        'title',
-        'content',
-        'image',
-        'extra',
-        'section',
-    ];
+    public $translatable = ['title', 'content'];
+
+    // لا نذكر 'key' لأن الجدول لا يحتوي هذا العمود
+    protected $fillable = ['title', 'content', 'image', 'extra', 'section'];
 
     protected $casts = [
-        'extra' => 'array',
-
-        'section' => SectionEnum::class,
+        'extra'   => 'array',
+        'section' => 'string',   // نتجنّب الـ Enum لأن القيمة عندك نص حر مثل "about us"
     ];
 
     /**
-     * الحصول على روابط السوشيال ميديا مع قيم افتراضية آمنة
+     * أول سجل لقسم "من نحن" (ندعم بعض الصيغ المحتملة في القيمة)
      */
-    public static function getSocialMediaLinks()
+    public static function firstAboutUs(): ?self
     {
-        $setting = self::where('section', 'about us')->first();
+        $sections = ['about us', 'about-us', 'about_us', 'about', 'aboutus'];
 
-        $defaults = [
+        return self::query()
+            ->where(function ($q) use ($sections) {
+                foreach ($sections as $s) {
+                    $q->orWhere('section', $s);
+                }
+            })
+            ->first();
+    }
+
+    /**
+     * روابط السوشيال مع قيم افتراضية
+     */
+    public static function getSocialMediaLinks(): array
+    {
+        $setting = self::firstAboutUs();
+
+        $links = [
             'facebook' => '#',
             'instagram' => '#',
-            'twitter' => '#',
-            'youtube' => '#',
-            'linkedin' => '#'
+            'twitter'  => '#',
+            'youtube'  => '#',
+            'linkedin' => '#',
         ];
 
-        if (!$setting || !is_array($setting->extra)) {
-            return $defaults;
-        }
+        $extra = is_array($setting?->extra) ? $setting->extra : [];
 
-        $socialLinks = $defaults;
-
-        foreach ($setting->extra as $item) {
-            if (in_array($item['key'], ['Facebook', 'Instagram', 'Twitter', 'Youtube', 'Linkedin'])) {
-                $key = strtolower($item['key']);
-                $socialLinks[$key] = $item['value'];
+        // extra متوقع تكون مصفوفة عناصر من نوع ['key' => ..., 'value' => ...]
+        foreach ($extra as $item) {
+            if (is_array($item) && isset($item['key'], $item['value'])) {
+                $k = strtolower($item['key']);
+                if (isset($links[$k])) {
+                    $links[$k] = $item['value'];
+                }
             }
         }
 
-        return $socialLinks;
+        return $links;
     }
 
     /**
-     * الحصول على معلومات التواصل مع قيم افتراضية آمنة
+     * معلومات التواصل مع قيم افتراضية
      */
-    public static function getContactInfo()
+    public static function getContactInfo(): array
     {
-        $setting = self::where('section', 'about us')->first();
+        $setting = self::firstAboutUs();
 
-        $defaults = [
-            'emails' => ['info@example.com'],
-            'phones' => ['123-456-789'],
+        $data = [
+            'emails'         => [],
+            'phones'         => [],
             'mobile_numbers' => [],
-            'address' => __('Damascus, Syria'),
-            'working_hours' => __('9:00 AM - 5:00 PM')
+            'address'        => __('Damascus, Syria'),
+            'working_hours'  => __('9:00 AM - 5:00 PM'),
+            'instagram'      => '',
         ];
 
-        if (!$setting || !is_array($setting->extra)) {
-            return $defaults;
-        }
+        $extra = is_array($setting?->extra) ? $setting->extra : [];
 
-        $extra = [
-            'emails' => [],
-            'phones' => [],
-            'mobile_numbers' => [],
-            'address' => '',
-            'instagram' => ''
-        ];
-
-        foreach ($setting->extra as $item) {
+        foreach ($extra as $item) {
+            if (!is_array($item) || !isset($item['key'], $item['value'])) {
+                continue;
+            }
             switch ($item['key']) {
                 case 'Email':
-                    $extra['emails'][] = $item['value'];
+                    $data['emails'][] = $item['value'];
                     break;
                 case 'Phone':
-                    $extra['phones'][] = $item['value'];
+                    $data['phones'][] = $item['value'];
                     break;
                 case 'Address':
-                    $extra['address'] = $item['value'];
+                    $data['address']  = $item['value'];
                     break;
                 case 'Instagram':
-                    $extra['instagram'] = $item['value'];
+                    $data['instagram'] = $item['value'];
                     break;
             }
         }
 
-        return array_merge($defaults, $extra);
-    }
-    /**
-     * الحصول على قيمة من الحقل extra
-     */
-    public function getExtraValue(string $key, mixed $default = null): mixed
-    {
-        return $this->extra[$key] ?? $default;
+        return $data;
     }
 
-    /**
-     * تحديث قيمة في الحقل extra
-     */
+    public function getExtraValue(string $key, mixed $default = null): mixed
+    {
+        $extra = is_array($this->extra) ? $this->extra : [];
+        return $extra[$key] ?? $default;
+    }
+
     public function setExtraValue(string $key, mixed $value): void
     {
-        $extra = $this->extra ?? [];
+        $extra = is_array($this->extra) ? $this->extra : [];
         $extra[$key] = $value;
         $this->extra = $extra;
     }
 
     /**
-     * تخزين الإعدادات في الكاش لتحسين الأداء
+     * كاش مبسّط بدون الاعتماد على عمود غير موجود
      */
     public static function cached(): array
     {
         return Cache::remember('settings', now()->addDay(), function () {
-            return self::all()->keyBy('key')->toArray();
+            return self::all()->toArray(); // لا نستخدم keyBy('key')
         });
     }
 
-    /**
-     * الحصول على إعدادات من الكاش
-     */
     public static function getCached(string $key): ?array
     {
-        return self::cached()[$key] ?? null;
+        $rows = self::cached();
+        foreach ($rows as $row) {
+            if (($row['section'] ?? null) === $key) {
+                return $row;
+            }
+        }
+        return null;
     }
 }
